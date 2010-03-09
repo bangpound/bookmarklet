@@ -42,7 +42,7 @@ function bookmarklet_block($op = 'list', $delta = 0, $edit = array()) {
 function bookmarklet_form_alter(&$form, $form_state, $form_id) {
   if (isset($_REQUEST['bookmarklet']) && isset($form['type']) && isset($form['#node']) && ($form_id == $form['type']['#value'] .'_node_form')) {
     foreach (element_children($form) as $element) {
-      if (!in_array($element, array('title', 'body_field', 'field_link', 'buttons'))) {
+      if (!in_array($element, array('title', 'body_field', 'field_link', 'buttons', 'form_build_id', 'form_token', 'form_id', 'nid', 'vid', 'uid', 'created', 'type'))) {
         $form[$element]['#access'] = FALSE;
       }
     }
