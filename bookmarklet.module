@@ -1,0 +1,72 @@
+<?php
+// $Id$
+/**
+ * @file bookmarklet.module
+ * TODO: Enter file description here.
+ */
+
+/**
+ * Implementation of hook_block().
+ */
+function bookmarklet_block($op = 'list', $delta = 0, $edit = array()) {
+  switch ($op) {
+
+    case 'list':
+      $blocks[0]['info'] = t('Bookmarklet');
+      return $blocks;
+
+    case 'view':
+      if ($delta == 0) {
+        $block['subject'] = t('Bookmarklet');
+        $block['content'] = theme('bookmarklet', 'Post on '. variable_get('site_name', 'Drupal'), bookmarklet_script());
+      }
+
+      return $block;
+  }
+}
+
+/**
+ * Implementation of hook_theme().
+ */
+function bookmarklet_theme($existing, $type, $theme, $path) {
+  return array(
+    'bookmarklet' => array(
+      'arguments' => array(
+        'text' => '',
+        'script' => '',
+        'options' => array(),
+      ),
+    ),
+  );
+}
+
+function theme_bookmarklet($text, $script, $options) {
+  $options['absolute'] = TRUE;
+  $decoy = 'http://BOOKMARKLET';
+  $link = l($text, $decoy, $options);
+  $script = 'javascript:'. $script;
+  return str_replace($decoy, $script, $link);
+}
+
+function bookmarklet_script() {
+  global $base_url;
+  $file = drupal_get_path('module', 'bookmarklet') .'/bookmarklet.js';
+  $script = <<<EOT
+(function(){
+  DRUPAL_BOOKMARKLET_HOST = '$base_url';
+  try {
+    var x;
+    x = document.createElement('SCRIPT');
+    x.type = 'text/javascript';
+    x.src = DRUPAL_BOOKMARKLET_HOST + '/$file?' + (new Date().getTime()/100000);
+    document.getElementsByTagName('head')[0].appendChild(x);
+  }
+  catch (e) {
+    location.href = DRUPAL_BOOKMARKLET_HOST + '/node/add/link?field_link[0][url]=' + encodeURIComponent(location.href) + '&field_link[0][title]=' + encodeURIComponent(document.title);
+  }
+})();
+EOT;
+  module_load_include('php', 'bookmarklet', 'jsmin-php/jsmin');
+
+  return JSMin::minify($script);
+}
