@@ -3,3 +3,4 @@ name = Bookmarklet
 description = TODO: Description of module
 core = 6.x
 dependencies[] = prepopulate
+dependencies[] = modalframe

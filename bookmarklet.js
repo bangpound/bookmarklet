@@ -31,8 +31,11 @@ function drupalBookmarklet($, L) {
   }
 
   iframe_url = DRUPAL_BOOKMARKLET_HOST;
-  iframe_url += '/node/add/link?edit[field_link][0][url]=';
+  iframe_url += '/node/add/link?bookmarklet';
+
+  iframe_url += '&edit[field_link][0][url]=';
   iframe_url += encodeURIComponent(location.href);
+
   iframe_url += '&edit[field_link][0][title]=';
   iframe_url += encodeURIComponent(document.title);
 
