@@ -111,17 +111,12 @@ function bookmarklet_script() {
   $file = drupal_get_path('module', 'bookmarklet') .'/bookmarklet.js';
 
   // jslint
-  /* global DRUPAL_BOOKMARKLET_HOST,$,drupalBookmarklet,L */
+  /* global DRUPAL_BOOKMARKLET_HOST,$,drupalBookmarklet,L,Math */
   $script = <<<EOT
 DRUPAL_BOOKMARKLET_HOST = '$base_url';
-try {
-  $.getScript(DRUPAL_BOOKMARKLET_HOST + '/$file?' + (new Date().getTime() / 100000), function (data, textStatus) {
-    drupalBookmarklet($, L);
-  });
-}
-catch (e) {
-  location.href = DRUPAL_BOOKMARKLET_HOST + '/node/add/link?bookmarklet&edit[field_link][0][url]=' + encodeURIComponent(location.href) + '&edit[field_link][0][title]=' + encodeURIComponent(document.title);
-}
+$.getScript(DRUPAL_BOOKMARKLET_HOST + '/$file?' + (Math.random()), function (data, textStatus) {
+  drupalBookmarklet($, L);
+});
 EOT;
   module_load_include('php', 'bookmarklet', 'jsmin-php/jsmin');
 
