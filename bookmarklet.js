@@ -1,19 +1,6 @@
 "use strict";
 /*global window,document,event,location,DRUPAL_BOOKMARKLET_HOST */
 
-function toggleItem(id) {
-  var item;
-  item = document.getElementById(id);
-  if (item) {
-    if (item.style.display === "none") {
-      item.style.display = "";
-    }
-    else {
-      item.style.display = "none";
-    }
-  }
-}
-
 function drupalBookmarklet($, L) {
   // get the currently selected text
   var t, body, iframe_url, existing_iframe;
