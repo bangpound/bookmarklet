@@ -53,7 +53,16 @@ function showItem(id) {
     body = "";
   }
 
-  iframe_url = DRUPAL_BOOKMARKLET_HOST + '/node/add/link?=' + encodeURIComponent(location.href) + '&field_link[0][title]=' + encodeURIComponent(document.title);
+  iframe_url = DRUPAL_BOOKMARKLET_HOST;
+  iframe_url += '/node/add/link?edit[field_link][0][url]=';
+  iframe_url += encodeURIComponent(location.href);
+  iframe_url += '&edit[field_link][0][title]=';
+  iframe_url += encodeURIComponent(document.title);
+
+  if (body !== "") {
+    iframe_url += '&edit[body_field][body]=';
+    iframe_url += encodeURIComponent(body);
+  }
 
   existing_iframe = document.getElementById('drupal_bookmarklet_iframe');
 

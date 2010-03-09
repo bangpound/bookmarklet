@@ -59,7 +59,7 @@ try {
   });
 }
 catch (e) {
-  location.href = DRUPAL_BOOKMARKLET_HOST + '/node/add/link?field_link[0][url]=' + encodeURIComponent(location.href) + '&field_link[0][title]=' + encodeURIComponent(document.title);
+  location.href = DRUPAL_BOOKMARKLET_HOST + '/node/add/link?edit[field_link][0][url]=' + encodeURIComponent(location.href) + '&edit[field_link][0][title]=' + encodeURIComponent(document.title);
 }
 EOT;
   module_load_include('php', 'bookmarklet', 'jsmin-php/jsmin');
