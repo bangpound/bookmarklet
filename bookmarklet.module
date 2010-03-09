@@ -51,11 +51,14 @@ function theme_bookmarklet($text, $script, $options) {
 function bookmarklet_script() {
   global $base_url;
   $file = drupal_get_path('module', 'bookmarklet') .'/bookmarklet.js';
+
+  // jslint
+  /* global DRUPAL_BOOKMARKLET_HOST,$,drupalBookmarklet,L */
   $script = <<<EOT
 DRUPAL_BOOKMARKLET_HOST = '$base_url';
 try {
   $.getScript(DRUPAL_BOOKMARKLET_HOST + '/$file?' + (new Date().getTime() / 100000), function (data, textStatus) {
-    drupalBookmarklet($,L);
+    drupalBookmarklet($, L);
   });
 }
 catch (e) {
