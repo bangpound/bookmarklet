@@ -58,9 +58,6 @@ function drupalBookmarklet($, L) {
     return;
   }
 
-  // alert("hi there: [" + body + "]");
-  //addCSS("http://instacalc.com/gadget/styles/instacalc.bookmarklet.mini.css");
-
   // wrapper
   $('<div id="drupal_bookmarklet"/>')
     .css({
