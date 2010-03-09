@@ -41,13 +41,38 @@ function bookmarklet_block($op = 'list', $delta = 0, $edit = array()) {
  */
 function bookmarklet_form_alter(&$form, $form_state, $form_id) {
   if (isset($_REQUEST['bookmarklet']) && isset($form['type']) && isset($form['#node']) && ($form_id == $form['type']['#value'] .'_node_form')) {
-    foreach (element_children($form) as $element) {
-      if (!in_array($element, array('title', 'body_field', 'field_link', 'buttons', 'form_build_id', 'form_token', 'form_id', 'nid', 'vid', 'uid', 'created', 'type'))) {
-        $form[$element]['#access'] = FALSE;
-      }
-    }
+
+    // Recurse through all children.
+    _bookmarklet_form_alter($form, $form_state, $form_id);
+
+    // Definitely shrink the body field.
     if (!empty($form['body_field'])) {
       $form['body_field']['body']['#rows'] = 5;
+    }
+  }
+}
+
+function _bookmarklet_form_alter(&$elements, $form_state, $form_id) {
+  foreach (element_children($elements) as $key) {
+    if (isset($elements[$key]) && $elements[$key]) {
+      if (in_array($key, array('body_field', 'field_link', 'buttons'))) {
+        continue;
+      }
+
+      // Only worry about form elements that have UI.
+      if (isset($elements[$key]['#type']) && in_array($elements[$key]['#type'], array('value', 'hidden'))) {
+        continue;
+      }
+
+      // Recurse through all children.
+      _bookmarklet_form_alter($elements[$key], $form_state, $form_id);
+
+      // Only worry about form elements the user can access.
+      if (!isset($elements[$key]['#access']) || $elements[$key]['#access']) {
+        if (!isset($elements[$key]['#required']) || !$elements[$key]['#required']) {
+          $elements[$key]['#access'] = FALSE;
+        }
+      }
     }
   }
 }
