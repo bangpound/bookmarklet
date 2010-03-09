@@ -14,32 +14,9 @@ function toggleItem(id) {
   }
 }
 
-function keyPressHandler(e) {
-  var kC, Esc;
-  kC  = (window.event) ? event.keyCode : e.keyCode; // MSIE or Firefox?
-  Esc = (window.event) ? 27 : e.DOM_VK_ESCAPE; // MSIE : Firefox
-  if (kC === Esc) {
-    // alert("Esc pressed");
-    toggleItem("drupal_bookmarklet");
-  }
-}
-
-function showItem(id) {
-  try {
-    var item;
-    item = document.getElementById(id);
-    if (item) {
-      item.style.display = "";
-    }
-  }
-  catch (e) {
-
-  }
-}
-
-(function () {
+function drupalBookmarklet($, L) {
   // get the currently selected text
-  var t, body, iframe_url, existing_iframe, div, str;
+  var t, body, iframe_url, existing_iframe;
   try {
     t = ((window.getSelection && window.getSelection()) || (document.getSelection && document.getSelection()) || (document.selection && document.selection.createRange && document.selection.createRange().text));
   }
@@ -64,10 +41,10 @@ function showItem(id) {
     iframe_url += encodeURIComponent(body);
   }
 
-  existing_iframe = document.getElementById('drupal_bookmarklet_iframe');
+  existing_iframe = $('#drupal_bookmarklet_iframe')[0];
 
   if (existing_iframe) {
-    showItem('drupal_bookmarklet');
+    $('#drupal_bookmarklet').show();
     // if has text selected, copy into iframe
     if (body !== "") {
       existing_iframe.src = iframe_url;
@@ -81,17 +58,67 @@ function showItem(id) {
   // alert("hi there: [" + body + "]");
   //addCSS("http://instacalc.com/gadget/styles/instacalc.bookmarklet.mini.css");
 
-  div = document.createElement("div");
-  div.id = "drupal_bookmarklet";
+  // wrapper
+  $('<div id="drupal_bookmarklet"/>')
+    .css({
+      position: 'absolute',
+      right: '0px',
+      zIndex: 10000,
+      margin: '10px',
+      top: '0px'
+    })
+    .prependTo('body')
 
-  str = "";
-  str += "<iframe frameborder='0' scrolling='no' name='drupal_bookmarklet_iframe' id='drupal_bookmarklet_iframe' src='" + iframe_url + "' style='textalign:right; backgroundColor: white;'></iframe>";
-  str += "<a href='javascript:void(0);' style='width:100%; text-align: middle; color: #FF0000; font-family: Arial;'>x</a>";
+    // inner
+    .append('<div/>')
+    .children('div')
+    .css({
+      backgroundColor: 'white',
+      zIndex: 2,
+      width: '500px',
+      height: '355px',
+      border: 'solid rgb(180,180,180)',
+      borderWidth: '6px'
+    })
 
-  div.innerHTML = str;
+    // iframe
+    .append('<iframe/>')
+    .children('iframe')
+    .attr({
+      src: iframe_url,
+      frameborder: 0,
+      scrolling: 'yes',
+      name: 'drupal_bookmarklet_iframe',
+      id: 'drupal_bookmarklet_iframe'
+    })
+    .css({
+      width: '100%',
+      height: '100%',
+      border: '1px',
+      padding: '0px',
+      margin: '0px'
+    })
 
-  div.onkeypress = keyPressHandler;
-  document.body.insertBefore(div, document.body.firstChild);
-})();
+    // close button
+    .parent('<div/>')
+    .append('<a/>')
+    .children('a')
+    .css({
+      width: '100%',
+      color: '#ff0000'
+    })
+    .click(function () {
+      $('#drupal_bookmarklet').remove();
+    })
+    .text('x');
+
+  $(document).keypress(function (event) {
+    if (event.keyCode == '27') {
+      event.preventDefault();
+      $('#drupal_bookmarklet').toggle();
+    }
+  });
+
+}
 
 /*jslint white: true, browser: true, devel: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, strict: true, newcap: true, immed: true, indent: 2 */
