@@ -137,7 +137,7 @@ function bookmarklet_jquery($script, $version = '1.2.6') {
     document.documentElement.childNodes[0].appendChild( script );
   }
 
-})( window, document,
+}( window, document,
 
   // Minimum jQuery version required. Change this as-needed.
   '$version',
@@ -148,6 +148,6 @@ function bookmarklet_jquery($script, $version = '1.2.6') {
   function( \$, L ) {
     $script
   }
-);
+));
 EOT;
 }
