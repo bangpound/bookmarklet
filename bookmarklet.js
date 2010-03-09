@@ -79,7 +79,7 @@ function drupalBookmarklet($, L) {
       backgroundColor: 'white',
       zIndex: 2,
       width: '500px',
-      height: '355px',
+      height: '400px',
       border: 'solid rgb(180,180,180)',
       borderWidth: '6px'
     })
@@ -90,7 +90,7 @@ function drupalBookmarklet($, L) {
     .attr({
       src: iframe_url,
       frameborder: 0,
-      scrolling: 'yes',
+      scrolling: 'no',
       name: 'drupal_bookmarklet_iframe',
       id: 'drupal_bookmarklet_iframe'
     })
