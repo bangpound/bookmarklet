@@ -14,16 +14,18 @@ drupalBookmarklet.s1.onload = function () {
   document.getElementsByTagName('head')[0].appendChild(drupalBookmarklet.s2);
 };
 drupalBookmarklet.s2.onload = function () {
+  // newly loaded jQuery is attached to the drupalBookmarklet object as the
+  // jQuery method.
   (function ($) {
     drupalBookmarklet.createBookmarklet($);
-  }(jQuery.noConflict(true)));
+  }(drupalBookmarklet.jQuery = jQuery.noConflict(true)));
 };
 document.getElementsByTagName('head')[0].appendChild(drupalBookmarklet.s1);
 };
 
 drupalBookmarklet.createBookmarklet = function ($) {
       // get the currently selected text
-      var t, body, iframe_url, existing_iframe;
+      var t, body, iframe_url;
 
       try {
         t = ((window.getSelection && window.getSelection()) || (document.getSelection && document.getSelection()) || (document.selection && document.selection.createRange && document.selection.createRange().text));
@@ -52,20 +54,6 @@ drupalBookmarklet.createBookmarklet = function ($) {
         iframe_url += encodeURIComponent(body);
       }
 
-      existing_iframe = $('#drupal_bookmarklet_iframe')[0];
-
-      if (existing_iframe) {
-        $('#drupal_bookmarklet').show();
-        // if has text selected, copy into iframe
-        if (body !== "") {
-          existing_iframe.src = iframe_url;
-        }
-        else {
-          // want to set focus back to that item! but can't; access denied
-        }
-        return;
-      }
-
       $('<link/>', {
         href: 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.7/themes/flick/jquery-ui.css',
         rel: 'stylesheet',
@@ -74,7 +62,7 @@ drupalBookmarklet.createBookmarklet = function ($) {
       })
         .appendTo('head');
 
-      $('<div/>', { id: 'drupal_bookmarklet' })
+      this.dialog = this.dialog || $('<div/>', { id: 'drupal_bookmarklet' })
         .append($('<iframe/>', {
           src: iframe_url,
           frameborder: 0,
@@ -102,7 +90,16 @@ drupalBookmarklet.createBookmarklet = function ($) {
   };
 
 (function () {
-drupalBookmarklet.init();
+  if (typeof drupalBookmarklet.dialog == "undefined") {
+    drupalBookmarklet.init();
+  }
+  else {
+    // If the dialog has been closed, re-open.
+    drupalBookmarklet.jQuery(drupalBookmarklet.dialog).dialog('open');
+    // If the dialog is already open, check for selected text and refresh
+    // the iframe. Probably less helpful than it sounds.
+    // TODO.
+  }
 }());
 
 /*jslint white: true, browser: true, devel: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, strict: true, newcap: true, immed: true, indent: 2 */
