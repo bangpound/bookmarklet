@@ -9,21 +9,16 @@ drupalBookmarklet.s1 = document.createElement('script');
 drupalBookmarklet.s2 = document.createElement('script');
 drupalBookmarklet.s1.setAttribute('src', 'http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.js');
 drupalBookmarklet.s2.setAttribute('src', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.7/jquery-ui.js');
-document.getElementsByTagName('head')[0].appendChild(drupalBookmarklet.s1);
-document.getElementsByTagName('head')[0].appendChild(drupalBookmarklet.s2);
-//once jq and ui are loaded...
 drupalBookmarklet.s1.onload = function () {
-  drupalBookmarklet.s2.onload = function () {
-    (function ($) {
-      $('<link/>')
-        .attr({
-          href: 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.7/themes/flick/jquery-ui.css',
-          rel: 'stylesheet',
-          type: 'text/css',
-          media: 'screen'
-        })
-        .appendTo('head');
+  document.getElementsByTagName('head')[0].appendChild(drupalBookmarklet.s2);
+};
+drupalBookmarklet.s2.onload = function () {
+  (function ($) {
+    drupalBookmarklet.init($);
+  }(jQuery.noConflict(true)));
+};
 
+drupalBookmarklet.init = function ($) {
       // get the currently selected text
       var t, body, iframe_url, existing_iframe;
       try {
@@ -93,8 +88,8 @@ drupalBookmarklet.s1.onload = function () {
           $('#drupal_bookmarklet').toggle();
         }
       });
-    }(jQuery.noConflict(true)));
   };
-};
+
+document.getElementsByTagName('head')[0].appendChild(drupalBookmarklet.s1);
 
 /*jslint white: true, browser: true, devel: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, strict: true, newcap: true, immed: true, indent: 2 */
