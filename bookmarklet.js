@@ -63,6 +63,14 @@ drupalBookmarklet.init = function ($) {
         return;
       }
 
+      $('<link/>', {
+        href: 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.7/themes/flick/jquery-ui.css',
+        rel: 'stylesheet',
+        type: 'text/css',
+        media: 'screen'
+      })
+        .appendTo('head');
+
       $('<div/>', { id: 'drupal_bookmarklet' })
         .append($('<iframe/>', {
           src: iframe_url,
