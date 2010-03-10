@@ -21,6 +21,7 @@ drupalBookmarklet.s2.onload = function () {
 drupalBookmarklet.init = function ($) {
       // get the currently selected text
       var t, body, iframe_url, existing_iframe;
+
       try {
         t = ((window.getSelection && window.getSelection()) || (document.getSelection && document.getSelection()) || (document.selection && document.selection.createRange && document.selection.createRange().text));
       }

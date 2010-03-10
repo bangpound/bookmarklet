@@ -128,5 +128,3 @@ EOT;
 
   return JSMin::minify($script);
 }
-
-
