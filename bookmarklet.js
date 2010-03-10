@@ -14,11 +14,11 @@ drupalBookmarklet.s1.onload = function () {
 };
 drupalBookmarklet.s2.onload = function () {
   (function ($) {
-    drupalBookmarklet.init($);
+    drupalBookmarklet.createBookmarklet($);
   }(jQuery.noConflict(true)));
 };
 
-drupalBookmarklet.init = function ($) {
+drupalBookmarklet.createBookmarklet = function ($) {
       // get the currently selected text
       var t, body, iframe_url, existing_iframe;
 
