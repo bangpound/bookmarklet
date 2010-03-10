@@ -3,10 +3,8 @@
 
 "use strict";
 
-/*global window,DRUPAL_BOOKMARKLET_HOST,jQuery */
+/*global drupalBookmarklet,window,jQuery */
 
-var drupalBookmarklet;
-drupalBookmarklet = {};
 drupalBookmarklet.s1 = document.createElement('script');
 drupalBookmarklet.s2 = document.createElement('script');
 drupalBookmarklet.s1.setAttribute('src', 'http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.js');
@@ -41,7 +39,7 @@ drupalBookmarklet.s1.onload = function () {
         body = "";
       }
 
-      iframe_url = DRUPAL_BOOKMARKLET_HOST;
+      iframe_url = drupalBookmarklet.host;
       iframe_url += '/node/add/link?bookmarklet';
 
       iframe_url += '&edit[field_link][0][url]=';

@@ -108,16 +108,19 @@ function theme_bookmarklet($text = '', $script = '', $options = array()) {
 
 function bookmarklet_script() {
   global $base_url;
-  $file = drupal_get_path('module', 'bookmarklet') .'/bookmarklet.js';
+  $path = drupal_get_path('module', 'bookmarklet');
+  $labjs = drupal_get_path('module', 'bookmarklet');
 
   // jslint
   /* global DRUPAL_BOOKMARKLET_HOST,$,drupalBookmarklet,L,Math */
   $script = <<<EOT
 (function () {
-  DRUPAL_BOOKMARKLET_HOST = '$base_url';
+  var d = drupalBookmarklet = {};
+  d.host = '$base_url';
+  d.path = '$path';
   bookmarklet = document.createElement('SCRIPT');
   bookmarklet.type = 'text/javascript';
-  bookmarklet.src = DRUPAL_BOOKMARKLET_HOST + '/$file?' + (Math.random());
+  bookmarklet.src = d.host + '/' + d.path + '/bookmarklet.js?' + (Math.random());
   document.getElementsByTagName('head')[0].appendChild(bookmarklet);
 }());
 EOT;
