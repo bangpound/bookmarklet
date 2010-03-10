@@ -114,6 +114,7 @@ function bookmarklet_script() {
   // jslint
   /* global DRUPAL_BOOKMARKLET_HOST,$,drupalBookmarklet,L,Math */
   $script = <<<EOT
+// TODO load bookmarklet script once even if clicked multiple times.
 var drupalBookmarklet = drupalBookmarklet || function() {};
 (function () {
   var d,b;
