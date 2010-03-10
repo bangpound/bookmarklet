@@ -114,14 +114,16 @@ function bookmarklet_script() {
   // jslint
   /* global DRUPAL_BOOKMARKLET_HOST,$,drupalBookmarklet,L,Math */
   $script = <<<EOT
+var drupalBookmarklet = drupalBookmarklet || function() {};
 (function () {
-  var d = drupalBookmarklet = {};
+  var d,b;
+  d = drupalBookmarklet;
   d.host = '$base_url';
   d.path = '$path';
-  bookmarklet = document.createElement('SCRIPT');
-  bookmarklet.type = 'text/javascript';
-  bookmarklet.src = d.host + '/' + d.path + '/bookmarklet.js?' + (Math.random());
-  document.getElementsByTagName('head')[0].appendChild(bookmarklet);
+  b = d.bookmarklet = document.createElement('SCRIPT');
+  b.type = 'text/javascript';
+  b.src = d.host + '/' + d.path + '/bookmarklet.js'; // ?' + (Math.random());
+  document.getElementsByTagName('head')[0].appendChild(b);
 }());
 EOT;
   module_load_include('php', 'bookmarklet', 'jsmin-php/jsmin');
