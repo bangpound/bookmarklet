@@ -98,7 +98,7 @@ function bookmarklet_theme($existing, $type, $theme, $path) {
  * Takes the same arguments as l() but deliberately side steps the XSS security
  * filter because our goal is XSS.
  */
-function theme_bookmarklet($text, $script, $options) {
+function theme_bookmarklet($text = '', $script = '', $options = array()) {
   $options['absolute'] = TRUE;
   $decoy = 'http://BOOKMARKLET';
   $link = l($text, $decoy, $options);
