@@ -5,6 +5,7 @@
 
 /*global drupalBookmarklet,window,jQuery */
 
+drupalBookmarklet.init = function () {
 drupalBookmarklet.s1 = document.createElement('script');
 drupalBookmarklet.s2 = document.createElement('script');
 drupalBookmarklet.s1.setAttribute('src', 'http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.js');
@@ -16,6 +17,8 @@ drupalBookmarklet.s2.onload = function () {
   (function ($) {
     drupalBookmarklet.createBookmarklet($);
   }(jQuery.noConflict(true)));
+};
+document.getElementsByTagName('head')[0].appendChild(drupalBookmarklet.s1);
 };
 
 drupalBookmarklet.createBookmarklet = function ($) {
@@ -98,6 +101,8 @@ drupalBookmarklet.createBookmarklet = function ($) {
       });
   };
 
-document.getElementsByTagName('head')[0].appendChild(drupalBookmarklet.s1);
+(function () {
+drupalBookmarklet.init();
+}());
 
 /*jslint white: true, browser: true, devel: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, strict: true, newcap: true, immed: true, indent: 2 */
