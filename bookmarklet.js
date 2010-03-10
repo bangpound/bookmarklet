@@ -63,25 +63,24 @@ drupalBookmarklet.init = function ($) {
         return;
       }
 
-      $('<iframe/>')
-        .attr({
+      $('<div/>', { id: 'drupal_bookmarklet' })
+        .append($('<iframe/>', {
           src: iframe_url,
           frameborder: 0,
           scrolling: 'no',
           name: 'drupal_bookmarklet_iframe',
-          id: 'drupal_bookmarklet_iframe'
-        })
-        .dialog({
-          position: ['right', 'top'],
-          title: 'post to EI'
-        })
-        .css({
+          id: 'drupal_bookmarklet_iframe',
           width: '100%',
           height: '100%',
-          border: '1px',
-          padding: '0px',
-          margin: '0px'
-        });
+          css: {
+            width: '100%',
+            height: '100%',
+            border: '0px',
+            padding: '0px',
+            margin: '0px'
+          }
+        }))
+        .dialog();
 
       $(document).keypress(function (event) {
         if (event.keyCode === '27') {
