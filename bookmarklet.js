@@ -35,14 +35,18 @@ drupalBookmarklet.init = function () {
 };
 
 drupalBookmarklet.handleMessage = function (event) {
-  if (event.data === 'close') {
-    drupalBookmarklet.jQuery(drupalBookmarklet.dialog).dialog('close');
+  var data = {};
+  drupalBookmarklet.jQuery.each(decodeURIComponent(event.data).split("&"), function () {
+    data[this.split("=")[0]] = this.split("=")[1];
+  });
+  if (typeof(data.optionName) === "undefined") {
+    drupalBookmarklet.jQuery(drupalBookmarklet.dialog).dialog(data.method);
   }
-  if (event.data === 'resize') {
-    drupalBookmarklet.jQuery(drupalBookmarklet.dialog).dialog('option', {
-      width: 'auto',
-      height: 'auto'
-    });
+  else {
+    drupalBookmarklet.jQuery(drupalBookmarklet.dialog).dialog(data.method, data.optionName, data.value);
+    if (data.optionName === 'height') {
+      drupalBookmarklet.jQuery(drupalBookmarklet.dialog).height(data.value);
+    }
   }
 };
 
@@ -115,7 +119,10 @@ drupalBookmarklet.createBookmarklet = function ($) {
         margin: '0px'
       }
     }))
-    .dialog();
+    .dialog({
+      position: ['right', 'top'],
+      width: '500px'
+    });
 
   $(document).keypress(function (event) {
     if (event.keyCode === '27') {
