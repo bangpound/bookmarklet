@@ -124,13 +124,6 @@ drupalBookmarklet.createBookmarklet = function ($) {
       position: ['right', 'top'],
       width: '500px'
     });
-
-  $(document).keypress(function (event) {
-    if (event.keyCode === '27') {
-      event.preventDefault();
-      $('#drupal_bookmarklet').toggle();
-    }
-  });
 };
 
 (function () {
