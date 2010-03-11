@@ -41,6 +41,9 @@ function bookmarklet_block($op = 'list', $delta = 0, $edit = array()) {
  */
 function bookmarklet_form_alter(&$form, $form_state, $form_id) {
   if (isset($_REQUEST['bookmarklet']) && isset($form['type']) && isset($form['#node']) && ($form_id == $form['type']['#value'] .'_node_form')) {
+    if (!$form_state['submitted']) {
+      _bookmarklet_message('resize',  $_SERVER['HTTP_REFERER']);
+    }
 
     // Recurse through all children.
     _bookmarklet_form_alter($form, $form_state, $form_id);
@@ -71,13 +74,7 @@ function bookmarklet_form_alter(&$form, $form_state, $form_id) {
  */
 function bookmarklet_form_submit($form, &$form_state) {
   $form_state['redirect'] = FALSE;
-  drupal_add_js(drupal_get_path('module', 'bookmarklet') .'/jquery-postmessage/jquery.ba-postmessage.js');
-  drupal_add_js(drupal_get_path('module', 'bookmarklet') .'/bookmarklet.child.js', 'module', 'footer');
-  drupal_add_js(array(
-    'bookmarklet' => array(
-      'referrer' => $form_state['values']['bookmarklet_referrer'],
-    )
-  ), 'setting');
+  _bookmarklet_message('close',  $form_state['values']['bookmarklet_referrer']);
 }
 
 function _bookmarklet_form_alter(&$elements, $form_state, $form_id) {
@@ -102,6 +99,30 @@ function _bookmarklet_form_alter(&$elements, $form_state, $form_id) {
         }
       }
     }
+  }
+}
+
+/**
+ * Set up a message to pass from the iframe to the parent document.
+ */
+function _bookmarklet_message($event = NULL, $target_url = NULL) {
+  static $stored_message = array();
+
+  if (!is_null($event) && !is_null($target_url)) {
+    $stored_message = array(
+      'event' => $event,
+      'target_url' => $target_url
+    );
+  }
+  return $stored_message;
+}
+
+function bookmarklet_footer($main = 0) {
+  if ($message = _bookmarklet_message()) {
+    $path = drupal_get_path('module', 'bookmarklet');
+    drupal_add_js($path .'/jquery-postmessage/jquery.ba-postmessage.js', 'module', 'footer');
+    drupal_add_js($path .'/bookmarklet.child.js', 'module', 'footer');
+    drupal_add_js(array('bookmarklet' => $message), 'setting', 'footer');
   }
 }
 
