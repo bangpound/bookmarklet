@@ -3,6 +3,8 @@ Drupal Bookmarklet
 
 This module provides a bookmarklet to allow users to create new nodes while they browse other sites. The bookmarklet opens a jQuery UI Dialog containing an iframe of the Drupal node form.
 
+[Video Demonstration](http://www.vimeo.com/10082728)
+
 Dependencies
 ------------
 * [Modal Frame API](http://drupal.org/project/modalframe)  
