@@ -132,7 +132,7 @@ drupalBookmarklet.createBookmarklet = function ($) {
   else {
     // If the dialog has already been open, refresh the src URL of the iframe to
     // fill in the form with new values.
-    $('iframe', drupalBookmarklet.dialog).attr('src', drupalBookmarklet.iframeUrl());
+    drupalBookmarklet.jQuery('iframe', drupalBookmarklet.dialog).attr('src', drupalBookmarklet.iframeUrl());
     drupalBookmarklet.jQuery(drupalBookmarklet.dialog).dialog('open');
   }
 }());
