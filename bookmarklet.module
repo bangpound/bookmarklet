@@ -171,7 +171,7 @@ var drupalBookmarklet = drupalBookmarklet || function() {};
   d.path = '$path';
   b = d.bookmarklet = document.createElement('SCRIPT');
   b.type = 'text/javascript';
-  b.src = d.host + '/' + d.path + '/bookmarklet.js'; // ?' + (Math.random());
+  b.src = d.host + '/' + d.path + '/bookmarklet.js?' + (Math.random());
   document.getElementsByTagName('head')[0].appendChild(b);
 }());
 EOT;
