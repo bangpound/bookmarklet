@@ -55,6 +55,7 @@ function bookmarklet_form_alter(&$form, $form_state, $form_id) {
 
     // Store the referrer which will be used in the submit handler to direct
     // the child JS to tell the parent document close the iframe.
+    // TODO: Workaround for missing referrers.
     $form['bookmarklet_referrer'] = array(
       '#type' => 'hidden',
       '#default_value' => $_SERVER['HTTP_REFERER'],
