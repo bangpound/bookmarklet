@@ -46,8 +46,8 @@ drupalBookmarklet.handleMessage = function (event) {
   }
 };
 
-drupalBookmarklet.createBookmarklet = function ($) {
-  var t, body, iframe_url;
+drupalBookmarklet.getSelection = function () {
+  var t, body;
 
   try {
     // get the currently selected text
@@ -63,6 +63,14 @@ drupalBookmarklet.createBookmarklet = function ($) {
   if (body === "") {
     body = "";
   }
+
+  return body;
+};
+
+drupalBookmarklet.createBookmarklet = function ($) {
+  var body, iframe_url;
+
+  body = this.getSelection();
 
   iframe_url = drupalBookmarklet.host;
   iframe_url += '/node/add/link?bookmarklet';
