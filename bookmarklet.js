@@ -8,19 +8,39 @@
 drupalBookmarklet.init = function () {
   drupalBookmarklet.s1 = document.createElement('script');
   drupalBookmarklet.s2 = document.createElement('script');
+  drupalBookmarklet.s3 = document.createElement('script');
+
   drupalBookmarklet.s1.setAttribute('src', 'http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.js');
   drupalBookmarklet.s2.setAttribute('src', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.7/jquery-ui.js');
+  drupalBookmarklet.s3.setAttribute('src', drupalBookmarklet.host + '/' + drupalBookmarklet.path + '/jquery-postmessage/jquery.ba-postmessage.js');
+
   drupalBookmarklet.s1.onload = function () {
     document.getElementsByTagName('head')[0].appendChild(drupalBookmarklet.s2);
   };
   drupalBookmarklet.s2.onload = function () {
+    document.getElementsByTagName('head')[0].appendChild(drupalBookmarklet.s3);
+  };
+  drupalBookmarklet.s3.onload = function () {
     // newly loaded jQuery is attached to the drupalBookmarklet object as the
     // jQuery method.
     (function ($) {
+
+      // TODO: Get this in one match.
       drupalBookmarklet.createBookmarklet($);
+      $.receiveMessage(
+        drupalBookmarklet.handleMessage,
+        // https://developer.mozilla.org/en/DOM/window.postMessage
+        drupalBookmarklet.host.match(/([^:]+:\/\/[^\/]+)[^\/]/)
+      );
     }(drupalBookmarklet.jQuery = jQuery.noConflict(true)));
   };
   document.getElementsByTagName('head')[0].appendChild(drupalBookmarklet.s1);
+};
+
+drupalBookmarklet.handleMessage = function (event) {
+  if (event.data == 'close') {
+    drupalBookmarklet.jQuery(drupalBookmarklet.dialog).dialog('close');
+  }
 };
 
 drupalBookmarklet.createBookmarklet = function ($) {

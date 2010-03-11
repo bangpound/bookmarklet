@@ -77,7 +77,8 @@ function bookmarklet_form_alter(&$form, $form_state, $form_id) {
  */
 function bookmarklet_form_submit($form, &$form_state) {
   $form_state['redirect'] = FALSE;
-  drupal_add_js(drupal_get_path('module', 'bookmarklet') .'/bookmarklet.child.js');
+  drupal_add_js(drupal_get_path('module', 'bookmarklet') .'/jquery-postmessage/jquery.ba-postmessage.js');
+  drupal_add_js(drupal_get_path('module', 'bookmarklet') .'/bookmarklet.child.js', 'module', 'footer');
   drupal_add_js(array(
     'bookmarklet' => array(
       'referrer' => $form_state['values']['bookmarklet_referrer'],
