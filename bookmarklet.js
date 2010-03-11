@@ -67,7 +67,7 @@ drupalBookmarklet.getSelection = function () {
   return body;
 };
 
-drupalBookmarklet.createBookmarklet = function ($) {
+drupalBookmarklet.iframeUrl = function () {
   var body, iframe_url;
 
   body = this.getSelection();
@@ -86,6 +86,10 @@ drupalBookmarklet.createBookmarklet = function ($) {
     iframe_url += encodeURIComponent(body);
   }
 
+  return iframe_url;
+};
+
+drupalBookmarklet.createBookmarklet = function ($) {
   $('<link/>', {
     href: 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.7/themes/flick/jquery-ui.css',
     rel: 'stylesheet',
@@ -96,7 +100,7 @@ drupalBookmarklet.createBookmarklet = function ($) {
 
   this.dialog = this.dialog || $('<div/>', { id: 'drupal_bookmarklet' })
     .append($('<iframe/>', {
-      src: iframe_url,
+      src: this.iframeUrl(),
       frameborder: 0,
       scrolling: 'no',
       name: 'drupal_bookmarklet_iframe',
