@@ -49,7 +49,40 @@ function bookmarklet_form_alter(&$form, $form_state, $form_id) {
     if (!empty($form['body_field'])) {
       $form['body_field']['body']['#rows'] = 5;
     }
+
+    // Add submit handler.
+    $form['buttons']['submit']['#submit'][] = 'bookmarklet_form_submit';
+
+    // Store the referrer which will be used in the submit handler to direct
+    // the child JS to tell the parent document close the iframe.
+    $form['bookmarklet_referrer'] = array(
+      '#type' => 'hidden',
+      '#default_value' => $_SERVER['HTTP_REFERER'],
+    );
   }
+}
+
+/**
+ * Generic form submit handler.
+ *
+ * When we are requested to close a modal dialog, we don't want Form API to
+ * perform any redirection once the submitted form has been processed.
+ *
+ * When $form_state['redirect'] is set to FALSE, then Form API will simply
+ * re-render the form with the values still in its fields. And this is all
+ * we need to output the javascript that will tell the parent window to close
+ * the child dialog.
+ *
+ * @ingroup forms
+ */
+function bookmarklet_form_submit($form, &$form_state) {
+  $form_state['redirect'] = FALSE;
+  drupal_add_js(drupal_get_path('module', 'bookmarklet') .'/bookmarklet.child.js');
+  drupal_add_js(array(
+    'bookmarklet' => array(
+      'referrer' => $form_state['values']['bookmarklet_referrer'],
+    )
+  ), 'setting');
 }
 
 function _bookmarklet_form_alter(&$elements, $form_state, $form_id) {
