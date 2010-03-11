@@ -47,13 +47,14 @@ drupalBookmarklet.handleMessage = function (event) {
 };
 
 drupalBookmarklet.createBookmarklet = function ($) {
-  // get the currently selected text
   var t, body, iframe_url;
 
   try {
+    // get the currently selected text
     t = ((window.getSelection && window.getSelection()) || (document.getSelection && document.getSelection()) || (document.selection && document.selection.createRange && document.selection.createRange().text));
   }
-  catch (e) { // access denied on https sites
+  catch (e) {
+    // access denied on https sites
     t = "";
   }
 
