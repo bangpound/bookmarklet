@@ -35,7 +35,8 @@ drupalBookmarklet.init = function () {
 };
 
 drupalBookmarklet.handleMessage = function (event) {
-  var data = {};
+  var data;
+  data = {};
   drupalBookmarklet.jQuery.each(decodeURIComponent(event.data).split("&"), function () {
     data[this.split("=")[0]] = this.split("=")[1];
   });
