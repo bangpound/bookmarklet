@@ -3,6 +3,8 @@ Drupal Bookmarklet
 
 This module provides a bookmarklet to allow users to create new nodes while they browse other sites. The bookmarklet opens a jQuery UI Dialog containing an iframe of the Drupal node form.
 
+[Video Demonstration](http://www.vimeo.com/10082728)
+
 Dependencies
 ------------
 * [Modal Frame API](http://drupal.org/project/modalframe)  
@@ -21,8 +23,6 @@ This module is not complete nor very configurable. It's only been tested in Fire
 Multiple invocations of the bookmarklet on the same page cause the dialog to reappear, but this is not always desireable.
 
 There is no status indicators. Is the iframe loading? Is the node saving? When the node is saved, the dialog disappears too quickly.
-
-The dialog does not change its size to fit the contents of the iframe.
 
 Every optional field on the node form is left out except for the body and other hard-coded selections.
 
