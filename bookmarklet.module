@@ -142,7 +142,6 @@ function theme_bookmarklet($text = '', $script = '', $options = array()) {
 function bookmarklet_script() {
   global $base_url;
   $path = drupal_get_path('module', 'bookmarklet');
-  $labjs = drupal_get_path('module', 'bookmarklet');
 
   // jslint
   /* global DRUPAL_BOOKMARKLET_HOST,$,drupalBookmarklet,L,Math */
