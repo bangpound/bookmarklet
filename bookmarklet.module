@@ -66,14 +66,7 @@ function bookmarklet_form_alter(&$form, $form_state, $form_id) {
 /**
  * Generic form submit handler.
  *
- * When we are requested to close a modal dialog, we don't want Form API to
- * perform any redirection once the submitted form has been processed.
- *
- * When $form_state['redirect'] is set to FALSE, then Form API will simply
- * re-render the form with the values still in its fields. And this is all
- * we need to output the javascript that will tell the parent window to close
- * the child dialog.
- *
+ * @see modalframe_form_submit().
  * @ingroup forms
  */
 function bookmarklet_form_submit($form, &$form_state) {
