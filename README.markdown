@@ -18,8 +18,6 @@ Issues
 ------
 This module is not complete nor very configurable. It's only been tested in Firefox 3 and Safari.
 
-Notably in Firefox 3, Drupal always returns a 403 error when the site is accessed from the iframe. If the user logs in through the iframe, the response is 404.
-
 Multiple invocations of the bookmarklet on the same page cause the dialog to reappear, but this is not always desireable.
 
 There is no status indicators. Is the iframe loading? Is the node saving? When the node is saved, the dialog disappears too quickly.
@@ -39,6 +37,8 @@ Road map
 The bookmarklet needs to support multiple node types, and it would be even nicer if Drupal would choose the best node type depending on the URL of the page the user is viewing.
 
 The Drupal theme needs to be educated about how to render and style forms for the bookmarklet.
+
+Warn the user when he has third party cookies disabled.
 
 References
 ----------
