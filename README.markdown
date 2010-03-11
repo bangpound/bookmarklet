@@ -24,8 +24,6 @@ Multiple invocations of the bookmarklet on the same page cause the dialog to rea
 
 There is no status indicators. Is the iframe loading? Is the node saving? When the node is saved, the dialog disappears too quickly.
 
-The dialog does not change its size to fit the contents of the iframe.
-
 Every optional field on the node form is left out except for the body and other hard-coded selections.
 
 If the user is visiting a secure site, the referrer doesn't get passed to the Drupal site and the connection between the child iframe and the parent page is broken. This means the iframe cannot be closed without user intervention.
