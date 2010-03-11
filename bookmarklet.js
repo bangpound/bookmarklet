@@ -27,7 +27,7 @@ drupalBookmarklet.init = function () {
       $.receiveMessage(
         drupalBookmarklet.handleMessage,
         // https://developer.mozilla.org/en/DOM/window.postMessage
-        drupalBookmarklet.host.match(/([^:]+:\/\/[^\/]+)[^\/]/)
+        drupalBookmarklet.host.match(/(.*?:\/\/.*?)\//)
       );
     }(drupalBookmarklet.jQuery = jQuery.noConflict(true)));
   };
