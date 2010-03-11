@@ -41,6 +41,12 @@ drupalBookmarklet.handleMessage = function (event) {
   if (event.data === 'close') {
     drupalBookmarklet.jQuery(drupalBookmarklet.dialog).dialog('close');
   }
+  if (event.data === 'resize') {
+    drupalBookmarklet.jQuery(drupalBookmarklet.dialog).dialog('option', {
+      width: 'auto',
+      height: 'auto'
+    });
+  }
 };
 
 drupalBookmarklet.createBookmarklet = function ($) {
