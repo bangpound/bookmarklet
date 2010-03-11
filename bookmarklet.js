@@ -1,9 +1,6 @@
-// Inspired by:
-// http://jqueryui.com/themeroller/developertool/developertool.js.php
+/*global drupalBookmarklet,window,jQuery */
 
 "use strict";
-
-/*global drupalBookmarklet,window,jQuery */
 
 drupalBookmarklet.init = function () {
   drupalBookmarklet.s1 = document.createElement('script');
