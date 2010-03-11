@@ -38,7 +38,7 @@ drupalBookmarklet.init = function () {
 };
 
 drupalBookmarklet.handleMessage = function (event) {
-  if (event.data == 'close') {
+  if (event.data === 'close') {
     drupalBookmarklet.jQuery(drupalBookmarklet.dialog).dialog('close');
   }
 };
@@ -110,7 +110,7 @@ drupalBookmarklet.createBookmarklet = function ($) {
 };
 
 (function () {
-  if (typeof drupalBookmarklet.dialog == "undefined") {
+  if (typeof drupalBookmarklet.dialog === "undefined") {
     drupalBookmarklet.init();
   }
   else {
