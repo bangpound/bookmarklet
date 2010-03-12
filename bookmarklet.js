@@ -113,11 +113,11 @@ drupalBookmarklet.iframeUrl = function (nodeType) {
 
 drupalBookmarklet.createBookmarklet = function (buttons) {
   this.jQuery('<link/>', {
-    href: 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.7/themes/flick/jquery-ui.css',
-    rel: 'stylesheet',
-    type: 'text/css',
-    media: 'screen'
-  })
+      href: 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.7/themes/smoothness/jquery-ui.css',
+      rel: 'stylesheet',
+      type: 'text/css',
+      media: 'screen'
+    })
     .appendTo('head');
 
   this.dialog = this.dialog || this.jQuery('<div/>', { id: 'drupal_bookmarklet' })
