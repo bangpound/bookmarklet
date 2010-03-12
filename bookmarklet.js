@@ -21,18 +21,20 @@ drupalBookmarklet.init = function () {
     // newly loaded jQuery is attached to the drupalBookmarklet object as the
     // jQuery method.
     (function ($) {
-      var buttons;
+      var buttons,nodeTypes;
       buttons = {};
+      nodeTypes = [];
 
       $.getJSON(drupalBookmarklet.host + '/bookmarklet/js?callback=?', function (json) {
 
         $.each(json, function (machineName, nodeType) {
+          nodeTypes.push(machineName);
           buttons[nodeType] = function () {
             $('iframe', this).attr('src', drupalBookmarklet.iframeUrl(machineName));
           };
         });
 
-        drupalBookmarklet.createBookmarklet(buttons);
+        drupalBookmarklet.createBookmarklet(buttons, nodeTypes[0]);
 
         $.receiveMessage(
           drupalBookmarklet.handleMessage,
@@ -142,7 +144,7 @@ drupalBookmarklet.iframeUrl = function (nodeType) {
   return iframe_url + '?' + drupalBookmarklet.jQuery.param({ bookmarklet: true, edit: edit });
 };
 
-drupalBookmarklet.createBookmarklet = function (buttons) {
+drupalBookmarklet.createBookmarklet = function (buttons, nodeType) {
   this.jQuery('<link/>', {
       href: 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.7/themes/smoothness/jquery-ui.css',
       rel: 'stylesheet',
@@ -159,7 +161,7 @@ drupalBookmarklet.createBookmarklet = function (buttons) {
       }
     })
     .append(this.jQuery('<iframe/>', {
-      src: this.iframeUrl('story'),
+      src: this.iframeUrl(nodeType),
       frameborder: 0,
       scrolling: 'no',
       name: 'drupal_bookmarklet_iframe',
@@ -177,7 +179,8 @@ drupalBookmarklet.createBookmarklet = function (buttons) {
     .dialog({
       position: ['right', 'top'],
       buttons: buttons
-    });
+    })
+    .data('defaultNodeType', nodeType);
 
   // jQuery UI stylesheets assumes base font size of 11px.
   this.dialog.data('dialog').uiDialog.css({
@@ -192,7 +195,7 @@ drupalBookmarklet.createBookmarklet = function (buttons) {
   else {
     // If the dialog has already been open, refresh the src URL of the iframe to
     // fill in the form with new values.
-    drupalBookmarklet.jQuery('iframe', drupalBookmarklet.dialog).attr('src', drupalBookmarklet.iframeUrl('story'));
+    drupalBookmarklet.jQuery('iframe', drupalBookmarklet.dialog).attr('src', drupalBookmarklet.iframeUrl(drupalBookmarklet.dialog.data('defaultNodeType')));
     drupalBookmarklet.jQuery(drupalBookmarklet.dialog).dialog('open');
   }
 }());
