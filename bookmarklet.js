@@ -97,10 +97,16 @@ drupalBookmarklet.iframeUrl = function (nodeType) {
   iframe_url = drupalBookmarklet.host;
   iframe_url += '/node/add/' + nodeType + '?bookmarklet';
 
+  // Link URL
   iframe_url += '&edit[field_link][0][url]=';
   iframe_url += encodeURIComponent(location.href);
 
+  // Link title
   iframe_url += '&edit[field_link][0][title]=';
+  iframe_url += encodeURIComponent(document.title);
+
+  // Node title
+  iframe_url += '&edit[title]=';
   iframe_url += encodeURIComponent(document.title);
 
   if (body !== "") {
