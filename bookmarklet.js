@@ -100,44 +100,46 @@ drupalBookmarklet.getSelection = function () {
 };
 
 drupalBookmarklet.iframeUrl = function (nodeType) {
-  var body, iframe_url;
+  var body, iframe_url, edit;
 
+  edit = {};
   body = this.getSelection();
 
   iframe_url = drupalBookmarklet.host;
-  iframe_url += '/node/add/' + nodeType + '?bookmarklet';
+  iframe_url += '/node/add/' + nodeType;
 
   switch (nodeType) {
   case 'video':
 
     // Video URL
-    iframe_url += '&edit[field_emvideo][0][embed]=';
-    iframe_url += encodeURIComponent(location.href);
+    edit.field_emvideo = [];
+    edit.field_emvideo[0] = {
+      embed: location.href
+    };
     break;
   case 'link':
 
-    // Link URL
-    iframe_url += '&edit[field_link][0][url]=';
-    iframe_url += encodeURIComponent(location.href);
-
-    // Link title
-    iframe_url += '&edit[field_link][0][title]=';
-    iframe_url += encodeURIComponent(document.title);
+    // Link URL & title
+    edit.field_link = [];
+    edit.field_link[0] = {
+      url: location.href,
+      title: document.title
+    };
     break;
   default:
 
     // Node title
-    iframe_url += '&edit[title]=';
-    iframe_url += encodeURIComponent(document.title);
+    edit.title = document.title;
     break;
   }
 
   if (body !== "") {
-    iframe_url += '&edit[body_field][body]=';
-    iframe_url += encodeURIComponent(body);
+    edit.body_field = {
+      body: body
+    };
   }
 
-  return iframe_url;
+  return iframe_url + '?' + drupalBookmarklet.jQuery.param({ bookmarklet: true, edit: edit });
 };
 
 drupalBookmarklet.createBookmarklet = function (buttons) {
