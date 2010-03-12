@@ -97,17 +97,30 @@ drupalBookmarklet.iframeUrl = function (nodeType) {
   iframe_url = drupalBookmarklet.host;
   iframe_url += '/node/add/' + nodeType + '?bookmarklet';
 
-  // Link URL
-  iframe_url += '&edit[field_link][0][url]=';
-  iframe_url += encodeURIComponent(location.href);
+  switch (nodeType) {
+  case 'video':
 
-  // Link title
-  iframe_url += '&edit[field_link][0][title]=';
-  iframe_url += encodeURIComponent(document.title);
+    // Video URL
+    iframe_url += '&edit[field_emvideo][0][embed]=';
+    iframe_url += encodeURIComponent(location.href);
+    break;
+  case 'link':
 
-  // Node title
-  iframe_url += '&edit[title]=';
-  iframe_url += encodeURIComponent(document.title);
+    // Link URL
+    iframe_url += '&edit[field_link][0][url]=';
+    iframe_url += encodeURIComponent(location.href);
+
+    // Link title
+    iframe_url += '&edit[field_link][0][title]=';
+    iframe_url += encodeURIComponent(document.title);
+    break;
+  default:
+
+    // Node title
+    iframe_url += '&edit[title]=';
+    iframe_url += encodeURIComponent(document.title);
+    break;
+  }
 
   if (body !== "") {
     iframe_url += '&edit[body_field][body]=';
