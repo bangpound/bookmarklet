@@ -22,7 +22,6 @@ drupalBookmarklet.init = function () {
     // jQuery method.
     (function ($) {
 
-      // TODO: Get this in one match.
       drupalBookmarklet.createBookmarklet();
       $.receiveMessage(
         drupalBookmarklet.handleMessage,
