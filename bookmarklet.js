@@ -3,21 +3,21 @@
 "use strict";
 
 drupalBookmarklet.init = function () {
-  drupalBookmarklet.s1 = document.createElement('script');
-  drupalBookmarklet.s2 = document.createElement('script');
-  drupalBookmarklet.s3 = document.createElement('script');
+  this.s1 = document.createElement('script');
+  this.s2 = document.createElement('script');
+  this.s3 = document.createElement('script');
 
-  drupalBookmarklet.s1.setAttribute('src', 'http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.js');
-  drupalBookmarklet.s2.setAttribute('src', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.7/jquery-ui.js');
-  drupalBookmarklet.s3.setAttribute('src', drupalBookmarklet.host + '/' + drupalBookmarklet.path + '/jquery-postmessage/jquery.ba-postmessage.js');
+  this.s1.setAttribute('src', 'http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.js');
+  this.s2.setAttribute('src', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.7/jquery-ui.js');
+  this.s3.setAttribute('src', this.host + '/' + this.path + '/jquery-postmessage/jquery.ba-postmessage.js');
 
-  drupalBookmarklet.s1.onload = function () {
-    document.getElementsByTagName('head')[0].appendChild(drupalBookmarklet.s2);
+  this.s1.onload = function () {
+    document.getElementsByTagName('head')[0].appendChild(this.s2);
   };
-  drupalBookmarklet.s2.onload = function () {
-    document.getElementsByTagName('head')[0].appendChild(drupalBookmarklet.s3);
+  this.s2.onload = function () {
+    document.getElementsByTagName('head')[0].appendChild(this.s3);
   };
-  drupalBookmarklet.s3.onload = function () {
+  this.s3.onload = function () {
     // newly loaded jQuery is attached to the drupalBookmarklet object as the
     // jQuery method.
     (function ($) {
