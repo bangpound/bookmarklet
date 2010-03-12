@@ -38,6 +38,24 @@ function bookmarklet_block($op = 'list', $delta = 0, $edit = array()) {
       $blocks[0]['info'] = t('Bookmarklet');
       return $blocks;
 
+    case 'configure':
+      if ($delta == 0) {
+        $form['node_types'] = array(
+          '#type' => 'checkboxes',
+          '#title' => t('Node types'),
+          '#default_value' => variable_get('bookmarklet_node_types', array('story' => 'story')),
+          '#options' => node_get_types('names'),
+        );
+        return $form;
+      }
+      break;
+
+    case 'save':
+      if ($delta == 0) {
+        variable_set('bookmarklet_node_types', $edit['node_types']);
+      }
+      break;
+
     case 'view':
       if ($delta == 0) {
         $block['subject'] = t('Bookmarklet');
@@ -198,12 +216,13 @@ EOT;
 }
 
 function bookmarklet_js() {
+  $node_types = array_filter(variable_get('bookmarklet_node_types', array('story' => 'story')));
   // We are returning JavaScript, so tell the browser.
   drupal_set_header('Content-Type: text/javascript; charset=utf-8');
 
   $types = array();
   foreach (node_get_types('types') as $type) {
-    if (node_access('create', $type->type)) {
+    if (in_array($type->type, $node_types) && node_access('create', $type->type)) {
       $types[str_replace('_', '-', $type->type)] = drupal_ucfirst($type->name);
     }
   }
