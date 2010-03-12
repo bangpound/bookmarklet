@@ -120,7 +120,13 @@ drupalBookmarklet.createBookmarklet = function (buttons) {
     })
     .appendTo('head');
 
-  this.dialog = this.dialog || this.jQuery('<div/>', { id: 'drupal_bookmarklet' })
+  this.dialog = this.dialog || this.jQuery('<div/>', {
+      id: 'drupal_bookmarklet',
+      css: {
+        overflow: 'visible',
+        padding: '0px'
+      }
+    })
     .append(this.jQuery('<iframe/>', {
       src: this.iframeUrl('story'),
       frameborder: 0,
