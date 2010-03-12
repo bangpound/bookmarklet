@@ -51,6 +51,11 @@ function bookmarklet_form_alter(&$form, $form_state, $form_id) {
     // Definitely shrink the body field.
     if (!empty($form['body_field'])) {
       $form['body_field']['body']['#rows'] = 5;
+
+      // Drupal resizable behavior fake-out. It's not helpful in a small frame.
+      $form['body_field']['body']['#attributes'] = array(
+        'class' => 'textarea-processed',
+      );
     }
 
     // Add submit handler.
