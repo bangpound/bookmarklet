@@ -77,13 +77,13 @@ drupalBookmarklet.getSelection = function () {
   return body;
 };
 
-drupalBookmarklet.iframeUrl = function () {
+drupalBookmarklet.iframeUrl = function (nodeType) {
   var body, iframe_url;
 
   body = this.getSelection();
 
   iframe_url = drupalBookmarklet.host;
-  iframe_url += '/node/add/link?bookmarklet';
+  iframe_url += '/node/add/' + nodeType + '?bookmarklet';
 
   iframe_url += '&edit[field_link][0][url]=';
   iframe_url += encodeURIComponent(location.href);
@@ -110,7 +110,7 @@ drupalBookmarklet.createBookmarklet = function ($) {
 
   this.dialog = this.dialog || $('<div/>', { id: 'drupal_bookmarklet' })
     .append($('<iframe/>', {
-      src: this.iframeUrl(),
+      src: this.iframeUrl('story'),
       frameborder: 0,
       scrolling: 'no',
       name: 'drupal_bookmarklet_iframe',
@@ -137,7 +137,7 @@ drupalBookmarklet.createBookmarklet = function ($) {
   else {
     // If the dialog has already been open, refresh the src URL of the iframe to
     // fill in the form with new values.
-    drupalBookmarklet.jQuery('iframe', drupalBookmarklet.dialog).attr('src', drupalBookmarklet.iframeUrl());
+    drupalBookmarklet.jQuery('iframe', drupalBookmarklet.dialog).attr('src', drupalBookmarklet.iframeUrl('story'));
     drupalBookmarklet.jQuery(drupalBookmarklet.dialog).dialog('open');
   }
 }());
