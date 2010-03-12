@@ -44,9 +44,14 @@ drupalBookmarklet.handleMessage = function (event) {
     drupalBookmarklet.jQuery(drupalBookmarklet.dialog).dialog(data.method);
   }
   else {
-    drupalBookmarklet.jQuery(drupalBookmarklet.dialog).dialog(data.method, data.optionName, data.value);
-    if (data.optionName === 'height') {
-      drupalBookmarklet.jQuery(drupalBookmarklet.dialog).height(data.value);
+    switch (data.optionName) {
+    case 'height':
+    case 'width':
+      drupalBookmarklet.dialog.css(data.optionName, data.value + "px");
+      break;
+    default:
+      drupalBookmarklet.jQuery(drupalBookmarklet.dialog).dialog(data.method, data.optionName, data.value);
+      break;
     }
   }
 };
@@ -121,8 +126,7 @@ drupalBookmarklet.createBookmarklet = function ($) {
       }
     }))
     .dialog({
-      position: ['right', 'top'],
-      width: '500px'
+      position: ['right', 'top']
     });
 };
 

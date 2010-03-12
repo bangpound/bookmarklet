@@ -42,7 +42,7 @@ function bookmarklet_block($op = 'list', $delta = 0, $edit = array()) {
 function bookmarklet_form_alter(&$form, $form_state, $form_id) {
   if (isset($_REQUEST['bookmarklet']) && isset($form['type']) && isset($form['#node']) && ($form_id == $form['type']['#value'] .'_node_form')) {
     if (!$form_state['submitted']) {
-      _bookmarklet_message(array('method' => 'option', 'optionName' => 'height', 'value' => '500px'), $_SERVER['HTTP_REFERER']);
+      _bookmarklet_message(array('method' => 'moveToTop'), $_SERVER['HTTP_REFERER']);
     }
 
     // Recurse through all children.
