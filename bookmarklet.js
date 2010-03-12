@@ -23,7 +23,7 @@ drupalBookmarklet.init = function () {
     (function ($) {
 
       // TODO: Get this in one match.
-      drupalBookmarklet.createBookmarklet($);
+      drupalBookmarklet.createBookmarklet();
       $.receiveMessage(
         drupalBookmarklet.handleMessage,
         // https://developer.mozilla.org/en/DOM/window.postMessage
@@ -99,8 +99,8 @@ drupalBookmarklet.iframeUrl = function (nodeType) {
   return iframe_url;
 };
 
-drupalBookmarklet.createBookmarklet = function ($) {
-  $('<link/>', {
+drupalBookmarklet.createBookmarklet = function () {
+  this.jQuery('<link/>', {
     href: 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.7/themes/flick/jquery-ui.css',
     rel: 'stylesheet',
     type: 'text/css',
@@ -108,8 +108,8 @@ drupalBookmarklet.createBookmarklet = function ($) {
   })
     .appendTo('head');
 
-  this.dialog = this.dialog || $('<div/>', { id: 'drupal_bookmarklet' })
-    .append($('<iframe/>', {
+  this.dialog = this.dialog || this.jQuery('<div/>', { id: 'drupal_bookmarklet' })
+    .append(this.jQuery('<iframe/>', {
       src: this.iframeUrl('story'),
       frameborder: 0,
       scrolling: 'no',
