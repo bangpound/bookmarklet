@@ -34,7 +34,7 @@ jQuery, jQuery UI and jQuery UI stylesheet are loaded from [Google](http://code.
 
 Road map
 --------
-The bookmarklet needs to support multiple node types, and it would be even nicer if Drupal would choose the best node type depending on the URL of the page the user is viewing.
+It would be even nice if Drupal would choose the best node type depending on the URL of the page the user is viewing.
 
 The Drupal theme needs to be educated about how to render and style forms for the bookmarklet.
 
