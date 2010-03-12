@@ -207,5 +207,11 @@ function bookmarklet_js() {
       $types[str_replace('_', '-', $type->type)] = drupal_ucfirst($type->name);
     }
   }
-  echo $_GET['callback'] .'('. drupal_to_js($types) .');';
+
+  if (!empty($_GET['callback'])) {
+    echo $_GET['callback'] .'('. drupal_to_js($types) .');';
+  }
+  else {
+    echo drupal_to_js($types);
+  }
 }
