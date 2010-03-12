@@ -24,7 +24,7 @@ drupalBookmarklet.init = function () {
       var buttons;
       buttons = {};
 
-      $.getJSON(drupalBookmarklet.host + '/bookmarklet/js' + "?callback=?", function (json) {
+      $.getJSON(drupalBookmarklet.host + '/bookmarklet/js?callback=?', function (json) {
 
         $.each(json, function (machineName, nodeType) {
           buttons[nodeType] = function () {
