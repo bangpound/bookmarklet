@@ -23,7 +23,7 @@ function bookmarklet_menu() {
   $items['bookmarklet/js'] = array(
     'title' => 'Bookmarklet',
     'page callback' => 'bookmarklet_js',
-    'access arguments' => array(TRUE),
+    'access callback' => TRUE,
   );
   return $items;
 }
