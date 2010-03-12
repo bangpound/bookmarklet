@@ -46,6 +46,16 @@ drupalBookmarklet.init = function () {
   document.getElementsByTagName('head')[0].appendChild(drupalBookmarklet.s1);
 };
 
+/**
+ * receive postMessage events.
+ *
+ * The message handler is designed to pass most of the events as methods to the
+ * ui.dialog widget.
+ *
+ * @param   event   object - must contain a method property,
+ *                  if it contains an optionName property, it must contain a
+ *                  value property.
+ */
 drupalBookmarklet.handleMessage = function (event) {
   var data;
   data = {};
