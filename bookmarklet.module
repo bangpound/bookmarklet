@@ -17,6 +17,18 @@ function bookmarklet_init() {
 }
 
 /**
+ * Implementation of hook_menu().
+ */
+function bookmarklet_menu() {
+  $items['bookmarklet/js'] = array(
+    'title' => 'Bookmarklet',
+    'page callback' => 'bookmarklet_js',
+    'access arguments' => array(TRUE),
+  );
+  return $items;
+}
+
+/**
  * Implementation of hook_block().
  */
 function bookmarklet_block($op = 'list', $delta = 0, $edit = array()) {
@@ -183,4 +195,17 @@ EOT;
   module_load_include('php', 'bookmarklet', 'jsmin-php/jsmin');
 
   return JSMin::minify($script);
+}
+
+function bookmarklet_js() {
+  // We are returning JavaScript, so tell the browser.
+  drupal_set_header('Content-Type: text/javascript; charset=utf-8');
+
+  $types = array();
+  foreach (node_get_types('types') as $type) {
+    if (node_access('create', $type->type)) {
+      $types[str_replace('_', '-', $type->type)] = drupal_ucfirst($type->name);
+    }
+  }
+  echo $_GET['callback'] .'('. drupal_to_js($types) .');';
 }

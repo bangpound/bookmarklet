@@ -21,13 +21,25 @@ drupalBookmarklet.init = function () {
     // newly loaded jQuery is attached to the drupalBookmarklet object as the
     // jQuery method.
     (function ($) {
+      var buttons;
+      buttons = {};
 
-      drupalBookmarklet.createBookmarklet();
+      $.getJSON(drupalBookmarklet.host + '/bookmarklet/js' + "?callback=?", function (json) {
+
+        $.each(json, function (machineName, nodeType) {
+          buttons[nodeType] = function () {
+            $('iframe', this).attr('src', drupalBookmarklet.iframeUrl(machineName));
+          };
+        });
+
+      drupalBookmarklet.createBookmarklet(buttons);
       $.receiveMessage(
         drupalBookmarklet.handleMessage,
         // https://developer.mozilla.org/en/DOM/window.postMessage
         drupalBookmarklet.host.match(/(.*?:\/\/.*?)\//)
       );
+
+      });
     }(drupalBookmarklet.jQuery = jQuery.noConflict(true)));
   };
   document.getElementsByTagName('head')[0].appendChild(drupalBookmarklet.s1);
@@ -98,7 +110,7 @@ drupalBookmarklet.iframeUrl = function (nodeType) {
   return iframe_url;
 };
 
-drupalBookmarklet.createBookmarklet = function () {
+drupalBookmarklet.createBookmarklet = function (buttons) {
   this.jQuery('<link/>', {
     href: 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.7/themes/flick/jquery-ui.css',
     rel: 'stylesheet',
@@ -125,7 +137,8 @@ drupalBookmarklet.createBookmarklet = function () {
       }
     }))
     .dialog({
-      position: ['right', 'top']
+      position: ['right', 'top'],
+      buttons: buttons
     });
 };
 
