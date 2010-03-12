@@ -21,7 +21,7 @@ Issues
 ------
 This module is not complete nor very configurable. It's only been tested in Firefox 3 and Safari.
 
-Multiple invocations of the bookmarklet on the same page cause the dialog to reappear, but this is not always desireable.
+Multiple invocations of the bookmarklet on the same page cause the dialog to reappear, but this is not always desirable.
 
 There is no status indicators. Is the iframe loading? Is the node saving? When the node is saved, the dialog disappears too quickly.
 
