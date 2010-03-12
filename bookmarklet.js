@@ -32,12 +32,13 @@ drupalBookmarklet.init = function () {
           };
         });
 
-      drupalBookmarklet.createBookmarklet(buttons);
-      $.receiveMessage(
-        drupalBookmarklet.handleMessage,
-        // https://developer.mozilla.org/en/DOM/window.postMessage
-        drupalBookmarklet.host.match(/(.*?:\/\/.*?)\//)
-      );
+        drupalBookmarklet.createBookmarklet(buttons);
+
+        $.receiveMessage(
+          drupalBookmarklet.handleMessage,
+          // https://developer.mozilla.org/en/DOM/window.postMessage
+          drupalBookmarklet.host.match(/(.*?:\/\/.*?)\//)
+        );
 
       });
     }(drupalBookmarklet.jQuery = jQuery.noConflict(true)));
