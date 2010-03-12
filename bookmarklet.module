@@ -75,6 +75,10 @@ function bookmarklet_form_alter(&$form, $form_state, $form_id) {
       _bookmarklet_message(array('method' => 'moveToTop'), $_SERVER['HTTP_REFERER']);
     }
 
+    if (module_exists('vertical_tabs')) {
+      vertical_tabs_remove_vertical_tabs($form);
+    }
+
     // Recurse through all children.
     _bookmarklet_form_alter($form, $form_state, $form_id);
 

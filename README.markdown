@@ -33,6 +33,8 @@ The JavaScript code is still clumsy. Variable scope may be a mess. Fortunately j
 
 jQuery, jQuery UI and jQuery UI stylesheet are loaded from [Google](http://code.google.com/apis/ajaxlibs/documentation/index.html).
 
+Because this module implements hook\_form\_alter, this module's weight in the system table is important. For example, it must run after Vertical Tabs if you want to disable Vertical Tabs for bookmarklet forms.
+
 Road map
 --------
 It would be even nice if Drupal would choose the best node type depending on the URL of the page the user is viewing.
