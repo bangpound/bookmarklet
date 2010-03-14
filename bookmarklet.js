@@ -3,6 +3,8 @@
 "use strict";
 
 drupalBookmarklet.init = function () {
+  var bookmarklet;
+  bookmarklet = this;
   this.s1 = document.createElement('script');
   this.s2 = document.createElement('script');
   this.s3 = document.createElement('script');
@@ -12,10 +14,10 @@ drupalBookmarklet.init = function () {
   this.s3.setAttribute('src', this.host + '/' + this.path + '/jquery-postmessage/jquery.ba-postmessage.js');
 
   this.s1.onload = function () {
-    document.getElementsByTagName('head')[0].appendChild(this.s2);
+    document.getElementsByTagName('head')[0].appendChild(bookmarklet.s2);
   };
   this.s2.onload = function () {
-    document.getElementsByTagName('head')[0].appendChild(this.s3);
+    document.getElementsByTagName('head')[0].appendChild(bookmarklet.s3);
   };
   this.s3.onload = function () {
     // newly loaded jQuery is attached to the drupalBookmarklet object as the
@@ -45,7 +47,7 @@ drupalBookmarklet.init = function () {
       });
     }(drupalBookmarklet.jQuery = jQuery.noConflict(true)));
   };
-  document.getElementsByTagName('head')[0].appendChild(drupalBookmarklet.s1);
+  document.getElementsByTagName('head')[0].appendChild(this.s1);
 };
 
 /**
