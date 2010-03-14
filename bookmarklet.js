@@ -20,14 +20,14 @@ drupalBookmarklet.init = function () {
     document.getElementsByTagName('head')[0].appendChild(bookmarklet.s3);
   };
   this.s3.onload = function () {
-    // newly loaded jQuery is attached to the drupalBookmarklet object as the
+    // newly loaded jQuery is attached to the bookmarklet object as the
     // jQuery method.
     (function ($) {
       var buttons, nodeTypes;
       buttons = {};
       nodeTypes = [];
 
-      $.getJSON(drupalBookmarklet.host + '/bookmarklet/js?callback=?', function (json) {
+      $.getJSON(bookmarklet.host + '/bookmarklet/js?callback=?', function (json) {
 
         $.each(json, function (machineName, nodeType) {
           nodeTypes.push(machineName);
@@ -36,20 +36,20 @@ drupalBookmarklet.init = function () {
               .addClass('ui-state-active')
               .siblings('.ui-state-active')
               .removeClass('ui-state-active');
-            $('iframe', this).attr('src', drupalBookmarklet.iframeUrl(machineName));
+            $('iframe', this).attr('src', bookmarklet.iframeUrl(machineName));
           };
         });
 
-        drupalBookmarklet.createBookmarklet(buttons, nodeTypes[0]);
+        bookmarklet.createBookmarklet(buttons, nodeTypes[0]);
 
         $.receiveMessage(
-          drupalBookmarklet.handleMessage,
+          bookmarklet.handleMessage,
           // https://developer.mozilla.org/en/DOM/window.postMessage
-          drupalBookmarklet.host.match(/(.*?:\/\/.*?)\//)
+          bookmarklet.host.match(/(.*?:\/\/.*?)\//)
         );
 
       });
-    }(drupalBookmarklet.jQuery = jQuery.noConflict(true)));
+    }(bookmarklet.jQuery = jQuery.noConflict(true)));
   };
   document.getElementsByTagName('head')[0].appendChild(this.s1);
 };
