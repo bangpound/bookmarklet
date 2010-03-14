@@ -31,7 +31,11 @@ drupalBookmarklet.init = function () {
 
         $.each(json, function (machineName, nodeType) {
           nodeTypes.push(machineName);
-          buttons[nodeType] = function () {
+          buttons[nodeType] = function (event) {
+            $(event.target)
+              .addClass('ui-state-active')
+              .siblings('.ui-state-active')
+              .removeClass('ui-state-active');
             $('iframe', this).attr('src', drupalBookmarklet.iframeUrl(machineName));
           };
         });
