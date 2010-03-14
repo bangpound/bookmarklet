@@ -67,7 +67,14 @@ drupalBookmarklet.handleMessage = function (event) {
     data[this.split("=")[0]] = this.split("=")[1];
   });
   if (typeof(data.optionName) === "undefined") {
-    drupalBookmarklet.jQuery(drupalBookmarklet.dialog).dialog(data.method);
+    if (data.method === 'close') {
+      setTimeout(function () {
+        drupalBookmarklet.jQuery(drupalBookmarklet.dialog).dialog(data.method);
+      }, 5000);
+    }
+    else {
+      drupalBookmarklet.jQuery(drupalBookmarklet.dialog).dialog(data.method);
+    }
   }
   else {
     switch (data.optionName) {

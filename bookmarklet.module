@@ -25,6 +25,15 @@ function bookmarklet_menu() {
     'page callback' => 'bookmarklet_js',
     'access callback' => TRUE,
   );
+  $items['node/%node/bookmarklet'] = array(
+    'title callback' => 'node_page_title',
+    'title arguments' => array(1),
+    'page callback' => 'bookmarklet_node_save_confirm',
+    'page arguments' => array(1),
+    'access callback' => 'node_access',
+    'access arguments' => array('view', 1),
+    'type' => MENU_CALLBACK
+  );
   return $items;
 }
 
@@ -112,8 +121,11 @@ function bookmarklet_form_alter(&$form, $form_state, $form_id) {
  * @ingroup forms
  */
 function bookmarklet_form_submit($form, &$form_state) {
-  $form_state['redirect'] = FALSE;
-  _bookmarklet_message(array('method' => 'close'), $form_state['values']['bookmarklet_referrer']);
+  $query = array(
+    'bookmarklet' => TRUE,
+    'origin' => $form_state['values']['bookmarklet_referrer'],
+  );
+  $form_state['redirect'] = array('node/'. $form_state['nid'] .'/bookmarklet', $query);
 }
 
 function _bookmarklet_form_alter(&$elements, $form_state, $form_id) {
@@ -236,4 +248,22 @@ function bookmarklet_js() {
   else {
     echo drupal_to_js($types);
   }
+}
+
+/**
+ * Node save confirmation page.
+ */
+function bookmarklet_node_save_confirm($node) {
+  if (!empty($_GET['origin'])) {
+    _bookmarklet_message(array('method' => 'close'), $_GET['origin']);
+  }
+  $links = array();
+  $options = array(
+    'attributes' => array(
+      'target' => '_blank',
+    ),
+  );
+  $links[] = l('View', 'node/'. $node->nid, $options);
+  $links[] = l('Edit', 'node/'. $node->nid .'/edit', $options);
+  return theme('item_list', $links);
 }
