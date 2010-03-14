@@ -23,7 +23,7 @@ drupalBookmarklet.init = function () {
     // newly loaded jQuery is attached to the drupalBookmarklet object as the
     // jQuery method.
     (function ($) {
-      var buttons,nodeTypes;
+      var buttons, nodeTypes;
       buttons = {};
       nodeTypes = [];
 
@@ -202,4 +202,4 @@ drupalBookmarklet.createBookmarklet = function (buttons, nodeType) {
   }
 }());
 
-/*jslint white: true, browser: true, devel: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, strict: true, newcap: true, immed: true, indent: 2 */
+/*jslint white: true, browser: true, devel: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, strict: true, newcap: true, immed: true, indent: 2 */
