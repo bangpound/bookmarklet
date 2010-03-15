@@ -1,8 +1,18 @@
-/*global drupalBookmarklet,window,jQuery */
+/*global window,jQuery */
 
 "use strict";
 
-drupalBookmarklet.init = function () {
+var drupalBookmarklet;
+
+drupalBookmarklet = function (host, path) {
+  this.host = host;
+  this.path = path;
+  this.init();
+};
+
+drupalBookmarklet.prototype.init = function () {
+  var bookmarklet;
+  bookmarklet = this;
   this.s1 = document.createElement('script');
   this.s2 = document.createElement('script');
   this.s3 = document.createElement('script');
@@ -12,40 +22,47 @@ drupalBookmarklet.init = function () {
   this.s3.setAttribute('src', this.host + '/' + this.path + '/jquery-postmessage/jquery.ba-postmessage.js');
 
   this.s1.onload = function () {
-    document.getElementsByTagName('head')[0].appendChild(this.s2);
+    document.getElementsByTagName('head')[0].appendChild(bookmarklet.s2);
   };
   this.s2.onload = function () {
-    document.getElementsByTagName('head')[0].appendChild(this.s3);
+    document.getElementsByTagName('head')[0].appendChild(bookmarklet.s3);
   };
   this.s3.onload = function () {
-    // newly loaded jQuery is attached to the drupalBookmarklet object as the
+    // newly loaded jQuery is attached to the bookmarklet object as the
     // jQuery method.
     (function ($) {
-      var buttons,nodeTypes;
+      var buttons, nodeTypes;
       buttons = {};
       nodeTypes = [];
 
-      $.getJSON(drupalBookmarklet.host + '/bookmarklet/js?callback=?', function (json) {
+      // Pull bookmarklet settings from Drupal callback.
+      $.getJSON(bookmarklet.host + '/bookmarklet/js?callback=?', function (json) {
+        bookmarklet.settings = json;
 
-        $.each(json, function (machineName, nodeType) {
+        // Make UI Dialog buttons for each content type.
+        $.each(json.types, function (machineName, nodeType) {
           nodeTypes.push(machineName);
-          buttons[nodeType] = function () {
-            $('iframe', this).attr('src', drupalBookmarklet.iframeUrl(machineName));
+          buttons[nodeType] = function (event) {
+            $(event.target)
+              .addClass('ui-state-active')
+              .siblings('.ui-state-active')
+              .removeClass('ui-state-active');
+            $('iframe', this).attr('src', bookmarklet.iframeUrl(machineName));
           };
         });
 
-        drupalBookmarklet.createBookmarklet(buttons, nodeTypes[0]);
+        bookmarklet.createBookmarklet(buttons, nodeTypes[0]);
 
         $.receiveMessage(
-          drupalBookmarklet.handleMessage,
+          $.proxy(bookmarklet, 'handleMessage'),
           // https://developer.mozilla.org/en/DOM/window.postMessage
-          drupalBookmarklet.host.match(/(.*?:\/\/.*?)\//)
+          bookmarklet.host.match(/(.*?:\/\/.*?)\//)
         );
 
       });
-    }(drupalBookmarklet.jQuery = jQuery.noConflict(true)));
+    }(bookmarklet.jQuery = jQuery.noConflict(true)));
   };
-  document.getElementsByTagName('head')[0].appendChild(drupalBookmarklet.s1);
+  document.getElementsByTagName('head')[0].appendChild(this.s1);
 };
 
 /**
@@ -58,29 +75,37 @@ drupalBookmarklet.init = function () {
  *                  if it contains an optionName property, it must contain a
  *                  value property.
  */
-drupalBookmarklet.handleMessage = function (event) {
-  var data;
+drupalBookmarklet.prototype.handleMessage = function (event) {
+  var data, bookmarklet;
   data = {};
-  drupalBookmarklet.jQuery.each(decodeURIComponent(event.data).split("&"), function () {
+  bookmarklet = this;
+  this.jQuery.each(decodeURIComponent(event.data).split("&"), function () {
     data[this.split("=")[0]] = this.split("=")[1];
   });
   if (typeof(data.optionName) === "undefined") {
-    drupalBookmarklet.jQuery(drupalBookmarklet.dialog).dialog(data.method);
+    if (data.method === 'close') {
+      setTimeout(function () {
+        bookmarklet.jQuery(bookmarklet.dialog).dialog(data.method);
+      }, 5000);
+    }
+    else {
+      this.jQuery(this.dialog).dialog(data.method);
+    }
   }
   else {
     switch (data.optionName) {
     case 'height':
     case 'width':
-      drupalBookmarklet.dialog.css(data.optionName, data.value + "px");
+      this.dialog.css(data.optionName, data.value + "px");
       break;
     default:
-      drupalBookmarklet.jQuery(drupalBookmarklet.dialog).dialog(data.method, data.optionName, data.value);
+      this.jQuery(this.dialog).dialog(data.method, data.optionName, data.value);
       break;
     }
   }
 };
 
-drupalBookmarklet.getSelection = function () {
+drupalBookmarklet.prototype.getSelection = function () {
   var t, body;
 
   try {
@@ -101,13 +126,13 @@ drupalBookmarklet.getSelection = function () {
   return body;
 };
 
-drupalBookmarklet.iframeUrl = function (nodeType) {
+drupalBookmarklet.prototype.iframeUrl = function (nodeType) {
   var body, iframe_url, edit;
 
   edit = {};
   body = this.getSelection();
 
-  iframe_url = drupalBookmarklet.host;
+  iframe_url = this.host;
   iframe_url += '/node/add/' + nodeType;
 
   switch (nodeType) {
@@ -141,10 +166,10 @@ drupalBookmarklet.iframeUrl = function (nodeType) {
     };
   }
 
-  return iframe_url + '?' + drupalBookmarklet.jQuery.param({ bookmarklet: true, edit: edit });
+  return iframe_url + '?' + this.jQuery.param({ bookmarklet: true, edit: edit }) + this.settings.constant;
 };
 
-drupalBookmarklet.createBookmarklet = function (buttons, nodeType) {
+drupalBookmarklet.prototype.createBookmarklet = function (buttons, nodeType) {
   this.jQuery('<link/>', {
       href: 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.7/themes/smoothness/jquery-ui.css',
       rel: 'stylesheet',
@@ -188,16 +213,11 @@ drupalBookmarklet.createBookmarklet = function (buttons, nodeType) {
   });
 };
 
-(function () {
-  if (typeof drupalBookmarklet.dialog === "undefined") {
-    drupalBookmarklet.init();
-  }
-  else {
-    // If the dialog has already been open, refresh the src URL of the iframe to
-    // fill in the form with new values.
-    drupalBookmarklet.jQuery('iframe', drupalBookmarklet.dialog).attr('src', drupalBookmarklet.iframeUrl(drupalBookmarklet.dialog.data('defaultNodeType')));
-    drupalBookmarklet.jQuery(drupalBookmarklet.dialog).dialog('open');
-  }
-}());
+drupalBookmarklet.prototype.reOpen = function () {
+  // If the dialog has already been open, refresh the src URL of the iframe to
+  // fill in the form with new values.
+  this.jQuery('iframe', this.dialog).attr('src', this.iframeUrl(this.dialog.data('defaultNodeType')));
+  this.jQuery(this.dialog).dialog('open');
+};
 
-/*jslint white: true, browser: true, devel: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, strict: true, newcap: true, immed: true, indent: 2 */
+/*jslint white: true, browser: true, devel: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, strict: true, newcap: true, immed: true, indent: 2 */

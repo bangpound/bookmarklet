@@ -26,6 +26,15 @@ function bookmarklet_menu() {
     'access callback' => TRUE,
     'type' => MENU_CALLBACK,
   );
+  $items['node/%node/bookmarklet'] = array(
+    'title callback' => 'node_page_title',
+    'title arguments' => array(1),
+    'page callback' => 'bookmarklet_node_save_confirm',
+    'page arguments' => array(1),
+    'access callback' => 'node_access',
+    'access arguments' => array('view', 1),
+    'type' => MENU_CALLBACK
+  );
   return $items;
 }
 
@@ -47,6 +56,11 @@ function bookmarklet_block($op = 'list', $delta = 0, $edit = array()) {
           '#default_value' => variable_get('bookmarklet_node_types', array('story' => 'story')),
           '#options' => node_get_types('names'),
         );
+        $form['constant'] = array(
+          '#type' => 'textfield',
+          '#title' => 'Constant',
+          '#default_value' => variable_get('bookmarklet_constant', ''),
+        );
         return $form;
       }
       break;
@@ -54,6 +68,7 @@ function bookmarklet_block($op = 'list', $delta = 0, $edit = array()) {
     case 'save':
       if ($delta == 0) {
         variable_set('bookmarklet_node_types', $edit['node_types']);
+        variable_set('bookmarklet_constant', $edit['constant']);
       }
       break;
 
@@ -113,8 +128,11 @@ function bookmarklet_form_alter(&$form, $form_state, $form_id) {
  * @ingroup forms
  */
 function bookmarklet_form_submit($form, &$form_state) {
-  $form_state['redirect'] = FALSE;
-  _bookmarklet_message(array('method' => 'close'), $form_state['values']['bookmarklet_referrer']);
+  $query = array(
+    'bookmarklet' => TRUE,
+    'origin' => $form_state['values']['bookmarklet_referrer'],
+  );
+  $form_state['redirect'] = array('node/'. $form_state['nid'] .'/bookmarklet', $query);
 }
 
 function _bookmarklet_form_alter(&$elements, $form_state, $form_id) {
@@ -189,6 +207,10 @@ function bookmarklet_theme($existing, $type, $theme, $path) {
  */
 function theme_bookmarklet($text = '', $script = '', $options = array()) {
   $options['absolute'] = TRUE;
+  $options['attributes'] = array(
+    'onclick' => 'alert(\'Click and drag this to your bookmark bar to install the bookmarklet.\');return false;',
+    'class' => 'bookmarklet',
+  );
   $decoy = 'http://BOOKMARKLET';
   $link = l($text, $decoy, $options);
   $script = 'javascript:'. trim($script);
@@ -198,19 +220,19 @@ function theme_bookmarklet($text = '', $script = '', $options = array()) {
 function bookmarklet_script() {
   global $base_url;
   $path = drupal_get_path('module', 'bookmarklet');
+  $instance_name = md5($base_url);
 
   $script = <<<EOT
 // TODO load bookmarklet script once even if clicked multiple times.
 /* global $,drupalBookmarklet */
-var drupalBookmarklet = drupalBookmarklet || function() {};
 (function () {
-  var d,b;
-  d = drupalBookmarklet;
-  d.host = '$base_url';
-  d.path = '$path';
-  b = d.bookmarklet = document.createElement('SCRIPT');
+  var host,path,b;
+  host = '$base_url';
+  path = '$path';
+  b = document.createElement('SCRIPT');
   b.type = 'text/javascript';
-  b.src = d.host + '/' + d.path + '/bookmarklet.js?' + (Math.random());
+  b.src = host + '/' + path + '/bookmarklet.js?' + (Math.random());
+  b.onload = function () { var __drupalBookmarklet$instance_name = new drupalBookmarklet(host, path); };
   document.getElementsByTagName('head')[0].appendChild(b);
 }());
 EOT;
@@ -224,17 +246,38 @@ function bookmarklet_js() {
   // We are returning JavaScript, so tell the browser.
   drupal_set_header('Content-Type: text/javascript; charset=utf-8');
 
-  $types = array();
+  $settings = array(
+    'types' => array(),
+    'constant' => variable_get('bookmarklet_constant', ''),
+  );
   foreach (node_get_types('types') as $type) {
     if (in_array($type->type, $node_types) && node_access('create', $type->type)) {
-      $types[str_replace('_', '-', $type->type)] = drupal_ucfirst($type->name);
+      $settings['types'][str_replace('_', '-', $type->type)] = drupal_ucfirst($type->name);
     }
   }
 
   if (!empty($_GET['callback'])) {
-    echo $_GET['callback'] .'('. drupal_to_js($types) .');';
+    echo $_GET['callback'] .'('. drupal_to_js($settings) .');';
   }
   else {
-    echo drupal_to_js($types);
+    echo drupal_to_js($settings);
   }
+}
+
+/**
+ * Node save confirmation page.
+ */
+function bookmarklet_node_save_confirm($node) {
+  if (!empty($_GET['origin'])) {
+    _bookmarklet_message(array('method' => 'close'), $_GET['origin']);
+  }
+  $links = array();
+  $options = array(
+    'attributes' => array(
+      'target' => '_blank',
+    ),
+  );
+  $links[] = l('View', 'node/'. $node->nid, $options);
+  $links[] = l('Edit', 'node/'. $node->nid .'/edit', $options);
+  return theme('item_list', $links);
 }
