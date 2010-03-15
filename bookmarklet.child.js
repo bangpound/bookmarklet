@@ -6,11 +6,13 @@ $(document).ready(function () {
     value: document.body.offsetHeight
   }, Drupal.settings.bookmarklet.target_url);
 
+  setTimeout(function () {
   $.postMessage({
     method: 'option',
     optionName: 'width',
     value: document.body.offsetWidth
   }, Drupal.settings.bookmarklet.target_url);
+  }, 100);
 
 });
 Drupal.behaviors.bookmarkletPostMessage = function (context) {
