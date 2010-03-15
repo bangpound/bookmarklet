@@ -209,19 +209,19 @@ function theme_bookmarklet($text = '', $script = '', $options = array()) {
 function bookmarklet_script() {
   global $base_url;
   $path = drupal_get_path('module', 'bookmarklet');
+  $instance_name = md5($base_url);
 
   $script = <<<EOT
 // TODO load bookmarklet script once even if clicked multiple times.
 /* global $,drupalBookmarklet */
-var drupalBookmarklet = drupalBookmarklet || function() {};
 (function () {
-  var d,b;
-  d = drupalBookmarklet;
-  d.host = '$base_url';
-  d.path = '$path';
-  b = d.bookmarklet = document.createElement('SCRIPT');
+  var host,path,b;
+  host = '$base_url';
+  path = '$path';
+  b = document.createElement('SCRIPT');
   b.type = 'text/javascript';
-  b.src = d.host + '/' + d.path + '/bookmarklet.js?' + (Math.random());
+  b.src = host + '/' + path + '/bookmarklet.js'; //?' + (Math.random());
+  b.onload = function () { var __drupalBookmarklet$instance_name = new drupalBookmarklet(host, path); };
   document.getElementsByTagName('head')[0].appendChild(b);
 }());
 EOT;

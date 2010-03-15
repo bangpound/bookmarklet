@@ -1,8 +1,16 @@
-/*global drupalBookmarklet,window,jQuery */
+/*global window,jQuery */
 
 "use strict";
 
-drupalBookmarklet.init = function () {
+var drupalBookmarklet;
+
+drupalBookmarklet = function (host, path) {
+  this.host = host;
+  this.path = path;
+  this.init();
+};
+
+drupalBookmarklet.prototype.init = function () {
   var bookmarklet;
   bookmarklet = this;
   this.s1 = document.createElement('script');
@@ -43,7 +51,7 @@ drupalBookmarklet.init = function () {
         bookmarklet.createBookmarklet(buttons, nodeTypes[0]);
 
         $.receiveMessage(
-          bookmarklet.handleMessage,
+          $.proxy(bookmarklet, 'handleMessage'),
           // https://developer.mozilla.org/en/DOM/window.postMessage
           bookmarklet.host.match(/(.*?:\/\/.*?)\//)
         );
@@ -64,36 +72,37 @@ drupalBookmarklet.init = function () {
  *                  if it contains an optionName property, it must contain a
  *                  value property.
  */
-drupalBookmarklet.handleMessage = function (event) {
-  var data;
+drupalBookmarklet.prototype.handleMessage = function (event) {
+  var data, bookmarklet;
   data = {};
-  drupalBookmarklet.jQuery.each(decodeURIComponent(event.data).split("&"), function () {
+  bookmarklet = this;
+  this.jQuery.each(decodeURIComponent(event.data).split("&"), function () {
     data[this.split("=")[0]] = this.split("=")[1];
   });
   if (typeof(data.optionName) === "undefined") {
     if (data.method === 'close') {
       setTimeout(function () {
-        drupalBookmarklet.jQuery(drupalBookmarklet.dialog).dialog(data.method);
+        bookmarklet.jQuery(bookmarklet.dialog).dialog(data.method);
       }, 5000);
     }
     else {
-      drupalBookmarklet.jQuery(drupalBookmarklet.dialog).dialog(data.method);
+      this.jQuery(this.dialog).dialog(data.method);
     }
   }
   else {
     switch (data.optionName) {
     case 'height':
     case 'width':
-      drupalBookmarklet.dialog.css(data.optionName, data.value + "px");
+      this.dialog.css(data.optionName, data.value + "px");
       break;
     default:
-      drupalBookmarklet.jQuery(drupalBookmarklet.dialog).dialog(data.method, data.optionName, data.value);
+      this.jQuery(this.dialog).dialog(data.method, data.optionName, data.value);
       break;
     }
   }
 };
 
-drupalBookmarklet.getSelection = function () {
+drupalBookmarklet.prototype.getSelection = function () {
   var t, body;
 
   try {
@@ -114,13 +123,13 @@ drupalBookmarklet.getSelection = function () {
   return body;
 };
 
-drupalBookmarklet.iframeUrl = function (nodeType) {
+drupalBookmarklet.prototype.iframeUrl = function (nodeType) {
   var body, iframe_url, edit;
 
   edit = {};
   body = this.getSelection();
 
-  iframe_url = drupalBookmarklet.host;
+  iframe_url = this.host;
   iframe_url += '/node/add/' + nodeType;
 
   switch (nodeType) {
@@ -154,10 +163,10 @@ drupalBookmarklet.iframeUrl = function (nodeType) {
     };
   }
 
-  return iframe_url + '?' + drupalBookmarklet.jQuery.param({ bookmarklet: true, edit: edit });
+  return iframe_url + '?' + this.jQuery.param({ bookmarklet: true, edit: edit });
 };
 
-drupalBookmarklet.createBookmarklet = function (buttons, nodeType) {
+drupalBookmarklet.prototype.createBookmarklet = function (buttons, nodeType) {
   this.jQuery('<link/>', {
       href: 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.7/themes/smoothness/jquery-ui.css',
       rel: 'stylesheet',
@@ -201,16 +210,11 @@ drupalBookmarklet.createBookmarklet = function (buttons, nodeType) {
   });
 };
 
-(function () {
-  if (typeof drupalBookmarklet.dialog === "undefined") {
-    drupalBookmarklet.init();
-  }
-  else {
-    // If the dialog has already been open, refresh the src URL of the iframe to
-    // fill in the form with new values.
-    drupalBookmarklet.jQuery('iframe', drupalBookmarklet.dialog).attr('src', drupalBookmarklet.iframeUrl(drupalBookmarklet.dialog.data('defaultNodeType')));
-    drupalBookmarklet.jQuery(drupalBookmarklet.dialog).dialog('open');
-  }
-}());
+drupalBookmarklet.prototype.reOpen = function () {
+  // If the dialog has already been open, refresh the src URL of the iframe to
+  // fill in the form with new values.
+  this.jQuery('iframe', this.dialog).attr('src', this.iframeUrl(this.dialog.data('defaultNodeType')));
+  this.jQuery(this.dialog).dialog('open');
+};
 
 /*jslint white: true, browser: true, devel: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, strict: true, newcap: true, immed: true, indent: 2 */
