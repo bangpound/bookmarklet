@@ -11,11 +11,11 @@ $(document).ready(function () {
   }, Drupal.settings.bookmarklet.target_url);
 
   setTimeout(function () {
-  $.postMessage({
-    method: 'option',
-    optionName: 'width',
-    value: document.body.offsetWidth
-  }, Drupal.settings.bookmarklet.target_url);
+    $.postMessage({
+      method: 'option',
+      optionName: 'width',
+      value: document.body.offsetWidth
+    }, Drupal.settings.bookmarklet.target_url);
   }, 100);
 
 });
