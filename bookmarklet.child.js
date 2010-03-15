@@ -1,3 +1,7 @@
+/*global $, Drupal, document, setTimeout */
+
+"use strict";
+
 $(document).ready(function () {
 
   $.postMessage({
@@ -20,3 +24,5 @@ Drupal.behaviors.bookmarkletPostMessage = function (context) {
     $.postMessage(Drupal.settings.bookmarklet.event, Drupal.settings.bookmarklet.target_url);
   }
 };
+
+/*jslint white: true, browser: true, devel: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, strict: true, newcap: true, immed: true, indent: 2 */
