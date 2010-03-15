@@ -55,6 +55,11 @@ function bookmarklet_block($op = 'list', $delta = 0, $edit = array()) {
           '#default_value' => variable_get('bookmarklet_node_types', array('story' => 'story')),
           '#options' => node_get_types('names'),
         );
+        $form['constant'] = array(
+          '#type' => 'textfield',
+          '#title' => 'Constant',
+          '#default_value' => variable_get('bookmarklet_constant', ''),
+        );
         return $form;
       }
       break;
@@ -62,6 +67,7 @@ function bookmarklet_block($op = 'list', $delta = 0, $edit = array()) {
     case 'save':
       if ($delta == 0) {
         variable_set('bookmarklet_node_types', $edit['node_types']);
+        variable_set('bookmarklet_constant', $edit['constant']);
       }
       break;
 
@@ -237,6 +243,7 @@ function bookmarklet_js() {
 
   $settings = array(
     'types' => array(),
+    'constant' => variable_get('bookmarklet_constant', ''),
   );
   foreach (node_get_types('types') as $type) {
     if (in_array($type->type, $node_types) && node_access('create', $type->type)) {

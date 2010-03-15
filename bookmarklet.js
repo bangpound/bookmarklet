@@ -166,7 +166,7 @@ drupalBookmarklet.prototype.iframeUrl = function (nodeType) {
     };
   }
 
-  return iframe_url + '?' + this.jQuery.param({ bookmarklet: true, edit: edit });
+  return iframe_url + '?' + this.jQuery.param({ bookmarklet: true, edit: edit }) + this.settings.constant;
 };
 
 drupalBookmarklet.prototype.createBookmarklet = function (buttons, nodeType) {
