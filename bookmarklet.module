@@ -206,6 +206,9 @@ function bookmarklet_theme($existing, $type, $theme, $path) {
  */
 function theme_bookmarklet($text = '', $script = '', $options = array()) {
   $options['absolute'] = TRUE;
+  $options['attributes'] = array(
+    'onclick' => 'alert(\'Click and drag this to your bookmark bar to install the bookmarklet.\');return false;',
+  );
   $decoy = 'http://BOOKMARKLET';
   $link = l($text, $decoy, $options);
   $script = 'javascript:'. trim($script);
