@@ -37,9 +37,10 @@ drupalBookmarklet.prototype.init = function () {
 
       // Pull bookmarklet settings from Drupal callback.
       $.getJSON(bookmarklet.host + '/bookmarklet/js?callback=?', function (json) {
+        bookmarklet.settings = json;
 
         // Make UI Dialog buttons for each content type.
-        $.each(json, function (machineName, nodeType) {
+        $.each(json.types, function (machineName, nodeType) {
           nodeTypes.push(machineName);
           buttons[nodeType] = function (event) {
             $(event.target)
