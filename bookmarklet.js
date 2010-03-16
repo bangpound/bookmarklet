@@ -40,9 +40,9 @@ drupalBookmarklet.prototype.init = function () {
         bookmarklet.settings = json;
 
         // Make UI Dialog buttons for each content type.
-        $.each(json.types, function (machineName, nodeType) {
+        $.each(json.types, function (machineName, setting) {
           nodeTypes.push(machineName);
-          buttons[nodeType] = function (event) {
+          buttons[setting.name] = function (event) {
             $(event.target)
               .addClass('ui-state-active')
               .siblings('.ui-state-active')

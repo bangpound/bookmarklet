@@ -264,7 +264,9 @@ function bookmarklet_js() {
   );
   foreach (node_get_types('types') as $type) {
     if (in_array($type->type, $node_types) && node_access('create', $type->type)) {
-      $settings['types'][str_replace('_', '-', $type->type)] = drupal_ucfirst($type->name);
+      $settings['types'][str_replace('_', '-', $type->type)] = array(
+        'name' => drupal_ucfirst($type->name),
+      );
     }
   }
 
