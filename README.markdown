@@ -8,8 +8,6 @@ This module provides a bookmarklet to allow users to create new nodes while they
 
 Dependencies
 ------------
-* [Modal Frame API](http://drupal.org/project/modalframe)  
-  Modal Frame is used only for the modalframe page template.
 * [Prepopulate](http://drupal.org/project/prepopulate)  
   The module was developed with the 6.x-2.x branch, but the more stable branch probably works too.
 * [JSMin PHP](http://github.com/rgrove/jsmin-php/)  

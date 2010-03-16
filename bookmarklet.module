@@ -10,9 +10,7 @@
  */
 function bookmarklet_init() {
   if (isset($_REQUEST['bookmarklet'])) {
-    $GLOBALS['modalframe_page_template'] = TRUE;
-    $module_path = drupal_get_path('module', 'modalframe');
-    drupal_add_css($module_path .'/css/modalframe.child.css');
+    $GLOBALS['bookmarklet_page_template'] = TRUE;
   }
 }
 
@@ -193,6 +191,51 @@ function bookmarklet_footer($main = 0) {
     drupal_add_js($path .'/jquery-postmessage/jquery.ba-postmessage.js', 'module', 'footer');
     drupal_add_js($path .'/bookmarklet.child.js', 'module', 'footer');
     drupal_add_js(array('bookmarklet' => $message), 'setting', 'footer');
+  }
+}
+
+/**
+ * Implement hook_theme_registry_alter().
+ *
+ * @see modalframe_theme_registry_alter()
+ * @ingroup themeable
+ */
+function bookmarklet_theme_registry_alter(&$theme_registry) {
+  if (isset($theme_registry['page']) && isset($theme_registry['page']['theme paths'])) {
+    $module_path = drupal_get_path('module', 'bookmarklet');
+    array_unshift($theme_registry['page']['theme paths'], $module_path);
+    array_unshift($theme_registry['page']['preprocess functions'], 'bookmarklet_pre_preprocess_page');
+  }
+}
+
+/**
+ * Preprocess template variables for page.tpl.php - step 1.
+ *
+ * Performance enhancement: prevent template_preprocess_page() from generating
+ * sidebar blocks when a modal frame has been requested.
+ *
+ * @see modalframe_pre_preprocess_page()
+ *
+ */
+function bookmarklet_pre_preprocess_page(&$variables) {
+  if (!empty($GLOBALS['bookmarklet_page_template'])) {
+    $variables['show_blocks'] = FALSE;
+  }
+}
+
+/**
+ * Preprocess template variables for page.tpl.php - step 2.
+ *
+ * @see modalframe_preprocess_page()
+ *
+ * @ingroup themeable
+ */
+function bookmarklet_preprocess_page(&$variables) {
+  if (!empty($GLOBALS['bookmarklet_page_template'])) {
+    if (!isset($variables['template_files'])) {
+      $variables['template_files'] = array();
+    }
+    array_unshift($variables['template_files'], 'bookmarklet-page');
   }
 }
 
