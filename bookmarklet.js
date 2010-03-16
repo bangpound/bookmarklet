@@ -48,6 +48,7 @@ drupalBookmarklet.prototype.init = function () {
               .siblings('.ui-state-active')
               .removeClass('ui-state-active');
             $('iframe', this).attr('src', bookmarklet.iframeUrl(machineName));
+            $(this).dialog('option', 'title', 'Post new ' + bookmarklet.settings.types[machineName].name);
           };
         });
 
@@ -202,7 +203,8 @@ drupalBookmarklet.prototype.createBookmarklet = function (buttons, nodeType) {
     }))
     .dialog({
       position: ['right', 'top'],
-      buttons: buttons
+      buttons: buttons,
+      title: 'Post new ' + this.settings.types[nodeType].name
     })
     .data('defaultNodeType', nodeType);
 
