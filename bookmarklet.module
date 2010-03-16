@@ -142,7 +142,7 @@ function _bookmarklet_form_alter(&$elements, $form_state, $form_id) {
       }
 
       // Only worry about form elements that have UI.
-      if (isset($elements[$key]['#type']) && in_array($elements[$key]['#type'], array('value', 'hidden'))) {
+      if (isset($elements[$key]['#type']) && in_array($elements[$key]['#type'], array('value', 'hidden', 'token'))) {
         continue;
       }
 
