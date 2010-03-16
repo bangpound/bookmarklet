@@ -302,6 +302,7 @@ function bookmarklet_js() {
   drupal_set_header('Content-Type: text/javascript; charset=utf-8');
 
   $settings = array(
+    'stylesheet' => variable_get('bookmarklet_stylesheet', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.7/themes/smoothness/jquery-ui.css'),
     'types' => array(),
     'constant' => variable_get('bookmarklet_constant', ''),
   );

@@ -172,7 +172,7 @@ drupalBookmarklet.prototype.iframeUrl = function (nodeType) {
 
 drupalBookmarklet.prototype.createBookmarklet = function (buttons, nodeType) {
   this.jQuery('<link/>', {
-      href: 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.7/themes/smoothness/jquery-ui.css',
+      href: this.settings.stylesheet,
       rel: 'stylesheet',
       type: 'text/css',
       media: 'screen'
