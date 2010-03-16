@@ -182,7 +182,6 @@ drupalBookmarklet.prototype.createBookmarklet = function (buttons, nodeType) {
       id: 'drupal_bookmarklet',
       css: {
         overflow: 'visible',
-        padding: '0px'
       }
     })
     .append(this.jQuery('<iframe/>', {
