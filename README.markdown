@@ -21,13 +21,9 @@ This module is not complete nor very configurable. It's only been tested in Fire
 
 Multiple invocations of the bookmarklet on the same page cause the dialog to reappear, but this is not always desirable.
 
-There is no status indicators. Is the iframe loading? Is the node saving? When the node is saved, the dialog disappears too quickly.
-
-Every optional field on the node form is left out except for the body and other hard-coded selections.
+There is no status indicators. Is the iframe loading? Is the node saving?
 
 If the user is visiting a secure site, the referrer doesn't get passed to the Drupal site and the connection between the child iframe and the parent page is broken. This means the iframe cannot be closed without user intervention.
-
-The JavaScript code is still clumsy. Variable scope may be a mess. Fortunately jQuery UI does most of the heavy lifting, so there isn't much original code.
 
 jQuery, jQuery UI and jQuery UI stylesheet are loaded from [Google](http://code.google.com/apis/ajaxlibs/documentation/index.html).
 
