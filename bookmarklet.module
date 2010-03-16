@@ -24,6 +24,7 @@ function bookmarklet_menu() {
     'title' => 'Bookmarklet',
     'page callback' => 'bookmarklet_js',
     'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
   );
   $items['node/%node/bookmarklet'] = array(
     'title callback' => 'node_page_title',
