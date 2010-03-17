@@ -182,7 +182,7 @@ drupalBookmarklet.prototype.createBookmarklet = function (buttons, nodeType) {
   this.dialog = this.dialog || this.jQuery('<div/>', {
       id: 'drupal_bookmarklet',
       css: {
-        overflow: 'visible',
+        overflow: 'visible'
       }
     })
     .append(this.jQuery('<iframe/>', {
