@@ -4,6 +4,9 @@
 
 var drupalBookmarklet;
 
+/**
+ * @constructor
+ */
 drupalBookmarklet = function (host, path) {
   this.host = host;
   this.path = path;
@@ -220,5 +223,13 @@ drupalBookmarklet.prototype.reOpen = function () {
   this.jQuery('iframe', this.dialog).attr('src', this.iframeUrl(this.dialog.data('defaultNodeType')));
   this.jQuery(this.dialog).dialog('open');
 };
+
+window['drupalBookmarklet'] = drupalBookmarklet;
+drupalBookmarklet.prototype['init'] = drupalBookmarklet.prototype.init;
+drupalBookmarklet.prototype['handleMessage'] = drupalBookmarklet.prototype.handleMessage;
+drupalBookmarklet.prototype['getSelection'] = drupalBookmarklet.prototype.getSelection;
+drupalBookmarklet.prototype['iframeUrl'] = drupalBookmarklet.prototype.iframeUrl;
+drupalBookmarklet.prototype['createBookmarklet'] = drupalBookmarklet.prototype.createBookmarklet;
+drupalBookmarklet.prototype['reOpen'] = drupalBookmarklet.prototype.reOpen;
 
 /*jslint white: true, browser: true, devel: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, strict: true, newcap: true, immed: true, indent: 2 */
