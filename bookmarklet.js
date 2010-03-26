@@ -13,24 +13,29 @@ drupalBookmarklet = function (host, path) {
   this.init();
 };
 
+drupalBookmarklet.prototype.createScript = function (src, callback) {
+  var script;
+  script = document.createElement('script');
+  script.setAttribute('src', src);
+  if (callback) {
+    script.onload = callback;
+  }
+  return script;
+};
+
 drupalBookmarklet.prototype.init = function () {
   var bookmarklet;
   bookmarklet = this;
-  this.s1 = document.createElement('script');
-  this.s2 = document.createElement('script');
-  this.s3 = document.createElement('script');
 
-  this.s1.setAttribute('src', 'http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.js');
-  this.s2.setAttribute('src', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.js');
-  this.s3.setAttribute('src', this.host + '/' + this.path + '/jquery-postmessage/jquery.ba-postmessage.js');
-
-  this.s1.onload = function () {
+  this.s1 = this.createScript('http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.js', function () {
     document.getElementsByTagName('head')[0].appendChild(bookmarklet.s2);
-  };
-  this.s2.onload = function () {
+  });
+
+  this.s2 = this.createScript('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.js', function () {
     document.getElementsByTagName('head')[0].appendChild(bookmarklet.s3);
-  };
-  this.s3.onload = function () {
+  });
+
+  this.s3 = this.createScript(this.host + '/' + this.path + '/jquery-postmessage/jquery.ba-postmessage.js', function () {
     // newly loaded jQuery is attached to the bookmarklet object as the
     // jQuery method.
     (function ($) {
@@ -61,7 +66,8 @@ drupalBookmarklet.prototype.init = function () {
 
       });
     }(bookmarklet.jQuery = jQuery.noConflict(true)));
-  };
+  });
+
   document.getElementsByTagName('head')[0].appendChild(this.s1);
 };
 
