@@ -21,7 +21,7 @@ drupalBookmarklet.prototype.init = function () {
   this.s3 = document.createElement('script');
 
   this.s1.setAttribute('src', 'http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.js');
-  this.s2.setAttribute('src', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.7/jquery-ui.js');
+  this.s2.setAttribute('src', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.js');
   this.s3.setAttribute('src', this.host + '/' + this.path + '/jquery-postmessage/jquery.ba-postmessage.js');
 
   this.s1.onload = function () {
@@ -110,7 +110,7 @@ drupalBookmarklet.prototype.handleMessage = function (event) {
 };
 
 drupalBookmarklet.prototype.getSelection = function () {
-  var t, body;
+  var t;
 
   try {
     // get the currently selected text
@@ -121,13 +121,13 @@ drupalBookmarklet.prototype.getSelection = function () {
     t = "";
   }
 
-  body = t.toString();
+  t = t.toString();
 
-  if (body === "") {
-    body = "";
+  if (t === "") {
+    t = "";
   }
 
-  return body;
+  return t;
 };
 
 drupalBookmarklet.prototype.iframeUrl = function (nodeType) {
