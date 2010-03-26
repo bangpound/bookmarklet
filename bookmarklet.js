@@ -46,10 +46,6 @@ drupalBookmarklet.prototype.init = function () {
         $.each(json.types, function (machineName, setting) {
           nodeTypes.push(machineName);
           buttons[setting.name] = function (event) {
-            $(event.target)
-              .addClass('ui-state-active')
-              .siblings('.ui-state-active')
-              .removeClass('ui-state-active');
             $('iframe', this).attr('src', bookmarklet.iframeUrl(machineName));
             $(this).dialog('option', 'title', 'Post new ' + bookmarklet.settings.types[machineName].name);
           };
