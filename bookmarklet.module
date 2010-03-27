@@ -283,6 +283,10 @@ function bookmarklet_script() {
 "use strict";
 (function () {
   var host, path, b;
+  if (typeof __drupalBookmarklet$instance_name === 'object') {
+    __drupalBookmarklet$instance_name.reOpen();
+  }
+  else {
   host = '$base_url';
   path = '$path';
   b = document.createElement('SCRIPT');
@@ -292,6 +296,7 @@ function bookmarklet_script() {
     __drupalBookmarklet$instance_name = new drupalBookmarklet(host, path);
   };
   document.getElementsByTagName('head')[0].appendChild(b);
+  }
 }());
 EOT;
   module_load_include('php', 'bookmarklet', 'jsmin-php/jsmin');
