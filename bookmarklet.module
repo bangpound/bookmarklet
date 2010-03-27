@@ -280,7 +280,6 @@ function bookmarklet_script() {
   $script = <<<EOT
 // TODO load bookmarklet script once even if clicked multiple times.
 /* global $,drupalBookmarklet */
-"use strict";
 (function () {
   var host, path, b;
   if (typeof __drupalBookmarklet$instance_name === 'object') {
