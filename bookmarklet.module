@@ -288,7 +288,7 @@ function bookmarklet_script() {
   b.type = 'text/javascript';
   b.src = host + '/' + path + '/bookmarklet.js?' + (Math.random());
   b.onload = function () {
-    var __drupalBookmarklet$instance_name = new drupalBookmarklet(host, path);
+    __drupalBookmarklet$instance_name = new drupalBookmarklet(host, path);
   };
   document.getElementsByTagName('head')[0].appendChild(b);
 }());
