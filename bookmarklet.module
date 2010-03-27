@@ -287,15 +287,15 @@ function bookmarklet_script() {
     __drupalBookmarklet$instance_name.reOpen();
   }
   else {
-  host = '$base_url';
-  path = '$path';
-  b = document.createElement('SCRIPT');
-  b.type = 'text/javascript';
-  b.src = host + '/' + path + '/bookmarklet.js?' + (Math.random());
-  b.onload = function () {
-    __drupalBookmarklet$instance_name = new drupalBookmarklet(host, path);
-  };
-  document.getElementsByTagName('head')[0].appendChild(b);
+    host = '$base_url';
+    path = '$path';
+    b = document.createElement('SCRIPT');
+    b.type = 'text/javascript';
+    b.src = host + '/' + path + '/bookmarklet.js?' + (Math.random());
+    b.onload = function () {
+      __drupalBookmarklet$instance_name = new drupalBookmarklet(host, path);
+    };
+    document.getElementsByTagName('head')[0].appendChild(b);
   }
 }());
 EOT;
