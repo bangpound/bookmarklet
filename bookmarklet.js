@@ -215,6 +215,7 @@ drupalBookmarklet.prototype.createBookmarklet = function (buttons, nodeType) {
     .data('defaultNodeType', nodeType);
 
   // jQuery UI stylesheets assumes base font size of 11px.
+  // private member: $(elem).data('dialog') returns jQuery UI dialog object.
   this.dialog.data('dialog').uiDialog.css({
     position: 'fixed',
     fontSize: '11px'
