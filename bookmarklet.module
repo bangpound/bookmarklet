@@ -10,6 +10,8 @@
  */
 function bookmarklet_init() {
   if (isset($_REQUEST['bookmarklet'])) {
+    $path = drupal_get_path('module', 'bookmarklet');
+    drupal_add_js($path .'/bookmarklet.child.js', 'module', 'footer');
     $GLOBALS['bookmarklet_page_template'] = TRUE;
   }
 }
@@ -189,7 +191,6 @@ function bookmarklet_footer($main = 0) {
   if ($message = _bookmarklet_message()) {
     $path = drupal_get_path('module', 'bookmarklet');
     drupal_add_js($path .'/jquery-postmessage/jquery.ba-postmessage.js', 'module', 'footer');
-    drupal_add_js($path .'/bookmarklet.child.js', 'module', 'footer');
     drupal_add_js(array('bookmarklet' => $message), 'setting', 'footer');
   }
 }
