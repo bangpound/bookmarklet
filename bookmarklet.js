@@ -209,6 +209,7 @@ drupalBookmarklet.prototype.createBookmarklet = function (buttons, nodeType) {
     .dialog({
       position: ['right', 'top'],
       buttons: buttons,
+      zIndex: 2147483647,
       title: 'Post new ' + this.settings.types[nodeType].name
     })
     .data('defaultNodeType', nodeType);
