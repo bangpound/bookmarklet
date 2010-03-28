@@ -287,7 +287,6 @@ function bookmarklet_script() {
       'output_info' => 'compiled_code',
     );
     $script = $data['js_code'] = <<<EOT
-// TODO load bookmarklet script once even if clicked multiple times.
 /* global $,drupalBookmarklet */
 (function () {
   var host, path, b;
