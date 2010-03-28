@@ -269,16 +269,24 @@ function theme_bookmarklet($text = '', $script = '', $options = array()) {
   );
   $decoy = 'http://BOOKMARKLET';
   $link = l($text, $decoy, $options);
-  $script = 'javascript:'. trim($script);
+  $script = 'javascript:'. rawurlencode(trim($script));
   return str_replace($decoy, $script, $link);
 }
 
 function bookmarklet_script() {
-  global $base_url;
-  $path = drupal_get_path('module', 'bookmarklet');
-  $instance_name = md5($base_url);
-
-  $script = <<<EOT
+  if ($cache = cache_get('bookmarklet_script')) {
+    $script = $cache->data;
+  }
+  else {
+    global $base_url;
+    $path = drupal_get_path('module', 'bookmarklet');
+    $instance_name = md5($base_url);
+    $data = array(
+      'compilation_level' => 'SIMPLE_OPTIMIZATIONS',
+      'output_format' => 'text',
+      'output_info' => 'compiled_code',
+    );
+    $data['js_code'] = <<<EOT
 // TODO load bookmarklet script once even if clicked multiple times.
 /* global $,drupalBookmarklet */
 (function () {
@@ -299,9 +307,16 @@ function bookmarklet_script() {
   }
 }());
 EOT;
-  module_load_include('php', 'bookmarklet', 'jsmin-php/jsmin');
-
-  return JSMin::minify($script);
+    $headers = array(
+      'Content-type' => 'application/x-www-form-urlencoded',
+    );
+    $request = drupal_http_request('http://closure-compiler.appspot.com/compile', $headers, 'POST', http_build_query($data, '', '&'));
+    if ($request->code == '200') {
+      $script = $request->data;
+      cache_set('bookmarklet_script', $script);
+    }
+  }
+  return $script;
 }
 
 function bookmarklet_js() {

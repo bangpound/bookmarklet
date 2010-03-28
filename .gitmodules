@@ -1,6 +1,3 @@
-[submodule "jsmin-php"]
-	path = jsmin-php
-	url = git://github.com/rgrove/jsmin-php.git
 [submodule "jquery-postmessage"]
 	path = jquery-postmessage
 	url = git://github.com/cowboy/jquery-postmessage.git

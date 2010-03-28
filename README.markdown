@@ -10,8 +10,6 @@ Dependencies
 ------------
 * [Prepopulate](http://drupal.org/project/prepopulate)  
   The module was developed with the 6.x-2.x branch, but the more stable branch probably works too.
-* [JSMin PHP](http://github.com/rgrove/jsmin-php/)  
-  This is for development only. Any released module would not need this dependency. (Embedded as a git submodule.)
 * [jQuery postMessage](http://github.com/cowboy/jquery-postmessage/)  
   postMessage is what enables XSS between the parent and the child iframe on different domains. If the browser supports [window.postMessage](https://developer.mozilla.org/en/DOM/window.postMessage), this is used. Otherwise, the location of the parent page is updated with the message as the fragment. (Embedded as git submodule.)
 
