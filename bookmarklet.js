@@ -178,7 +178,7 @@ DrupalBookmarklet.prototype.iframeUrl = function (nodeType) {
 };
 
 DrupalBookmarklet.prototype.createBookmarklet = function (buttons, nodeType) {
-  var $, uiDialog;
+  var $;
 
   $ = this.jQuery;
 
@@ -220,13 +220,11 @@ DrupalBookmarklet.prototype.createBookmarklet = function (buttons, nodeType) {
     })
     .data('defaultNodeType', nodeType);
 
-  uiDialog = this.dialog.data('dialog').uiDialog;
-
-  // jQuery UI stylesheets assumes base font size of 11px.
   // private member: $(elem).data('dialog') returns jQuery UI dialog object.
-  uiDialog
+  this.dialog.data('dialog').uiDialog
 
     // Shrink font size to a normal value.
+    // jQuery UI stylesheets assumes base font size of 11px.
     .css({
       fontSize: '11px'
     })
