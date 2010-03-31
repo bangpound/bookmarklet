@@ -39,9 +39,10 @@ DrupalBookmarklet.prototype.init = function () {
     // newly loaded jQuery is attached to the bookmarklet object as the
     // jQuery method.
     (function ($) {
-      var buttons, nodeTypes, nodeType;
+      var buttons, nodeTypes, nodeType, parsedUrl;
       buttons = {};
       nodeTypes = [];
+      parsedUrl = {};
 
       // Pull bookmarklet settings from Drupal callback.
       $.getJSON(bookmarklet.host + '/bookmarklet/js?callback=?', function (json) {
@@ -59,10 +60,12 @@ DrupalBookmarklet.prototype.init = function () {
         nodeType = bookmarklet.mapNodeType(location.href);
         bookmarklet.createBookmarklet(buttons, nodeType);
 
+        parsedUrl = bookmarklet.parseUrl(bookmarklet.host);
+
         $.receiveMessage(
           $.proxy(bookmarklet, 'handleMessage'),
           // https://developer.mozilla.org/en/DOM/window.postMessage
-          bookmarklet.host.match(/(.*?:\/\/.*?)\//)
+          parsedUrl.scheme + ":" + parsedUrl.slash + parsedUrl.host + (parsedUrl.port ? ':' + parsedUrl.port : '')
         );
 
       });
@@ -136,6 +139,23 @@ DrupalBookmarklet.prototype.getSelection = function () {
 
 DrupalBookmarklet.prototype.mapNodeType = function (href) {
   return 'story';
+};
+
+// From Chapter 7 of JavaScript, the Good Parts.
+
+DrupalBookmarklet.prototype.parseUrl = function (href) {
+  var $, urlRegex, result, names, parsedUrl;
+
+  $ = this.jQuery;
+  urlRegex = /^(?:([A-Za-z]+):)?(\/{0,3})([0-9.\-A-Za-z]+)(?::(\d+))?(?:\/([^?#]*))?(?:\?([^#]*))?(?:#(.*))?$/;
+  result = urlRegex.exec(href);
+  names = ['url', 'scheme', 'slash', 'host', 'port', 'path', 'query', 'hash'];
+  parsedUrl = {};
+
+  $.each(names, function (item, name) {
+    parsedUrl[name] = result[item];
+  });
+  return parsedUrl;
 };
 
 DrupalBookmarklet.prototype.iframeUrl = function (nodeType) {
