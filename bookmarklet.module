@@ -330,6 +330,9 @@ function bookmarklet_js() {
     'types' => array(),
     'constant' => variable_get('bookmarklet_constant', ''),
   );
+
+  // Node types keyed by hyphenated machine name.
+  // Name is the human readable node type used in the button text of the dialog.
   foreach (node_get_types('types') as $type) {
     if (in_array($type->type, $node_types) && node_access('create', $type->type)) {
       $settings['types'][str_replace('_', '-', $type->type)] = array(
