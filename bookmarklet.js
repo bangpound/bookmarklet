@@ -39,7 +39,7 @@ DrupalBookmarklet.prototype.init = function () {
     // newly loaded jQuery is attached to the bookmarklet object as the
     // jQuery method.
     (function ($) {
-      var buttons, nodeTypes;
+      var buttons, nodeTypes, nodeType;
       buttons = {};
       nodeTypes = [];
 
@@ -56,7 +56,8 @@ DrupalBookmarklet.prototype.init = function () {
           };
         });
 
-        bookmarklet.createBookmarklet(buttons, nodeTypes[0]);
+        nodeType = bookmarklet.mapNodeType(location.href);
+        bookmarklet.createBookmarklet(buttons, nodeType);
 
         $.receiveMessage(
           $.proxy(bookmarklet, 'handleMessage'),
@@ -131,6 +132,10 @@ DrupalBookmarklet.prototype.getSelection = function () {
   }
 
   return t;
+};
+
+DrupalBookmarklet.prototype.mapNodeType = function (href) {
+  return 'story';
 };
 
 DrupalBookmarklet.prototype.iframeUrl = function (nodeType) {
