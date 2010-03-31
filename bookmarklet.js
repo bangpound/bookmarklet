@@ -241,9 +241,11 @@ DrupalBookmarklet.prototype.createBookmarklet = function (buttons, nodeType) {
     // Restyle the buttons to cancel any ui-dialog styles that interfere with
     // buttonset.
     .find('.ui-button')
-    .css({
-      marginRight: 0,
-      float: 'none'
+    .each(function () {
+      $(this).css({
+        marginRight: 0,
+        float: 'none'
+      });
     });
 
 };
