@@ -2,18 +2,18 @@
 
 "use strict";
 
-var drupalBookmarklet;
+var DrupalBookmarklet;
 
 /**
  * @constructor
  */
-drupalBookmarklet = function (host, path) {
+DrupalBookmarklet = function (host, path) {
   this.host = host;
   this.path = path;
   this.init();
 };
 
-drupalBookmarklet.prototype.createScript = function (src, callback) {
+DrupalBookmarklet.prototype.createScript = function (src, callback) {
   var script;
   script = document.createElement('script');
   script.setAttribute('src', src);
@@ -23,7 +23,7 @@ drupalBookmarklet.prototype.createScript = function (src, callback) {
   return script;
 };
 
-drupalBookmarklet.prototype.init = function () {
+DrupalBookmarklet.prototype.init = function () {
   var bookmarklet;
   bookmarklet = this;
 
@@ -81,7 +81,7 @@ drupalBookmarklet.prototype.init = function () {
  *                  if it contains an optionName property, it must contain a
  *                  value property.
  */
-drupalBookmarklet.prototype.handleMessage = function (event) {
+DrupalBookmarklet.prototype.handleMessage = function (event) {
   var $, data, bookmarklet;
   $ = this.jQuery;
   data = {};
@@ -112,7 +112,7 @@ drupalBookmarklet.prototype.handleMessage = function (event) {
   }
 };
 
-drupalBookmarklet.prototype.getSelection = function () {
+DrupalBookmarklet.prototype.getSelection = function () {
   var t;
 
   try {
@@ -133,7 +133,7 @@ drupalBookmarklet.prototype.getSelection = function () {
   return t;
 };
 
-drupalBookmarklet.prototype.iframeUrl = function (nodeType) {
+DrupalBookmarklet.prototype.iframeUrl = function (nodeType) {
   var $, body, iframe_url, edit;
 
   $ = this.jQuery;
@@ -177,7 +177,7 @@ drupalBookmarklet.prototype.iframeUrl = function (nodeType) {
   return iframe_url + '?' + $.param({ bookmarklet: true, edit: edit }) + this.settings.constant;
 };
 
-drupalBookmarklet.prototype.createBookmarklet = function (buttons, nodeType) {
+DrupalBookmarklet.prototype.createBookmarklet = function (buttons, nodeType) {
   var $;
 
   $ = this.jQuery;
@@ -228,7 +228,7 @@ drupalBookmarklet.prototype.createBookmarklet = function (buttons, nodeType) {
   });
 };
 
-drupalBookmarklet.prototype.reOpen = function () {
+DrupalBookmarklet.prototype.reOpen = function () {
   var $;
 
   $ = this.jQuery;
@@ -241,12 +241,12 @@ drupalBookmarklet.prototype.reOpen = function () {
   }
 };
 
-window['drupalBookmarklet'] = drupalBookmarklet;
-drupalBookmarklet.prototype['init'] = drupalBookmarklet.prototype.init;
-drupalBookmarklet.prototype['handleMessage'] = drupalBookmarklet.prototype.handleMessage;
-drupalBookmarklet.prototype['getSelection'] = drupalBookmarklet.prototype.getSelection;
-drupalBookmarklet.prototype['iframeUrl'] = drupalBookmarklet.prototype.iframeUrl;
-drupalBookmarklet.prototype['createBookmarklet'] = drupalBookmarklet.prototype.createBookmarklet;
-drupalBookmarklet.prototype['reOpen'] = drupalBookmarklet.prototype.reOpen;
+window['DrupalBookmarklet'] = DrupalBookmarklet;
+DrupalBookmarklet.prototype['init'] = DrupalBookmarklet.prototype.init;
+DrupalBookmarklet.prototype['handleMessage'] = DrupalBookmarklet.prototype.handleMessage;
+DrupalBookmarklet.prototype['getSelection'] = DrupalBookmarklet.prototype.getSelection;
+DrupalBookmarklet.prototype['iframeUrl'] = DrupalBookmarklet.prototype.iframeUrl;
+DrupalBookmarklet.prototype['createBookmarklet'] = DrupalBookmarklet.prototype.createBookmarklet;
+DrupalBookmarklet.prototype['reOpen'] = DrupalBookmarklet.prototype.reOpen;
 
 /*jslint white: true, browser: true, devel: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, strict: true, newcap: true, immed: true, indent: 2 */

@@ -287,7 +287,7 @@ function bookmarklet_script() {
       'output_info' => 'compiled_code',
     );
     $script = $data['js_code'] = <<<EOT
-/* global $,drupalBookmarklet */
+/* global $,DrupalBookmarklet */
 (function () {
   var host, path, b;
   if (typeof __drupalBookmarklet$instance_name === 'object') {
@@ -300,7 +300,7 @@ function bookmarklet_script() {
     b.type = 'text/javascript';
     b.src = host + '/' + path + '/bookmarklet.js?' + (Math.random());
     b.onload = function () {
-      __drupalBookmarklet$instance_name = new drupalBookmarklet(host, path);
+      __drupalBookmarklet$instance_name = new DrupalBookmarklet(host, path);
     };
     document.getElementsByTagName('head')[0].appendChild(b);
   }
