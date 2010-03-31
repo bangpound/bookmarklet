@@ -229,7 +229,7 @@ DrupalBookmarklet.prototype.createBookmarklet = function (buttons, nodeType) {
   });
   uiDialog.find('.ui-dialog-buttonpane').buttonset();
   uiDialog.find('.ui-dialog-buttonpane button').css({
-    margin: 0,
+    marginRight: 0,
     float: 'none'
   });
 
