@@ -82,10 +82,11 @@ drupalBookmarklet.prototype.init = function () {
  *                  value property.
  */
 drupalBookmarklet.prototype.handleMessage = function (event) {
-  var data, bookmarklet;
+  var $, data, bookmarklet;
+  $ = this.jQuery;
   data = {};
   bookmarklet = this;
-  this.jQuery.each(decodeURIComponent(event.data).split("&"), function () {
+  $.each(decodeURIComponent(event.data).split("&"), function () {
     data[this.split("=")[0]] = this.split("=")[1];
   });
   if (typeof(data.optionName) === "undefined") {
@@ -95,7 +96,7 @@ drupalBookmarklet.prototype.handleMessage = function (event) {
       }, 5000);
     }
     else {
-      this.jQuery(this.dialog).dialog(data.method);
+      $(this.dialog).dialog(data.method);
     }
   }
   else {
@@ -105,7 +106,7 @@ drupalBookmarklet.prototype.handleMessage = function (event) {
       this.dialog.css(data.optionName, data.value + "px");
       break;
     default:
-      this.jQuery(this.dialog).dialog(data.method, data.optionName, data.value);
+      $(this.dialog).dialog(data.method, data.optionName, data.value);
       break;
     }
   }
@@ -133,8 +134,9 @@ drupalBookmarklet.prototype.getSelection = function () {
 };
 
 drupalBookmarklet.prototype.iframeUrl = function (nodeType) {
-  var body, iframe_url, edit;
+  var $, body, iframe_url, edit;
 
+  $ = this.jQuery;
   edit = {};
   body = this.getSelection();
 
@@ -172,11 +174,15 @@ drupalBookmarklet.prototype.iframeUrl = function (nodeType) {
     };
   }
 
-  return iframe_url + '?' + this.jQuery.param({ bookmarklet: true, edit: edit }) + this.settings.constant;
+  return iframe_url + '?' + $.param({ bookmarklet: true, edit: edit }) + this.settings.constant;
 };
 
 drupalBookmarklet.prototype.createBookmarklet = function (buttons, nodeType) {
-  this.jQuery('<link/>', {
+  var $;
+
+  $ = this.jQuery;
+
+  $('<link/>', {
       href: this.settings.stylesheet,
       rel: 'stylesheet',
       type: 'text/css',
@@ -184,13 +190,13 @@ drupalBookmarklet.prototype.createBookmarklet = function (buttons, nodeType) {
     })
     .appendTo('head');
 
-  this.dialog = this.dialog || this.jQuery('<div/>', {
+  this.dialog = this.dialog || $('<div/>', {
       id: 'drupal_bookmarklet',
       css: {
         overflow: 'visible'
       }
     })
-    .append(this.jQuery('<iframe/>', {
+    .append($('<iframe/>', {
       src: this.iframeUrl(nodeType),
       frameborder: 0,
       scrolling: 'no',
@@ -223,11 +229,15 @@ drupalBookmarklet.prototype.createBookmarklet = function (buttons, nodeType) {
 };
 
 drupalBookmarklet.prototype.reOpen = function () {
+  var $;
+
+  $ = this.jQuery;
+
   // If the dialog has already been open, refresh the src URL of the iframe to
   // fill in the form with new values.
-  this.jQuery('iframe', this.dialog).attr('src', this.iframeUrl(this.dialog.data('defaultNodeType')));
-  if (!this.jQuery(this.dialog).dialog('isOpen')) {
-    this.jQuery(this.dialog).dialog('open');
+  $('iframe', this.dialog).attr('src', this.iframeUrl(this.dialog.data('defaultNodeType')));
+  if (!$(this.dialog).dialog('isOpen')) {
+    $(this.dialog).dialog('open');
   }
 };
 
