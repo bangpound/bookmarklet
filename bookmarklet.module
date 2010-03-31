@@ -290,8 +290,8 @@ function bookmarklet_script() {
 /* global $,DrupalBookmarklet */
 (function () {
   var host, path, b;
-  if (typeof __drupalBookmarklet$instance_name === 'object') {
-    __drupalBookmarklet$instance_name.reOpen();
+  if (typeof DrupalBookmarklet$instance_name === 'object') {
+    DrupalBookmarklet$instance_name.reOpen();
   }
   else {
     host = '$base_url';
@@ -300,7 +300,7 @@ function bookmarklet_script() {
     b.type = 'text/javascript';
     b.src = host + '/' + path + '/bookmarklet.js?' + (Math.random());
     b.onload = function () {
-      __drupalBookmarklet$instance_name = new DrupalBookmarklet(host, path);
+      DrupalBookmarklet$instance_name = new DrupalBookmarklet(host, path);
     };
     document.getElementsByTagName('head')[0].appendChild(b);
   }
