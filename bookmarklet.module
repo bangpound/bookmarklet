@@ -56,6 +56,12 @@ function bookmarklet_block($op = 'list', $delta = 0, $edit = array()) {
           '#default_value' => variable_get('bookmarklet_node_types', array('story' => 'story')),
           '#options' => node_get_types('names'),
         );
+        $form['default_node_type'] = array(
+          '#type' => 'radios',
+          '#title' => t('Default'),
+          '#default_value' => variable_get('bookmarklet_default_node_type', 'story'),
+          '#options' => node_get_types('names'),
+        );
         $form['constant'] = array(
           '#type' => 'textfield',
           '#title' => 'Constant',
@@ -68,6 +74,7 @@ function bookmarklet_block($op = 'list', $delta = 0, $edit = array()) {
     case 'save':
       if ($delta == 0) {
         variable_set('bookmarklet_node_types', $edit['node_types']);
+        variable_set('bookmarklet_default_node_type', $edit['default_node_type']);
         variable_set('bookmarklet_constant', $edit['constant']);
       }
       break;
@@ -328,7 +335,7 @@ function bookmarklet_js() {
   $settings = array(
     'stylesheet' => variable_get('bookmarklet_stylesheet', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/flick/jquery-ui.css'),
     'types' => array(),
-    'defaultType' => 'story',
+    'defaultType' => variable_get('bookmarklet_default_node_type', 'story'),
     'urlMap' => array(),
     'constant' => variable_get('bookmarklet_constant', ''),
   );
