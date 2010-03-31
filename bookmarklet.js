@@ -138,19 +138,7 @@ DrupalBookmarklet.prototype.getSelection = function () {
 };
 
 DrupalBookmarklet.prototype.mapNodeType = function (href) {
-  var parsedUrl;
-
-  parsedUrl = this.parseUrl(href);
-
-  // I want this map to be stored in the JSON settings loaded from the Drupal
-  // site.
-  switch (parsedUrl.host) {
-  case 'www.youtube.com':
-  case 'youtube.com':
-    return 'video';
-  default:
-    return 'story';
-  }
+  return this.settings.urlMap[this.parseUrl(href).host] || this.settings.defaultType;
 };
 
 // From Chapter 7 of JavaScript, the Good Parts.

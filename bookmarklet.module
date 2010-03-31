@@ -328,6 +328,8 @@ function bookmarklet_js() {
   $settings = array(
     'stylesheet' => variable_get('bookmarklet_stylesheet', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/flick/jquery-ui.css'),
     'types' => array(),
+    'defaultType' => 'story',
+    'urlMap' => array(),
     'constant' => variable_get('bookmarklet_constant', ''),
   );
 
@@ -340,6 +342,12 @@ function bookmarklet_js() {
       );
     }
   }
+
+  // Map URLs to node types.
+  $settings['urlMap'] = array(
+    'www.youtube.com' => 'video',
+    'youtube.com' => 'video',
+  );
 
   if (!empty($_GET['callback'])) {
     echo $_GET['callback'] .'('. drupal_to_js($settings) .');';
