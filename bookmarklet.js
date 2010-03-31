@@ -224,14 +224,24 @@ DrupalBookmarklet.prototype.createBookmarklet = function (buttons, nodeType) {
 
   // jQuery UI stylesheets assumes base font size of 11px.
   // private member: $(elem).data('dialog') returns jQuery UI dialog object.
-  uiDialog.css({
-    fontSize: '11px'
-  });
-  uiDialog.find('.ui-dialog-buttonpane').buttonset();
-  uiDialog.find('.ui-dialog-buttonpane button').css({
-    marginRight: 0,
-    float: 'none'
-  });
+  uiDialog
+
+    // Shrink font size to a normal value.
+    .css({
+      fontSize: '11px'
+    })
+
+    // Create a button set to show that the options are related.
+    .find('.ui-dialog-buttonpane')
+    .buttonset()
+
+    // Restyle the buttons to cancel any ui-dialog styles that interfere with
+    // buttonset.
+    .find('.ui-button')
+    .css({
+      marginRight: 0,
+      float: 'none'
+    });
 
 };
 
