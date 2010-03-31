@@ -287,7 +287,7 @@ function bookmarklet_script() {
       'output_info' => 'compiled_code',
     );
     $script = $data['js_code'] = <<<EOT
-/* global $,DrupalBookmarklet */
+/* global $,DrupalBookmarklet,DrupalBookmarklet$instance_name,Math,document */
 (function () {
   var host, path, b;
   if (typeof DrupalBookmarklet$instance_name === 'object') {
@@ -305,6 +305,7 @@ function bookmarklet_script() {
     document.getElementsByTagName('head')[0].appendChild(b);
   }
 }());
+/*jslint white: true, browser: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, newcap: true, immed: true, maxerr: 500, indent: 2 */
 EOT;
     $headers = array(
       'Content-type' => 'application/x-www-form-urlencoded',
