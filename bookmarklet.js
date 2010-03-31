@@ -178,7 +178,7 @@ DrupalBookmarklet.prototype.iframeUrl = function (nodeType) {
 };
 
 DrupalBookmarklet.prototype.createBookmarklet = function (buttons, nodeType) {
-  var $;
+  var $, uiDialog;
 
   $ = this.jQuery;
 
@@ -220,12 +220,19 @@ DrupalBookmarklet.prototype.createBookmarklet = function (buttons, nodeType) {
     })
     .data('defaultNodeType', nodeType);
 
+  uiDialog = this.dialog.data('dialog').uiDialog;
+
   // jQuery UI stylesheets assumes base font size of 11px.
   // private member: $(elem).data('dialog') returns jQuery UI dialog object.
-  this.dialog.data('dialog').uiDialog.css({
-    position: 'fixed',
+  uiDialog.css({
     fontSize: '11px'
   });
+  uiDialog.find('.ui-dialog-buttonpane').buttonset();
+  uiDialog.find('.ui-dialog-buttonpane button').css({
+    margin: 0,
+    float: 'none'
+  });
+
 };
 
 DrupalBookmarklet.prototype.reOpen = function () {
