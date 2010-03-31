@@ -288,6 +288,7 @@ function bookmarklet_script() {
     );
     $script = $data['js_code'] = <<<EOT
 /* global $,DrupalBookmarklet,DrupalBookmarklet$instance_name,Math,document */
+var DrupalBookmarklet$instance_name;
 (function () {
   var host, path, b;
   if (typeof DrupalBookmarklet$instance_name === 'object') {
