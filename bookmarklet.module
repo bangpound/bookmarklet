@@ -71,7 +71,7 @@ function bookmarklet_block($op = 'list', $delta = 0, $edit = array()) {
         );
         $form['stylesheet'] = array(
           '#type' => 'textfield',
-          '#title' => 'Stylesheet',
+          '#title' => t('Stylesheet'),
           '#default_value' => variable_get('bookmarklet_stylesheet', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/flick/jquery-ui.css'),
         );
         return $form;
