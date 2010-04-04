@@ -301,10 +301,12 @@ function theme_bookmarklet_config($form) {
     $row[] = array(
       'data' => drupal_render($form['node_types'][$type]),
       'align' => 'center',
+      'title' => t($name) .': '. t('Enabled'),
     );
     $row[] = array(
       'data' => drupal_render($form['default_node_type'][$type]),
       'align' => 'center',
+      'title' => t($name) .': '. t('Default'),
     );
     $rows[] = $row;
   }
