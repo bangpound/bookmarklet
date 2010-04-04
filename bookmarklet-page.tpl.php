@@ -24,16 +24,10 @@
   <?php print $scripts; ?>
 </head>
 <body class="bookmarklet">
-<div class="modalframe-page-wrapper">
-  <div class="modalframe-page-container clear-block">
-    <div class="modalframe-page-content">
 <?php if ($show_messages && $messages): print $messages; endif; ?>
 <?php print $help; ?>
 <div class="clear-block">
   <?php print $content; ?>
-</div>
-    </div>
-  </div>
 </div>
 <?php print $closure; ?>
 </body>
