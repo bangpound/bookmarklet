@@ -24,8 +24,8 @@
   <?php print $scripts; ?>
 </head>
 <body class="bookmarklet">
-<?php if ($show_messages && $messages): print $messages; endif; ?>
-<?php print $help; ?>
+<?php if (!empty($messages)): print $messages; endif; ?>
+<?php if (!empty($help)): print $help; endif; ?>
 <div class="clear-block">
   <?php print $content; ?>
 </div>
