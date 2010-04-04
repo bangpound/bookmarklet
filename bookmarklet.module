@@ -294,12 +294,25 @@ function theme_bookmarklet_config($form) {
   $rows = array();
   foreach (node_get_types('names') as $type => $name) {
     $row = array();
-    $row[] = array('data' => $name, 'header' => TRUE);
-    $row[] = array('data' => drupal_render($form['node_types'][$type]), 'align' => 'center');
-    $row[] = array('data' => drupal_render($form['default_node_type'][$type]), 'align' => 'center');
+    $row[] = array(
+      'data' => $name,
+      'header' => TRUE,
+    );
+    $row[] = array(
+      'data' => drupal_render($form['node_types'][$type]),
+      'align' => 'center',
+    );
+    $row[] = array(
+      'data' => drupal_render($form['default_node_type'][$type]),
+      'align' => 'center',
+    );
     $rows[] = $row;
   }
-  $header = array(t('Name'), t('Enabled'), t('Default'));
+  $header = array(
+    t('Name'),
+    t('Enabled'),
+    t('Default'),
+  );
   $output = theme('table', $header, $rows);
   $output .= drupal_render($form);
   return $output;
