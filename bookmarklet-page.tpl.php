@@ -24,11 +24,11 @@
   <?php print $scripts; ?>
 </head>
 <body class="bookmarklet">
-<?php if (!empty($messages)): print $messages; endif; ?>
-<?php if (!empty($help)): print $help; endif; ?>
-<div class="clear-block">
-  <?php print $content; ?>
-</div>
-<?php print $closure; ?>
+  <?php if (!empty($messages)): print $messages; endif; ?>
+  <?php if (!empty($help)): print $help; endif; ?>
+  <div class="clear-block">
+    <?php print $content; ?>
+  </div>
+  <?php print $closure; ?>
 </body>
 </html>
