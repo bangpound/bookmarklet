@@ -50,21 +50,23 @@ function bookmarklet_block($op = 'list', $delta = 0, $edit = array()) {
 
     case 'configure':
       if ($delta == 0) {
-        $form['node_types'] = array(
+        $types = array_fill_keys(array_keys(node_get_types('types')), '');
+        $form['bookmarklet'] = array(
+          '#theme' => 'bookmarklet_config',
+        );
+        $form['bookmarklet']['node_types'] = array(
           '#type' => 'checkboxes',
-          '#title' => t('Node types'),
           '#default_value' => variable_get('bookmarklet_node_types', array('story' => 'story')),
-          '#options' => node_get_types('names'),
+          '#options' => $types,
         );
-        $form['default_node_type'] = array(
+        $form['bookmarklet']['default_node_type'] = array(
           '#type' => 'radios',
-          '#title' => t('Default'),
           '#default_value' => variable_get('bookmarklet_default_node_type', 'story'),
-          '#options' => node_get_types('names'),
+          '#options' => $types,
         );
-        $form['constant'] = array(
+        $form['bookmarklet']['constant'] = array(
           '#type' => 'textfield',
-          '#title' => 'Constant',
+          '#title' => t('Constant'),
           '#default_value' => variable_get('bookmarklet_constant', ''),
         );
         $form['stylesheet'] = array(
@@ -265,6 +267,11 @@ function bookmarklet_theme($existing, $type, $theme, $path) {
         'options' => array(),
       ),
     ),
+    'bookmarklet_config' => array(
+      'arguments' => array(
+        'form' => array(),
+      ),
+    ),
   );
 }
 
@@ -284,6 +291,39 @@ function theme_bookmarklet($text = '', $script = '', $options = array()) {
   $link = l($text, $decoy, $options);
   $script = 'javascript:'. rawurlencode(trim($script));
   return str_replace($decoy, $script, $link);
+}
+
+/**
+ * Theme the bookmarklet config form.
+ */
+function theme_bookmarklet_config($form) {
+  $rows = array();
+  foreach (node_get_types('names') as $type => $name) {
+    $row = array();
+    $row[] = array(
+      'data' => $name,
+      'header' => TRUE,
+    );
+    $row[] = array(
+      'data' => drupal_render($form['node_types'][$type]),
+      'align' => 'center',
+      'title' => t($name) .': '. t('Enabled'),
+    );
+    $row[] = array(
+      'data' => drupal_render($form['default_node_type'][$type]),
+      'align' => 'center',
+      'title' => t($name) .': '. t('Default'),
+    );
+    $rows[] = $row;
+  }
+  $header = array(
+    t('Name'),
+    t('Enabled'),
+    t('Default'),
+  );
+  $output = theme('table', $header, $rows, array(), t('Allowed and default node types in bookmarklet'));
+  $output .= drupal_render($form);
+  return $output;
 }
 
 function bookmarklet_script() {
