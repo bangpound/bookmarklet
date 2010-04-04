@@ -64,7 +64,7 @@ function bookmarklet_block($op = 'list', $delta = 0, $edit = array()) {
           '#default_value' => variable_get('bookmarklet_default_node_type', 'story'),
           '#options' => $types,
         );
-        $form['bookmarklet']['constant'] = array(
+        $form['constant'] = array(
           '#type' => 'textfield',
           '#title' => t('Constant'),
           '#default_value' => variable_get('bookmarklet_constant', ''),
