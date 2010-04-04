@@ -80,6 +80,9 @@ function bookmarklet_block($op = 'list', $delta = 0, $edit = array()) {
 
     case 'save':
       if ($delta == 0) {
+        if (!array_key_exists($edit['default_node_type'], array_flip($edit['node_types']))) {
+          $edit['node_types'][$edit['default_node_type']] = $edit['default_node_type'];
+        }
         variable_set('bookmarklet_node_types', $edit['node_types']);
         variable_set('bookmarklet_default_node_type', $edit['default_node_type']);
         variable_set('bookmarklet_constant', $edit['constant']);
