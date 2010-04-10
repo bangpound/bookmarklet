@@ -43,7 +43,7 @@ DrupalBookmarklet.prototype.init = function () {
       parsedUrl = {};
 
       // Pull bookmarklet settings from Drupal callback.
-      bookmarklet.getSettings(function (json) {
+      bookmarklet.loadSettings(function (json) {
 
         nodeType = bookmarklet.mapNodeType(location.href);
         bookmarklet.createBookmarklet(nodeType);
@@ -66,7 +66,7 @@ DrupalBookmarklet.prototype.init = function () {
 /**
  * Load bookmarklet settings.
  */
-DrupalBookmarklet.prototype.getSettings = function (callback) {
+DrupalBookmarklet.prototype.loadSettings = function (callback) {
   var bookmarklet, $;
 
   bookmarklet = this;
