@@ -39,8 +39,9 @@ DrupalBookmarklet.prototype.init = function () {
     // newly loaded jQuery is attached to the bookmarklet object as the
     // jQuery method.
     (function ($) {
-      var nodeType, parsedUrl;
-      parsedUrl = {};
+      var nodeType;
+
+      bookmarklet.setupMessageChannel();
 
       // Pull bookmarklet settings from Drupal callback.
       bookmarklet.loadSettings(function (json) {
@@ -52,14 +53,6 @@ DrupalBookmarklet.prototype.init = function () {
           nodeType = bookmarklet.mapNodeType(location.href);
           bookmarklet.createBookmarklet(nodeType);
         }
-
-        parsedUrl = bookmarklet.parseUrl(bookmarklet.host);
-
-        $.receiveMessage(
-          $.proxy(bookmarklet, 'handleMessage'),
-          // https://developer.mozilla.org/en/DOM/window.postMessage
-          parsedUrl.scheme + ":" + parsedUrl.slash + parsedUrl.host + (parsedUrl.port ? ':' + parsedUrl.port : '')
-        );
 
       });
     }(bookmarklet.jQuery = jQuery.noConflict(true)));
@@ -101,6 +94,22 @@ DrupalBookmarklet.prototype.setupButtons = function () {
       bookmarklet.updateTitle(machineName);
     };
   });
+};
+
+/**
+ * Set up message channel.
+ */
+DrupalBookmarklet.prototype.setupMessageChannel = function () {
+  var $, parsedUrl;
+
+  $ = this.jQuery;
+  parsedUrl = this.parseUrl(this.host);
+
+  $.receiveMessage(
+    $.proxy(this, 'handleMessage'),
+    // https://developer.mozilla.org/en/DOM/window.postMessage
+    parsedUrl.scheme + ":" + parsedUrl.slash + parsedUrl.host + (parsedUrl.port ? ':' + parsedUrl.port : '')
+  );
 };
 
 /**
