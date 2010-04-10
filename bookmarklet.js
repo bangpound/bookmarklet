@@ -45,8 +45,13 @@ DrupalBookmarklet.prototype.init = function () {
       // Pull bookmarklet settings from Drupal callback.
       bookmarklet.loadSettings(function (json) {
 
-        nodeType = bookmarklet.mapNodeType(location.href);
-        bookmarklet.createBookmarklet(nodeType);
+        if (json.authenticated === false && json.types.length === 0) {
+          alert('You have to be logged in.');
+        }
+        else {
+          nodeType = bookmarklet.mapNodeType(location.href);
+          bookmarklet.createBookmarklet(nodeType);
+        }
 
         parsedUrl = bookmarklet.parseUrl(bookmarklet.host);
 

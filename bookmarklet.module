@@ -382,6 +382,7 @@ function bookmarklet_js() {
   drupal_set_header('Content-Type: text/javascript; charset=utf-8');
 
   $settings = array(
+    'authenticated' => user_is_logged_in(),
     'stylesheet' => variable_get('bookmarklet_stylesheet', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/flick/jquery-ui.css'),
     'types' => array(),
     'defaultType' => variable_get('bookmarklet_default_node_type', 'story'),
