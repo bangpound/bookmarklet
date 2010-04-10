@@ -39,9 +39,8 @@ DrupalBookmarklet.prototype.init = function () {
     // newly loaded jQuery is attached to the bookmarklet object as the
     // jQuery method.
     (function ($) {
-      var buttons, nodeTypes, nodeType, parsedUrl;
+      var buttons, nodeType, parsedUrl;
       buttons = {};
-      nodeTypes = [];
       parsedUrl = {};
 
       // Pull bookmarklet settings from Drupal callback.
@@ -49,7 +48,6 @@ DrupalBookmarklet.prototype.init = function () {
 
         // Make UI Dialog buttons for each content type.
         $.each(json.types, function (machineName, setting) {
-          nodeTypes.push(machineName);
           buttons[setting.name] = function (event) {
             $('iframe', this).attr('src', bookmarklet.iframeUrl(machineName));
             bookmarklet.updateTitle(machineName);
