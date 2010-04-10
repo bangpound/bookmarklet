@@ -53,7 +53,7 @@ DrupalBookmarklet.prototype.init = function () {
           nodeTypes.push(machineName);
           buttons[setting.name] = function (event) {
             $('iframe', this).attr('src', bookmarklet.iframeUrl(machineName));
-            $(this).dialog('option', 'title', 'Post new ' + bookmarklet.settings.types[machineName].name);
+            bookmarklet.updateTitle(machineName);
           };
         });
 
@@ -240,10 +240,11 @@ DrupalBookmarklet.prototype.createBookmarklet = function (buttons, nodeType) {
     .dialog({
       position: ['right', 'top'],
       buttons: buttons,
-      zIndex: 2147483647,
-      title: 'Post new ' + this.settings.types[nodeType].name
+      zIndex: 2147483647
     })
     .data('defaultNodeType', nodeType);
+
+  this.updateTitle(nodeType);
 
   // private member: $(elem).data('dialog') returns jQuery UI dialog object.
   this.dialog.data('dialog').uiDialog
@@ -270,6 +271,17 @@ DrupalBookmarklet.prototype.createBookmarklet = function (buttons, nodeType) {
 
 };
 
+/**
+ * Update dialog title with the human name of a node type.
+ */
+DrupalBookmarklet.prototype.updateTitle = function (nodeType) {
+  var $;
+
+  $ = this.jQuery;
+
+  $(this.dialog).dialog('option', 'title', 'Post new ' + this.settings.types[nodeType].name);
+};
+
 DrupalBookmarklet.prototype.reOpen = function () {
   var $;
 
@@ -278,6 +290,7 @@ DrupalBookmarklet.prototype.reOpen = function () {
   // If the dialog has already been open, refresh the src URL of the iframe to
   // fill in the form with new values.
   $('iframe', this.dialog).attr('src', this.iframeUrl(this.dialog.data('defaultNodeType')));
+  this.updateTitle(this.dialog.data('defaultNodeType'));
   if (!$(this.dialog).dialog('isOpen')) {
     $(this.dialog).dialog('open');
   }
