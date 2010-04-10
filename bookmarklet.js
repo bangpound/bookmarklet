@@ -45,8 +45,7 @@ DrupalBookmarklet.prototype.init = function () {
       parsedUrl = {};
 
       // Pull bookmarklet settings from Drupal callback.
-      $.getJSON(bookmarklet.host + '/bookmarklet/js?callback=?', function (json) {
-        bookmarklet.settings = json;
+      bookmarklet.getSettings(function (json) {
 
         // Make UI Dialog buttons for each content type.
         $.each(json.types, function (machineName, setting) {
@@ -73,6 +72,21 @@ DrupalBookmarklet.prototype.init = function () {
   });
 
   document.getElementsByTagName('head')[0].appendChild(this.s1);
+};
+
+/**
+ * Load bookmarklet settings.
+ */
+DrupalBookmarklet.prototype.getSettings = function (callback) {
+  var bookmarklet, $;
+
+  bookmarklet = this;
+  $ = this.jQuery;
+
+  $.getJSON(this.host + '/bookmarklet/js?callback=?', function (json) {
+    bookmarklet.settings = json;
+    callback(json);
+  });
 };
 
 /**
