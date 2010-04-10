@@ -39,23 +39,14 @@ DrupalBookmarklet.prototype.init = function () {
     // newly loaded jQuery is attached to the bookmarklet object as the
     // jQuery method.
     (function ($) {
-      var buttons, nodeType, parsedUrl;
-      buttons = {};
+      var nodeType, parsedUrl;
       parsedUrl = {};
 
       // Pull bookmarklet settings from Drupal callback.
       bookmarklet.getSettings(function (json) {
 
-        // Make UI Dialog buttons for each content type.
-        $.each(json.types, function (machineName, setting) {
-          buttons[setting.name] = function (event) {
-            $('iframe', this).attr('src', bookmarklet.iframeUrl(machineName));
-            bookmarklet.updateTitle(machineName);
-          };
-        });
-
         nodeType = bookmarklet.mapNodeType(location.href);
-        bookmarklet.createBookmarklet(buttons, nodeType);
+        bookmarklet.createBookmarklet(nodeType);
 
         parsedUrl = bookmarklet.parseUrl(bookmarklet.host);
 
@@ -84,6 +75,26 @@ DrupalBookmarklet.prototype.getSettings = function (callback) {
   $.getJSON(this.host + '/bookmarklet/js?callback=?', function (json) {
     bookmarklet.settings = json;
     callback(json);
+  });
+};
+
+/**
+ * Set up buttons.
+ */
+DrupalBookmarklet.prototype.setupButtons = function () {
+  var $, bookmarklet;
+
+  $ = this.jQuery;
+  bookmarklet = this;
+
+  this.buttons = {};
+
+  // Make UI Dialog buttons for each content type.
+  $.each(this.settings.types, function (machineName, setting) {
+    bookmarklet.buttons[setting.name] = function (event) {
+      $('iframe', this).attr('src', bookmarklet.iframeUrl(machineName));
+      bookmarklet.updateTitle(machineName);
+    };
   });
 };
 
@@ -214,7 +225,7 @@ DrupalBookmarklet.prototype.iframeUrl = function (nodeType) {
   return iframe_url + '?' + $.param({ bookmarklet: true, edit: edit }) + this.settings.constant;
 };
 
-DrupalBookmarklet.prototype.createBookmarklet = function (buttons, nodeType) {
+DrupalBookmarklet.prototype.createBookmarklet = function (nodeType) {
   var $;
 
   $ = this.jQuery;
@@ -226,6 +237,8 @@ DrupalBookmarklet.prototype.createBookmarklet = function (buttons, nodeType) {
       media: 'screen'
     })
     .appendTo('head');
+
+  this.setupButtons();
 
   this.dialog = this.dialog || $('<div/>', {
       id: 'drupal_bookmarklet',
@@ -251,7 +264,7 @@ DrupalBookmarklet.prototype.createBookmarklet = function (buttons, nodeType) {
     }))
     .dialog({
       position: ['right', 'top'],
-      buttons: buttons,
+      buttons: this.buttons,
       zIndex: 2147483647
     })
     .data('defaultNodeType', nodeType);
