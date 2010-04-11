@@ -130,28 +130,29 @@ function bookmarklet_form_alter(&$form, $form_state, $form_id) {
         '#default_value' => $_REQUEST['origin'],
       );
     }
-  }
-  if (isset($_REQUEST['bookmarklet']) && isset($form['type']) && isset($form['#node']) && ($form_id == $form['type']['#value'] .'_node_form')) {
+    // Node forms.
+    if (isset($form['type']) && isset($form['#node']) && ($form_id == $form['type']['#value'] .'_node_form')) {
 
-    if (module_exists('vertical_tabs')) {
-      vertical_tabs_remove_vertical_tabs($form);
+      if (module_exists('vertical_tabs')) {
+        vertical_tabs_remove_vertical_tabs($form);
+      }
+
+      // Recurse through all children.
+      _bookmarklet_form_alter($form, $form_state, $form_id);
+
+      // Definitely shrink the body field.
+      if (!empty($form['body_field'])) {
+        $form['body_field']['body']['#rows'] = 5;
+
+        // Drupal resizable behavior fake-out. It's not helpful in a small frame.
+        $form['body_field']['body']['#attributes'] = array(
+          'class' => 'textarea-processed',
+        );
+      }
+
+      // Add submit handler.
+      $form['buttons']['submit']['#submit'][] = 'bookmarklet_form_submit';
     }
-
-    // Recurse through all children.
-    _bookmarklet_form_alter($form, $form_state, $form_id);
-
-    // Definitely shrink the body field.
-    if (!empty($form['body_field'])) {
-      $form['body_field']['body']['#rows'] = 5;
-
-      // Drupal resizable behavior fake-out. It's not helpful in a small frame.
-      $form['body_field']['body']['#attributes'] = array(
-        'class' => 'textarea-processed',
-      );
-    }
-
-    // Add submit handler.
-    $form['buttons']['submit']['#submit'][] = 'bookmarklet_form_submit';
   }
 }
 
