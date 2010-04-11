@@ -331,7 +331,7 @@ DrupalBookmarklet.prototype.createBookmarklet = function (url) {
     .each(function () {
       $(this).css({
         marginRight: 0,
-        float: 'none'
+        'float': 'none'
       });
     });
 
