@@ -338,13 +338,18 @@ DrupalBookmarklet.prototype.createBookmarklet = function (url) {
 };
 
 DrupalBookmarklet.prototype.reOpen = function () {
-  var $;
+  var $, nodeType, path;
 
   $ = this.jQuery;
+  nodeType = this.mapNodeType(location.href);
+  path = {
+    q: 'node/add/' + nodeType,
+    edit: this.getPrepopulate(nodeType)
+  };
 
   // If the dialog has already been open, refresh the src URL of the iframe to
   // fill in the form with new values.
-  $('iframe', this.dialog).attr('src', this.iframeUrl(this.mapNodeType(location.href)));
+  $('iframe', this.dialog).attr('src', this.iframeUrl(path));
   if (!$(this.dialog).dialog('isOpen')) {
     $(this.dialog).dialog('open');
   }
