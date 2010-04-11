@@ -6,9 +6,17 @@ $(document).ready(function () {
 
   $.postMessage({
     method: 'option',
-    optionName: 'height',
-    value: document.body.offsetHeight
+    optionName: 'title',
+    value: $('title').html()
   }, Drupal.settings.bookmarklet.target_url);
+
+  setTimeout(function () {
+    $.postMessage({
+      method: 'option',
+      optionName: 'height',
+      value: document.body.offsetHeight
+    }, Drupal.settings.bookmarklet.target_url);
+  }, 100);
 
   setTimeout(function () {
     $.postMessage({

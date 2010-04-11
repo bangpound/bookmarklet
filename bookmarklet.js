@@ -91,7 +91,6 @@ DrupalBookmarklet.prototype.setupButtons = function () {
   $.each(this.settings.types, function (machineName, setting) {
     bookmarklet.buttons[setting.name] = function (event) {
       $('iframe', this).attr('src', bookmarklet.iframeUrl(machineName));
-      bookmarklet.updateTitle(machineName);
     };
   });
 };
@@ -127,7 +126,7 @@ DrupalBookmarklet.prototype.handleMessage = function (event) {
   $ = this.jQuery;
   data = {};
   bookmarklet = this;
-  $.each(decodeURIComponent(event.data).split("&"), function () {
+  $.each(decodeURIComponent(event.data).replace(/\+/g, " ").split("&"), function () {
     data[this.split("=")[0]] = this.split("=")[1];
   });
   if (typeof(data.optionName) === "undefined") {
@@ -283,8 +282,6 @@ DrupalBookmarklet.prototype.createBookmarklet = function (nodeType) {
     })
     .data('defaultNodeType', nodeType);
 
-  this.updateTitle(nodeType);
-
   // private member: $(elem).data('dialog') returns jQuery UI dialog object.
   this.dialog.data('dialog').uiDialog
 
@@ -310,17 +307,6 @@ DrupalBookmarklet.prototype.createBookmarklet = function (nodeType) {
 
 };
 
-/**
- * Update dialog title with the human name of a node type.
- */
-DrupalBookmarklet.prototype.updateTitle = function (nodeType) {
-  var $;
-
-  $ = this.jQuery;
-
-  $(this.dialog).dialog('option', 'title', 'Post new ' + this.settings.types[nodeType].name);
-};
-
 DrupalBookmarklet.prototype.reOpen = function () {
   var $;
 
@@ -329,7 +315,6 @@ DrupalBookmarklet.prototype.reOpen = function () {
   // If the dialog has already been open, refresh the src URL of the iframe to
   // fill in the form with new values.
   $('iframe', this.dialog).attr('src', this.iframeUrl(this.dialog.data('defaultNodeType')));
-  this.updateTitle(this.dialog.data('defaultNodeType'));
   if (!$(this.dialog).dialog('isOpen')) {
     $(this.dialog).dialog('open');
   }
