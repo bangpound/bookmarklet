@@ -10,8 +10,6 @@
  */
 function bookmarklet_init() {
   if (isset($_REQUEST['bookmarklet'])) {
-    $path = drupal_get_path('module', 'bookmarklet');
-    drupal_add_js($path .'/bookmarklet.child.js', 'module', 'footer');
     $GLOBALS['bookmarklet_page_template'] = TRUE;
   }
 }
@@ -104,11 +102,36 @@ function bookmarklet_block($op = 'list', $delta = 0, $edit = array()) {
  * Implementation of hook_form_alter().
  */
 function bookmarklet_form_alter(&$form, $form_state, $form_id) {
-  if (isset($_REQUEST['bookmarklet']) && isset($form['type']) && isset($form['#node']) && ($form_id == $form['type']['#value'] .'_node_form')) {
-    if (!$form_state['submitted']) {
-      _bookmarklet_target($_SERVER['HTTP_REFERER']);
-      _bookmarklet_events(array('method' => 'moveToTop'));
+  if (isset($_REQUEST['bookmarklet'])) {
+
+    // When the destination is set, the user is probably not logged in yet.
+    if (isset($_REQUEST['destination'])) {
+
+      // Redirection happens in the context of the iframed Drupal page, so the
+      // origin, bookmarklet and edit variables must persist until the node
+      // form is displayed.
+      $query = array(
+        'bookmarklet' => TRUE,
+      );
+      if (isset($_REQUEST['origin'])) {
+        $query['origin'] = $_REQUEST['origin'];
+      }
+      if (isset($_REQUEST['edit'])) {
+        $query['edit'] = $_REQUEST['edit'];
+      }
+      $form['#redirect'] = array($_REQUEST['destination'], $query);
     }
+    else {
+
+      // Store the referrer which will be used in the submit handler to direct
+      // the child JS to tell the parent document close the iframe.
+      $form['bookmarklet_referrer'] = array(
+        '#type' => 'hidden',
+        '#default_value' => $_REQUEST['origin'],
+      );
+    }
+  }
+  if (isset($_REQUEST['bookmarklet']) && isset($form['type']) && isset($form['#node']) && ($form_id == $form['type']['#value'] .'_node_form')) {
 
     if (module_exists('vertical_tabs')) {
       vertical_tabs_remove_vertical_tabs($form);
@@ -129,14 +152,6 @@ function bookmarklet_form_alter(&$form, $form_state, $form_id) {
 
     // Add submit handler.
     $form['buttons']['submit']['#submit'][] = 'bookmarklet_form_submit';
-
-    // Store the referrer which will be used in the submit handler to direct
-    // the child JS to tell the parent document close the iframe.
-    // TODO: Workaround for missing referrers.
-    $form['bookmarklet_referrer'] = array(
-      '#type' => 'hidden',
-      '#default_value' => $_SERVER['HTTP_REFERER'],
-    );
   }
 }
 
@@ -204,25 +219,22 @@ function _bookmarklet_events($event = NULL) {
 }
 
 /**
- * Set origin for permission to postMessage to the parent document.
- */
-function _bookmarklet_target($url) {
-  $setting = array(
-    'bookmarklet' => array(
-      'target_url' => $url,
-    ),
-  );
-  drupal_add_js($setting, 'setting', 'footer');
-}
-
-/**
  * Implement of hook_footer().
  */
 function bookmarklet_footer($main = 0) {
-  if ($events = _bookmarklet_events()) {
+  if ($_REQUEST['bookmarklet']) {
     $path = drupal_get_path('module', 'bookmarklet');
     drupal_add_js($path .'/jquery-postmessage/jquery.ba-postmessage.js', 'module', 'footer');
-    drupal_add_js(array('bookmarklet' => array('events' => $events)), 'setting', 'footer');
+    drupal_add_js($path .'/bookmarklet.child.js', 'module', 'footer');
+    $setting = array(
+      'bookmarklet' => array(
+        'target_url' => $_REQUEST['origin'],
+      ),
+    );
+    drupal_add_js($setting, 'setting', 'footer');
+    if ($events = _bookmarklet_events()) {
+      drupal_add_js(array('bookmarklet' => array('events' => $events)), 'setting', 'footer');
+    }
   }
 }
 
@@ -431,10 +443,7 @@ function bookmarklet_js() {
  * Node save confirmation page.
  */
 function bookmarklet_node_save_confirm($node) {
-  if (!empty($_GET['origin'])) {
-    _bookmarklet_target($_GET['origin']);
-    _bookmarklet_events(array('method' => 'close'));
-  }
+  _bookmarklet_events(array('method' => 'close'));
   $links = array();
   $options = array(
     'attributes' => array(

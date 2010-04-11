@@ -51,7 +51,10 @@ DrupalBookmarklet.prototype.init = function () {
         };
 
         if (json.authenticated === false && json.types.length === 0) {
-          alert('You have to be logged in.');
+          $.extend(params, {
+            q: 'user/login',
+            destination: 'node/add/' + nodeType
+          });
         }
         else {
           $.extend(params, {
@@ -251,7 +254,10 @@ DrupalBookmarklet.prototype.iframeUrl = function (path) {
   var $, params;
 
   $ = this.jQuery;
-  params = { bookmarklet: true };
+  params = {
+    bookmarklet: true,
+    origin: location.href
+  };
 
   if (typeof path === "string") {
     $.extend(params, { q: path });
