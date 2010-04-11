@@ -39,20 +39,26 @@ DrupalBookmarklet.prototype.init = function () {
     // newly loaded jQuery is attached to the bookmarklet object as the
     // jQuery method.
     (function ($) {
-      var nodeType, url;
-
       bookmarklet.setupMessageChannel();
 
       // Pull bookmarklet settings from Drupal callback.
       bookmarklet.loadSettings(function (json) {
+        var nodeType, params, url;
+
+        nodeType = bookmarklet.mapNodeType(location.href);
+        params = {
+          edit: bookmarklet.getPrepopulate(nodeType)
+        };
 
         if (json.authenticated === false && json.types.length === 0) {
           alert('You have to be logged in.');
         }
         else {
-          nodeType = bookmarklet.mapNodeType(location.href);
-          url = bookmarklet.iframeUrl(nodeType);
+          $.extend(params, {
+            q: 'node/add/' + nodeType
+          });
         }
+        url = bookmarklet.iframeUrl(params);
         bookmarklet.createBookmarklet(url);
 
       });
@@ -92,7 +98,12 @@ DrupalBookmarklet.prototype.setupButtons = function () {
   // Make UI Dialog buttons for each content type.
   $.each(this.settings.types, function (machineName, setting) {
     bookmarklet.buttons[setting.name] = function (event) {
-      $('iframe', this).attr('src', bookmarklet.iframeUrl(machineName));
+      var params;
+      params = {
+        q: 'node/add/' + machineName,
+        edit: bookmarklet.getPrepopulate(machineName)
+      };
+      $('iframe', this).attr('src', bookmarklet.iframeUrl(params));
     };
   });
 };
@@ -196,15 +207,11 @@ DrupalBookmarklet.prototype.parseUrl = function (href) {
   return parsedUrl;
 };
 
-DrupalBookmarklet.prototype.iframeUrl = function (nodeType) {
-  var $, body, iframe_url, edit;
+DrupalBookmarklet.prototype.getPrepopulate = function (nodeType) {
+  var edit, body;
 
-  $ = this.jQuery;
   edit = {};
   body = this.getSelection();
-
-  iframe_url = this.host;
-  iframe_url += '/node/add/' + nodeType;
 
   switch (nodeType) {
   case 'video':
@@ -237,7 +244,23 @@ DrupalBookmarklet.prototype.iframeUrl = function (nodeType) {
     };
   }
 
-  return iframe_url + '?' + $.param({ bookmarklet: true, edit: edit }) + this.settings.constant;
+  return edit;
+};
+
+DrupalBookmarklet.prototype.iframeUrl = function (path) {
+  var $, params;
+
+  $ = this.jQuery;
+  params = { bookmarklet: true };
+
+  if (typeof path === "string") {
+    $.extend(params, { q: path });
+  }
+  else if (typeof path === "object") {
+    $.extend(params, path);
+  }
+
+  return this.host + '?' + $.param(params) + this.settings.constant;
 };
 
 DrupalBookmarklet.prototype.createBookmarklet = function (url) {
