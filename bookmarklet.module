@@ -229,6 +229,17 @@ function bookmarklet_footer($main = 0) {
     drupal_add_js($path .'/bookmarklet.child.js', 'module', 'footer');
     $setting = array();
     $setting['bookmarklet'] = array('target_url' => $_REQUEST['origin']);
+
+    // Add an event to set the bookmarklet's UI Dialog title.
+    if (drupal_get_title()) {
+      $event = array(
+        'method' => 'option',
+        'optionName' => 'title',
+        'value' => strip_tags(drupal_get_title()),
+      );
+      _bookmarklet_events($event);
+    }
+
     if ($events = _bookmarklet_events()) {
       $setting['bookmarklet']['events'] = $events;
     }
