@@ -66,12 +66,13 @@ DrupalBookmarklet.prototype.init = function () {
  * Load bookmarklet settings.
  */
 DrupalBookmarklet.prototype.loadSettings = function (callback) {
-  var bookmarklet, $;
+  var bookmarklet, $, url;
 
   bookmarklet = this;
   $ = this.jQuery;
+  url = this.host + '?' + $.param({ q: 'bookmarklet/js' }) + '&callback=?';
 
-  $.getJSON(this.host + '/bookmarklet/js?callback=?', function (json) {
+  $.getJSON(url, function (json) {
     bookmarklet.settings = json;
     callback(json);
   });
