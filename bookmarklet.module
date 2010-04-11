@@ -106,7 +106,8 @@ function bookmarklet_block($op = 'list', $delta = 0, $edit = array()) {
 function bookmarklet_form_alter(&$form, $form_state, $form_id) {
   if (isset($_REQUEST['bookmarklet']) && isset($form['type']) && isset($form['#node']) && ($form_id == $form['type']['#value'] .'_node_form')) {
     if (!$form_state['submitted']) {
-      _bookmarklet_message(array('method' => 'moveToTop'), $_SERVER['HTTP_REFERER']);
+      _bookmarklet_target($_SERVER['HTTP_REFERER']);
+      _bookmarklet_events(array('method' => 'moveToTop'));
     }
 
     if (module_exists('vertical_tabs')) {
@@ -193,23 +194,29 @@ function _bookmarklet_form_alter(&$elements, $form_state, $form_id) {
 /**
  * Set up a message to pass from the iframe to the parent document.
  */
-function _bookmarklet_message($event = NULL, $target_url = NULL) {
-  static $stored_message = array();
+function _bookmarklet_events($event = NULL) {
+  static $stored_events = array();
 
-  if (!is_null($event) && !is_null($target_url)) {
-    $stored_message = array(
-      'event' => $event,
-      'target_url' => $target_url
-    );
+  if (!is_null($event)) {
+    $stored_events[] = $event;
   }
-  return $stored_message;
+  return $stored_events;
+}
+
+function _bookmarklet_target($url) {
+  $setting = array(
+    'bookmarklet' => array(
+      'target_url' => $url,
+    ),
+  );
+  drupal_add_js($setting, 'setting', 'footer');
 }
 
 function bookmarklet_footer($main = 0) {
-  if ($message = _bookmarklet_message()) {
+  if ($events = _bookmarklet_events()) {
     $path = drupal_get_path('module', 'bookmarklet');
     drupal_add_js($path .'/jquery-postmessage/jquery.ba-postmessage.js', 'module', 'footer');
-    drupal_add_js(array('bookmarklet' => $message), 'setting', 'footer');
+    drupal_add_js(array('bookmarklet' => array('events' => $events)), 'setting', 'footer');
   }
 }
 
@@ -419,7 +426,8 @@ function bookmarklet_js() {
  */
 function bookmarklet_node_save_confirm($node) {
   if (!empty($_GET['origin'])) {
-    _bookmarklet_message(array('method' => 'close'), $_GET['origin']);
+    _bookmarklet_target($_GET['origin']);
+    _bookmarklet_events(array('method' => 'close'));
   }
   $links = array();
   $options = array(
