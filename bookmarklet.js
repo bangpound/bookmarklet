@@ -39,7 +39,7 @@ DrupalBookmarklet.prototype.init = function () {
     // newly loaded jQuery is attached to the bookmarklet object as the
     // jQuery method.
     (function ($) {
-      var nodeType;
+      var nodeType, url;
 
       bookmarklet.setupMessageChannel();
 
@@ -51,8 +51,9 @@ DrupalBookmarklet.prototype.init = function () {
         }
         else {
           nodeType = bookmarklet.mapNodeType(location.href);
-          bookmarklet.createBookmarklet(nodeType);
+          url = bookmarklet.iframeUrl(nodeType);
         }
+        bookmarklet.createBookmarklet(url);
 
       });
     }(bookmarklet.jQuery = jQuery.noConflict(true)));
@@ -238,7 +239,7 @@ DrupalBookmarklet.prototype.iframeUrl = function (nodeType) {
   return iframe_url + '?' + $.param({ bookmarklet: true, edit: edit }) + this.settings.constant;
 };
 
-DrupalBookmarklet.prototype.createBookmarklet = function (nodeType) {
+DrupalBookmarklet.prototype.createBookmarklet = function (url) {
   var $;
 
   $ = this.jQuery;
@@ -260,7 +261,7 @@ DrupalBookmarklet.prototype.createBookmarklet = function (nodeType) {
       }
     })
     .append($('<iframe/>', {
-      src: this.iframeUrl(nodeType),
+      src: url,
       frameborder: 0,
       scrolling: 'no',
       name: 'drupal_bookmarklet_iframe',
@@ -279,8 +280,7 @@ DrupalBookmarklet.prototype.createBookmarklet = function (nodeType) {
       position: ['right', 'top'],
       buttons: this.buttons,
       zIndex: 2147483647
-    })
-    .data('defaultNodeType', nodeType);
+    });
 
   // private member: $(elem).data('dialog') returns jQuery UI dialog object.
   this.dialog.data('dialog').uiDialog
@@ -314,7 +314,7 @@ DrupalBookmarklet.prototype.reOpen = function () {
 
   // If the dialog has already been open, refresh the src URL of the iframe to
   // fill in the form with new values.
-  $('iframe', this.dialog).attr('src', this.iframeUrl(this.dialog.data('defaultNodeType')));
+  $('iframe', this.dialog).attr('src', this.iframeUrl(this.mapNodeType(location.href)));
   if (!$(this.dialog).dialog('isOpen')) {
     $(this.dialog).dialog('open');
   }
