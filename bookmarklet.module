@@ -231,10 +231,10 @@ function bookmarklet_footer($main = 0) {
         'target_url' => $_REQUEST['origin'],
       ),
     );
-    drupal_add_js($setting, 'setting', 'footer');
     if ($events = _bookmarklet_events()) {
-      drupal_add_js(array('bookmarklet' => array('events' => $events)), 'setting', 'footer');
+      $setting['bookmarklet']['events'] = $events;
     }
+    drupal_add_js($setting, 'setting', 'footer');
   }
 }
 
