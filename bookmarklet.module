@@ -203,6 +203,9 @@ function _bookmarklet_events($event = NULL) {
   return $stored_events;
 }
 
+/**
+ * Set origin for permission to postMessage to the parent document.
+ */
 function _bookmarklet_target($url) {
   $setting = array(
     'bookmarklet' => array(
@@ -212,6 +215,9 @@ function _bookmarklet_target($url) {
   drupal_add_js($setting, 'setting', 'footer');
 }
 
+/**
+ * Implement of hook_footer().
+ */
 function bookmarklet_footer($main = 0) {
   if ($events = _bookmarklet_events()) {
     $path = drupal_get_path('module', 'bookmarklet');
