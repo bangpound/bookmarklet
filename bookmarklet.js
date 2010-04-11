@@ -220,19 +220,17 @@ DrupalBookmarklet.prototype.getPrepopulate = function (nodeType) {
   case 'video':
 
     // Video URL
-    edit.field_emvideo = [];
-    edit.field_emvideo[0] = {
+    edit.field_emvideo = [{
       embed: location.href
-    };
+    }];
     break;
   case 'link':
 
     // Link URL & title
-    edit.field_link = [];
-    edit.field_link[0] = {
+    edit.field_link = [{
       url: location.href,
       title: document.title
-    };
+    }];
     break;
   default:
 
