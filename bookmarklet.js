@@ -211,10 +211,10 @@ DrupalBookmarklet.prototype.parseUrl = function (href) {
 };
 
 DrupalBookmarklet.prototype.getPrepopulate = function (nodeType) {
-  var edit, body;
+  var edit, selection;
 
   edit = {};
-  body = this.getSelection();
+  selection = this.getSelection();
 
   switch (nodeType) {
   case 'video':
@@ -239,9 +239,9 @@ DrupalBookmarklet.prototype.getPrepopulate = function (nodeType) {
     break;
   }
 
-  if (body !== "") {
+  if (selection !== "") {
     edit.body_field = {
-      body: body
+      body: selection
     };
   }
 
