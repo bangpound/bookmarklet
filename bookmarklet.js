@@ -43,14 +43,15 @@ DrupalBookmarklet.prototype.init = function () {
 
       // Pull bookmarklet settings from Drupal callback.
       bookmarklet.loadSettings(function (json) {
-        var nodeType, params, url;
+        var nodeType, params, url, settings;
 
         nodeType = bookmarklet.mapNodeType(location.href);
         params = {
           edit: bookmarklet.getPrepopulate(nodeType)
         };
+        settings = bookmarklet.settings;
 
-        if (json.authenticated === false && json.types.length === 0) {
+        if (settings.authenticated === false && settings.types.length === 0) {
           $.extend(params, {
             q: 'user/login',
             destination: 'node/add/' + nodeType
