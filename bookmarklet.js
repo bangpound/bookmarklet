@@ -64,6 +64,7 @@ DrupalBookmarklet.prototype.init = function () {
         }
         url = bookmarklet.iframeUrl(params);
         bookmarklet.createBookmarklet(url);
+        bookmarklet.setupButtons();
 
       });
     }(bookmarklet.jQuery = jQuery.noConflict(true)));
@@ -92,16 +93,16 @@ DrupalBookmarklet.prototype.loadSettings = function (callback) {
  * Set up buttons.
  */
 DrupalBookmarklet.prototype.setupButtons = function () {
-  var $, bookmarklet;
+  var $, bookmarklet, buttons;
 
   $ = this.jQuery;
   bookmarklet = this;
 
-  this.buttons = {};
+  buttons = {};
 
   // Make UI Dialog buttons for each content type.
   $.each(this.settings.types, function (machineName, setting) {
-    bookmarklet.buttons[setting.name] = function (event) {
+    buttons[setting.name] = function (event) {
       var params;
       params = {
         q: 'node/add/' + machineName,
@@ -110,6 +111,24 @@ DrupalBookmarklet.prototype.setupButtons = function () {
       $('iframe', this).attr('src', bookmarklet.iframeUrl(params));
     };
   });
+
+  this.dialog.dialog('option', 'buttons', buttons);
+
+  // private member: $(elem).data('dialog') returns jQuery UI dialog object.
+  this.dialog.data('dialog').uiDialog
+    // Create a button set to show that the options are related.
+    .find('.ui-dialog-buttonpane')
+    .buttonset()
+
+    // Restyle the buttons to cancel any ui-dialog styles that interfere with
+    // buttonset.
+    .find('.ui-button')
+    .each(function () {
+      $(this).css({
+        marginRight: 0,
+        'float': 'none'
+      });
+    });
 };
 
 /**
@@ -156,7 +175,6 @@ DrupalBookmarklet.prototype.handleMessage = function (event) {
     case 'loadSettings':
       this.loadSettings(function () {
         bookmarklet.setupButtons();
-        $(bookmarklet.dialog).dialog('option', 'buttons', bookmarklet.buttons);
       });
       break;
     default:
@@ -289,8 +307,6 @@ DrupalBookmarklet.prototype.createBookmarklet = function (url) {
     })
     .appendTo('head');
 
-  this.setupButtons();
-
   this.dialog = this.dialog || $('<div/>', {
       id: 'drupal_bookmarklet',
       css: {
@@ -315,7 +331,6 @@ DrupalBookmarklet.prototype.createBookmarklet = function (url) {
     }))
     .dialog({
       position: ['right', 'top'],
-      buttons: this.buttons,
       zIndex: 2147483647
     });
 
@@ -326,20 +341,6 @@ DrupalBookmarklet.prototype.createBookmarklet = function (url) {
     // jQuery UI stylesheets assumes base font size of 11px.
     .css({
       fontSize: '11px'
-    })
-
-    // Create a button set to show that the options are related.
-    .find('.ui-dialog-buttonpane')
-    .buttonset()
-
-    // Restyle the buttons to cancel any ui-dialog styles that interfere with
-    // buttonset.
-    .find('.ui-button')
-    .each(function () {
-      $(this).css({
-        marginRight: 0,
-        'float': 'none'
-      });
     });
 
 };
