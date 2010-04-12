@@ -147,13 +147,15 @@ DrupalBookmarklet.prototype.handleMessage = function (event) {
     data[this.split("=")[0]] = this.split("=")[1];
   });
   if (typeof(data.optionName) === "undefined") {
-    if (data.method === 'close') {
+    switch (data.method) {
+    case 'close':
       setTimeout(function () {
         $(bookmarklet.dialog).dialog(data.method);
       }, 5000);
-    }
-    else {
+      break;
+    default:
       $(this.dialog).dialog(data.method);
+      break;
     }
   }
   else {
