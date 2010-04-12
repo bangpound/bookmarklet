@@ -1,8 +1,8 @@
 <?php
 // $Id$
 /**
- * @file bookmarklet.module
- * TODO: Enter file description here.
+ * @file
+ * Bookmarklet enables creation of nodes in a UI Dialog on any site.
  */
 
 /**
@@ -159,7 +159,7 @@ function bookmarklet_form_alter(&$form, $form_state, $form_id) {
 /**
  * Generic form submit handler.
  *
- * @see modalframe_form_submit().
+ * @see modalframe_form_submit()
  * @ingroup forms
  */
 function bookmarklet_form_submit($form, &$form_state) {
@@ -170,6 +170,9 @@ function bookmarklet_form_submit($form, &$form_state) {
   $form_state['redirect'] = array('node/'. $form_state['nid'] .'/bookmarklet', $query);
 }
 
+/**
+ * Form alter helper function.
+ */
 function _bookmarklet_form_alter(&$elements, $form_state, $form_id) {
   static $preserve = array();
 
@@ -220,7 +223,7 @@ function _bookmarklet_events($event = NULL) {
 }
 
 /**
- * Implement of hook_footer().
+ * Implementation of hook_footer().
  */
 function bookmarklet_footer($main = 0) {
   if ($_REQUEST['bookmarklet']) {
