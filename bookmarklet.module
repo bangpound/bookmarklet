@@ -213,13 +213,29 @@ function _bookmarklet_form_alter(&$elements, $form_state, $form_id) {
 /**
  * Set up a message to pass from the iframe to the parent document.
  */
-function _bookmarklet_events($event = NULL) {
-  static $stored_events = array();
+function bookmarklet_add_event($event = NULL) {
+  if (!empty($event)) {
+    if (!isset($_SESSION['bookmarklet'])) {
+      $_SESSION['bookmarklet'] = array();
+    }
 
-  if (!is_null($event)) {
-    $stored_events[] = $event;
+    $_SESSION['bookmarklet'][] = $event;
+
   }
-  return $stored_events;
+  return isset($_SESSION['bookmarklet']) ? $_SESSION['bookmarklet'] : NULL;
+}
+
+/**
+ * Get queued messages.
+ */
+function bookmarklet_get_events($clear_queue = TRUE) {
+  if ($events = bookmarklet_add_event()) {
+    if ($clear_queue) {
+      unset($_SESSION['bookmarklet']);
+    }
+    return $events;
+  }
+  return array();
 }
 
 /**
@@ -240,12 +256,10 @@ function bookmarklet_footer($main = 0) {
         'optionName' => 'title',
         'value' => strip_tags(drupal_get_title()),
       );
-      _bookmarklet_events($event);
+      bookmarklet_add_event($event);
     }
 
-    if ($events = _bookmarklet_events()) {
-      $setting['bookmarklet']['events'] = $events;
-    }
+    $setting['bookmarklet']['events'] = bookmarklet_get_events();
     drupal_add_js($setting, 'setting', 'footer');
   }
 }
@@ -455,7 +469,7 @@ function bookmarklet_js() {
  * Node save confirmation page.
  */
 function bookmarklet_node_save_confirm($node) {
-  _bookmarklet_events(array('method' => 'close'));
+  bookmarklet_add_event(array('method' => 'close'));
   $links = array();
   $options = array(
     'attributes' => array(
