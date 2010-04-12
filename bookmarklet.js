@@ -153,6 +153,12 @@ DrupalBookmarklet.prototype.handleMessage = function (event) {
         $(bookmarklet.dialog).dialog(data.method);
       }, 5000);
       break;
+    case 'loadSettings':
+      this.loadSettings(function () {
+        bookmarklet.setupButtons();
+        $(bookmarklet.dialog).dialog('option', 'buttons', bookmarklet.buttons);
+      });
+      break;
     default:
       $(this.dialog).dialog(data.method);
       break;

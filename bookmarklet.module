@@ -480,3 +480,12 @@ function bookmarklet_node_save_confirm($node) {
   $links[] = l('Edit', 'node/'. $node->nid .'/edit', $options);
   return theme('item_list', $links);
 }
+
+/**
+ * Implementation of hook_user().
+ */
+function bookmarklet_user($op, &$edit, &$account, $category = NULL) {
+  if ($op == 'login' && !empty($_GET['bookmarklet'])) {
+    bookmarklet_add_event(array('method' => 'loadSettings'));
+  }
+}
