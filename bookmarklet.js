@@ -149,7 +149,7 @@ DrupalBookmarklet.prototype.handleMessage = function (event) {
   if (typeof(data.optionName) === "undefined") {
     if (data.method === 'close') {
       setTimeout(function () {
-        bookmarklet.jQuery(bookmarklet.dialog).dialog(data.method);
+        $(bookmarklet.dialog).dialog(data.method);
       }, 5000);
     }
     else {
