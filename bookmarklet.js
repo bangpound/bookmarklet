@@ -42,7 +42,7 @@ DrupalBookmarklet.prototype.init = function () {
       bookmarklet.setupMessageChannel();
 
       // Pull bookmarklet settings from Drupal callback.
-      bookmarklet.loadSettings(function (json) {
+      bookmarklet.loadSettings(function () {
         var nodeType, params, url, settings;
 
         nodeType = bookmarklet.mapNodeType(location.href);
@@ -84,7 +84,7 @@ DrupalBookmarklet.prototype.loadSettings = function (callback) {
 
   $.getJSON(url, function (json) {
     bookmarklet.settings = json;
-    callback(json);
+    callback();
   });
 };
 
