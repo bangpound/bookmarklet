@@ -10,10 +10,7 @@ var DrupalBookmarklet;
 DrupalBookmarklet = function (host, path) {
   this.host = host;
   this.path = path;
-  this.init();
-};
 
-DrupalBookmarklet.prototype.init = function () {
   var bookmarklet = this,
     head = document.getElementsByTagName("head")[0] || document.documentElement,
     script = document.createElement("script"),
@@ -388,7 +385,6 @@ DrupalBookmarklet.prototype.reOpen = function () {
 };
 
 window['DrupalBookmarklet'] = DrupalBookmarklet;
-DrupalBookmarklet.prototype['init'] = DrupalBookmarklet.prototype.init;
 DrupalBookmarklet.prototype['handleMessage'] = DrupalBookmarklet.prototype.handleMessage;
 DrupalBookmarklet.prototype['getSelection'] = DrupalBookmarklet.prototype.getSelection;
 DrupalBookmarklet.prototype['iframeUrl'] = DrupalBookmarklet.prototype.iframeUrl;
