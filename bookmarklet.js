@@ -395,11 +395,4 @@ DrupalBookmarklet.prototype.reOpen = function () {
   }
 };
 
-window['DrupalBookmarklet'] = DrupalBookmarklet;
-DrupalBookmarklet.prototype['handleMessage'] = DrupalBookmarklet.prototype.handleMessage;
-DrupalBookmarklet.prototype['getSelection'] = DrupalBookmarklet.prototype.getSelection;
-DrupalBookmarklet.prototype['iframeUrl'] = DrupalBookmarklet.prototype.iframeUrl;
-DrupalBookmarklet.prototype['createBookmarklet'] = DrupalBookmarklet.prototype.createBookmarklet;
-DrupalBookmarklet.prototype['reOpen'] = DrupalBookmarklet.prototype.reOpen;
-
 /*jslint white: true, browser: true, devel: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, strict: true, newcap: true, immed: true, indent: 2 */
