@@ -224,7 +224,7 @@ DrupalBookmarklet.prototype.handleMessage = function (event) {
     case 'width':
       data.css = {};
       data.css[data.optionName] = data.value;
-      this.dialog.animate(data.css, 'fast');
+      this.dialog.animate(data.css, 'fast', 'swing');
       break;
     default:
       this.dialog.dialog(data.method, data.optionName, data.value);
