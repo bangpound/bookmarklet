@@ -178,7 +178,7 @@ DrupalBookmarklet.prototype.handleMessage = function (event) {
       });
       break;
     default:
-      $(this.dialog).dialog(data.method);
+      this.dialog.dialog(data.method);
       break;
     }
   }
@@ -189,7 +189,7 @@ DrupalBookmarklet.prototype.handleMessage = function (event) {
       this.dialog.css(data.optionName, data.value);
       break;
     default:
-      $(this.dialog).dialog(data.method, data.optionName, data.value);
+      this.dialog.dialog(data.method, data.optionName, data.value);
       break;
     }
   }
@@ -355,8 +355,8 @@ DrupalBookmarklet.prototype.reOpen = function () {
   // If the dialog has already been open, refresh the src URL of the iframe to
   // fill in the form with new values.
   $('iframe', this.dialog).attr('src', this.iframeUrl(path));
-  if (!$(this.dialog).dialog('isOpen')) {
-    $(this.dialog).dialog('open');
+  if (!this.dialog.dialog('isOpen')) {
+    this.dialog.dialog('open');
   }
 };
 
