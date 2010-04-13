@@ -23,10 +23,13 @@ DrupalBookmarklet = function (host, path) {
       global: false
     };
 
+    // Load jQuery UI.
     $.ajax($.extend({
       url: 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.js',
       success: function () {
         $.ajax($.extend({
+
+          // Load jQuery postMessage plugin.
           url: this.host + '/' + this.path + '/jquery-postmessage/jquery.ba-postmessage.js',
           success: function () {
             this.jQuery = jQuery.noConflict(true);
