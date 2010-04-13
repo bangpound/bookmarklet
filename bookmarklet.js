@@ -10,6 +10,8 @@ var DrupalBookmarklet;
 DrupalBookmarklet = function (host, path) {
   this.host = host;
   this.path = path;
+  this.settings = {};
+  this.dialog = {};
 
   this.createScript('http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.js', function () {
     var ajaxOptions;
@@ -334,7 +336,7 @@ DrupalBookmarklet.prototype.createBookmarklet = function (url) {
     })
     .appendTo('head');
 
-  this.dialog = this.dialog || $('<div/>', {
+  this.dialog = $('<div/>', {
       id: 'drupal_bookmarklet',
       css: {
         overflow: 'visible'
