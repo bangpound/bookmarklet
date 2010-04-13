@@ -81,7 +81,7 @@ DrupalBookmarklet.prototype.loadSettings = function (callback) {
 
   bookmarklet = this;
   $ = this.jQuery;
-  url = this.host + '?' + $.param({ q: 'bookmarklet/js' }) + '&callback=?';
+  url = this.host + '/?' + $.param({ q: 'bookmarklet/js' }) + '&callback=?';
 
   $.getJSON(url, function (json) {
     bookmarklet.settings = json;
@@ -288,7 +288,7 @@ DrupalBookmarklet.prototype.iframeUrl = function (path) {
     $.extend(params, path);
   }
 
-  return this.host + '?' + $.param(params) + this.settings.constant;
+  return this.host + '/?' + $.param(params) + this.settings.constant;
 };
 
 DrupalBookmarklet.prototype.createBookmarklet = function (url) {
