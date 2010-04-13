@@ -101,6 +101,7 @@ DrupalBookmarklet.prototype.setupBookmarklet  = function () {
       });
     }
     url = bookmarklet.iframeUrl(params);
+    bookmarklet.loadStylesheet(bookmarklet.settings.stylesheet);
     bookmarklet.createBookmarklet(url);
     bookmarklet.setupButtons();
 
@@ -328,18 +329,24 @@ DrupalBookmarklet.prototype.iframeUrl = function (path) {
   return this.host + '/?' + $.param(params) + this.settings.constant;
 };
 
-DrupalBookmarklet.prototype.createBookmarklet = function (url) {
+DrupalBookmarklet.prototype.loadStylesheet = function (url) {
   var $;
 
   $ = this.jQuery;
 
   $('<link/>', {
-      href: this.settings.stylesheet,
+      href: url,
       rel: 'stylesheet',
       type: 'text/css',
       media: 'screen'
     })
     .appendTo('head');
+};
+
+DrupalBookmarklet.prototype.createBookmarklet = function (url) {
+  var $;
+
+  $ = this.jQuery;
 
   this.dialog = $('<div/>', {
       id: 'drupal_bookmarklet',
