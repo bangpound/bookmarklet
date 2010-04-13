@@ -276,36 +276,28 @@ DrupalBookmarklet.prototype.parseUrl = function (href) {
 };
 
 DrupalBookmarklet.prototype.getPrepopulate = function (nodeType) {
-  var edit, selection;
+  var edit, prepopulate, values, $, prepopulateMap;
 
+  $ = this.jQuery;
+  prepopulate = this.settings.types[nodeType].prepopulate;
+  values = {
+    title: document.title,
+    href: location.href,
+    selection: this.getSelection()
+  };
   edit = {};
-  selection = this.getSelection();
 
-  switch (nodeType) {
-  case 'video':
-    // Video URL
-    edit.field_emvideo = [{
-      embed: location.href
-    }];
-    break;
-  case 'link':
-    // Link URL & title
-    edit.field_link = [{
-      url: location.href,
-      title: document.title
-    }];
-    break;
-  default:
-    // Node title
-    edit.title = document.title;
-    break;
-  }
+  prepopulateMap = function (map) {
+    var ret = {};
+    $.each(map, function (key, value) {
+      ret[key] = (typeof value === 'string') ? values[value] : prepopulateMap(value);
+    });
+    return ret;
+  };
 
-  if (selection !== "") {
-    edit.body_field = {
-      body: selection
-    };
-  }
+  edit = prepopulateMap(prepopulate);
+
+  console.log(edit);
 
   return edit;
 };

@@ -447,6 +447,7 @@ function bookmarklet_js() {
     if (in_array($type->type, $node_types) && node_access('create', $type->type)) {
       $settings['types'][str_replace('_', '-', $type->type)] = array(
         'name' => drupal_ucfirst($type->name),
+        'prepopulate' => bookmarklet_prepopulate_pattern($type->type),
       );
     }
   }
@@ -463,6 +464,53 @@ function bookmarklet_js() {
   else {
     echo drupal_to_js($settings);
   }
+}
+
+/**
+ * Return array of translations between available input and Form API elements.
+ *
+ * array(
+ *   'title' => '',
+ *   'href' => '',
+ *   'selection' => '',
+ * );
+ */
+function bookmarklet_prepopulate_pattern($type) {
+
+  // Default $edit URL prepopulate pattern for all nodes.
+  $pattern = array(
+    'title' => 'title',
+    'body_field' => array(
+      'body' => 'selection',
+    ),
+  );
+
+  $type_info = content_types($type);
+
+  // Find any linky fields.
+  foreach ($type_info['fields'] as $field) {
+    switch ($field['type']) {
+    case 'emimage':
+    case 'emvideo':
+    case 'emaudio':
+      $pattern[$field['field_name']] = array(
+        0 => array(
+          'embed' => 'href',
+        ),
+      );
+      break;
+    case 'link':
+      $column = 'url';
+      $pattern[$field['field_name']] = array(
+        0 => array(
+          'url' => 'href',
+          'title' => 'title',
+        ),
+      );
+      break;
+    }
+  }
+  return $pattern;
 }
 
 /**
