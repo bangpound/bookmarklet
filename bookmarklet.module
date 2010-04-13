@@ -453,10 +453,7 @@ function bookmarklet_js() {
   }
 
   // Map URLs to node types.
-  $settings['urlMap'] = array(
-    'www.youtube.com' => 'video',
-    'youtube.com' => 'video',
-  );
+  $settings['urlMap'] = bookmarklet_url_type_map();
 
   if (!empty($_GET['callback'])) {
     echo $_GET['callback'] .'('. drupal_to_js($settings) .');';
@@ -511,6 +508,40 @@ function bookmarklet_prepopulate_pattern($type) {
     }
   }
   return $pattern;
+}
+
+function bookmarklet_url_type_map() {
+  $results = array();
+
+  if (module_exists('emfield')) {
+
+    // Generate an array of providers. type => field module => provider.
+    $providers = array();
+    foreach (content_types() as $type_name => $type) {
+      foreach ($type['fields'] as $field) {
+        $allowed_providers = emfield_allowed_providers($field, $field['module']);
+        if (!empty($allowed_providers)) {
+          $providers[$type_name][$field['module']] = $allowed_providers;
+        }
+      }
+    }
+
+    // Transform the providers into regexs and types.
+    $map = array();
+    foreach ($providers as $type_name => $modules) {
+      foreach ($modules as $module => $providers_info) {
+        foreach (array_keys($providers_info) as $provider_name) {
+          $results = @emfield_include_invoke($module, $provider_name, 'extract');
+          if (!empty($results)) {
+            foreach ($results as $regex) {
+              $map[$regex][] = $type_name;
+            }
+          }
+        }
+      }
+    }
+  }
+  return $map;
 }
 
 /**
