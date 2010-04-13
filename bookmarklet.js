@@ -297,8 +297,6 @@ DrupalBookmarklet.prototype.getPrepopulate = function (nodeType) {
 
   edit = prepopulateMap(prepopulate);
 
-  console.log(edit);
-
   return edit;
 };
 
