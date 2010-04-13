@@ -14,35 +14,71 @@ DrupalBookmarklet = function (host, path) {
 };
 
 DrupalBookmarklet.prototype.createScript = function (src, callback) {
-  var script;
-  script = document.createElement('script');
-  script.setAttribute('src', src);
-  if (callback) {
-    script.onload = callback;
-  }
-  return script;
+  var bookmarklet = this,
+    head = document.getElementsByTagName("head")[0] || document.documentElement,
+    script = document.createElement("script"),
+    // Handle Script loading
+    done = false;
+
+  script.src = src;
+  script.charset = "utf-8";
+
+  // Attach handlers for all browsers
+  script.onload = script.onreadystatechange = function () {
+    if (!done && (!this.readyState ||
+        this.readyState === "loaded" || this.readyState === "complete")) {
+      done = true;
+      callback.call(bookmarklet);
+
+      // Handle memory leak in IE
+      script.onload = script.onreadystatechange = null;
+      if (head && script.parentNode) {
+        head.removeChild(script);
+      }
+    }
+  };
+
+  // Use insertBefore instead of appendChild  to circumvent an IE6 bug.
+  // This arises when a base node is used (#2709 and #4378).
+  head.insertBefore(script, head.firstChild);
 };
 
 DrupalBookmarklet.prototype.init = function () {
-  var bookmarklet;
-  bookmarklet = this;
+  this.createScript('http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.js', function () {
+    var ajaxOptions;
 
-  this.s1 = this.createScript('http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.js', function () {
-    document.getElementsByTagName('head')[0].appendChild(bookmarklet.s2);
+    ajaxOptions = {
+      type: "GET",
+      dataType: "script",
+      context: this,
+      global: false
+    };
+
+    $.ajax($.extend({
+      url: 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.js',
+      success: function () {
+        $.ajax($.extend({
+          url: this.host + '/' + this.path + '/jquery-postmessage/jquery.ba-postmessage.js',
+          success: function () {
+            this.jQuery = jQuery.noConflict(true);
+            this.setupBookmarklet();
+          }
+        }, ajaxOptions));
+      }
+    }, ajaxOptions));
   });
+};
 
-  this.s2 = this.createScript('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.js', function () {
-    document.getElementsByTagName('head')[0].appendChild(bookmarklet.s3);
-  });
-
-  this.s3 = this.createScript(this.host + '/' + this.path + '/jquery-postmessage/jquery.ba-postmessage.js', function () {
-    // newly loaded jQuery is attached to the bookmarklet object as the
-    // jQuery method.
-    (function ($) {
-      bookmarklet.setupMessageChannel();
+DrupalBookmarklet.prototype.setupBookmarklet  = function () {
+      var bookmarklet, $;
+      bookmarklet = this;
+      $ = this.jQuery;
+      // newly loaded jQuery is attached to the bookmarklet object as the
+      // jQuery method.
+      this.setupMessageChannel();
 
       // Pull bookmarklet settings from Drupal callback.
-      bookmarklet.loadSettings(function () {
+      this.loadSettings(function () {
         var nodeType, params, url, settings;
 
         nodeType = bookmarklet.mapNodeType(location.href);
@@ -67,10 +103,7 @@ DrupalBookmarklet.prototype.init = function () {
         bookmarklet.setupButtons();
 
       });
-    }(bookmarklet.jQuery = jQuery.noConflict(true)));
-  });
 
-  document.getElementsByTagName('head')[0].appendChild(this.s1);
 };
 
 /**
