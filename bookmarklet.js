@@ -186,7 +186,7 @@ DrupalBookmarklet.prototype.handleMessage = function (event) {
     switch (data.optionName) {
     case 'height':
     case 'width':
-      this.dialog.css(data.optionName, data.value + "px");
+      this.dialog.css(data.optionName, data.value);
       break;
     default:
       $(this.dialog).dialog(data.method, data.optionName, data.value);

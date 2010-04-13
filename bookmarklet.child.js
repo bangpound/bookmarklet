@@ -7,14 +7,14 @@ $(document).ready(function () {
   $.postMessage({
     method: 'option',
     optionName: 'height',
-    value: document.body.offsetHeight
+    value: document.body.offsetHeight + 'px'
   }, Drupal.settings.bookmarklet.target_url);
 
   setTimeout(function () {
     $.postMessage({
       method: 'option',
       optionName: 'width',
-      value: document.body.offsetWidth
+      value: document.body.offsetWidth + 'px'
     }, Drupal.settings.bookmarklet.target_url);
   }, 100);
 
