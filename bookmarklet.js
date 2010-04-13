@@ -13,22 +13,42 @@ DrupalBookmarklet = function (host, path) {
   this.init();
 };
 
-DrupalBookmarklet.prototype.createScript = function (src, callback) {
+DrupalBookmarklet.prototype.init = function () {
   var bookmarklet = this,
     head = document.getElementsByTagName("head")[0] || document.documentElement,
     script = document.createElement("script"),
     // Handle Script loading
     done = false;
 
-  script.src = src;
+  script.src = 'http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.js';
   script.charset = "utf-8";
 
   // Attach handlers for all browsers
   script.onload = script.onreadystatechange = function () {
+    var ajaxOptions;
     if (!done && (!this.readyState ||
         this.readyState === "loaded" || this.readyState === "complete")) {
       done = true;
-      callback.call(bookmarklet);
+
+      ajaxOptions = {
+        type: "GET",
+        dataType: "script",
+        context: bookmarklet,
+        global: false
+      };
+
+      $.ajax($.extend({
+        url: 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.js',
+        success: function () {
+          $.ajax($.extend({
+            url: this.host + '/' + this.path + '/jquery-postmessage/jquery.ba-postmessage.js',
+            success: function () {
+              this.jQuery = jQuery.noConflict(true);
+              this.setupBookmarklet();
+            }
+          }, ajaxOptions));
+        }
+      }, ajaxOptions));
 
       // Handle memory leak in IE
       script.onload = script.onreadystatechange = null;
@@ -41,32 +61,6 @@ DrupalBookmarklet.prototype.createScript = function (src, callback) {
   // Use insertBefore instead of appendChild  to circumvent an IE6 bug.
   // This arises when a base node is used (#2709 and #4378).
   head.insertBefore(script, head.firstChild);
-};
-
-DrupalBookmarklet.prototype.init = function () {
-  this.createScript('http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.js', function () {
-    var ajaxOptions;
-
-    ajaxOptions = {
-      type: "GET",
-      dataType: "script",
-      context: this,
-      global: false
-    };
-
-    $.ajax($.extend({
-      url: 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.js',
-      success: function () {
-        $.ajax($.extend({
-          url: this.host + '/' + this.path + '/jquery-postmessage/jquery.ba-postmessage.js',
-          success: function () {
-            this.jQuery = jQuery.noConflict(true);
-            this.setupBookmarklet();
-          }
-        }, ajaxOptions));
-      }
-    }, ajaxOptions));
-  });
 };
 
 DrupalBookmarklet.prototype.setupBookmarklet  = function () {
