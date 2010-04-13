@@ -2,8 +2,13 @@
 
 "use strict";
 
-$(document).ready(function () {
+Drupal.behaviors.bookmarkletTooltipDescription = function (context) {
+  $('.form-item .description', context).hide();
+  $('fieldset.collapsible:not(.collapsed) > legend.collapse-processed a', context).click();
+};
 
+
+Drupal.behaviors.bookmarkletResize = function (context) {
   $.postMessage({
     method: 'option',
     optionName: 'height',
@@ -17,8 +22,7 @@ $(document).ready(function () {
       value: document.body.offsetWidth + 'px'
     }, Drupal.settings.bookmarklet.target_url);
   }, 100);
-
-});
+};
 
 Drupal.behaviors.bookmarkletPostMessage = function (context) {
   if (Drupal.settings.bookmarklet.hasOwnProperty('events')) {
@@ -26,11 +30,6 @@ Drupal.behaviors.bookmarkletPostMessage = function (context) {
       $.postMessage(value, Drupal.settings.bookmarklet.target_url);
     });
   }
-};
-
-Drupal.behaviors.bookmarkletTooltipDescription = function (context) {
-  $('.form-item .description', context).hide();
-  $('fieldset.collapsible:not(.collapsed) > legend.collapse-processed a', context).click();
 };
 
 /*jslint white: true, browser: true, devel: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, strict: true, newcap: true, immed: true, indent: 2 */
