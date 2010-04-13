@@ -4,7 +4,6 @@
 
 Drupal.behaviors.bookmarkletTooltipDescription = function (context) {
   $('.form-item .description', context).hide();
-  $('fieldset.collapsible:not(.collapsed) > legend.collapse-processed a', context).click();
 };
 
 
