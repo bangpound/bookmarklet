@@ -221,7 +221,9 @@ DrupalBookmarklet.prototype.handleMessage = function (event) {
     switch (data.optionName) {
     case 'height':
     case 'width':
-      this.dialog.css(data.optionName, data.value);
+      data.css = {};
+      data.css[data.optionName] = data.value;
+      this.dialog.animate(data.css, 'fast');
       break;
     default:
       this.dialog.dialog(data.method, data.optionName, data.value);
@@ -362,9 +364,17 @@ DrupalBookmarklet.prototype.createBookmarklet = function (url) {
       }
     }))
     .dialog({
+      show: 'fade',
+      hide: 'fade',
       position: ['right', 'top'],
       zIndex: 2147483647
     });
+
+  $(window).bind('scroll', function (event) {
+    $('#drupal_bookmarklet').data('dialog').uiDialog
+      .clearQueue()
+      .animate({'marginTop': ($(window).scrollTop()) + 'px'}, 'fast', 'swing');
+  });
 
   // private member: $(elem).data('dialog') returns jQuery UI dialog object.
   this.dialog.data('dialog').uiDialog
