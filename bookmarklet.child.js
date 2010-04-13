@@ -28,4 +28,9 @@ Drupal.behaviors.bookmarkletPostMessage = function (context) {
   }
 };
 
+Drupal.behaviors.bookmarkletTooltipDescription = function (context) {
+  $('.form-item .description', context).hide();
+  $('fieldset.collapsible:not(.collapsed) > legend.collapse-processed a', context).click();
+};
+
 /*jslint white: true, browser: true, devel: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, strict: true, newcap: true, immed: true, indent: 2 */
