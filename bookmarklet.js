@@ -344,7 +344,7 @@ DrupalBookmarklet.prototype.loadStylesheet = function (url) {
 };
 
 DrupalBookmarklet.prototype.createBookmarklet = function (url) {
-  var $;
+  var $, scrollHandler;
 
   $ = this.jQuery;
 
@@ -377,11 +377,15 @@ DrupalBookmarklet.prototype.createBookmarklet = function (url) {
       zIndex: 2147483647
     });
 
-  $(window).bind('scroll', function (event) {
-    $('#drupal_bookmarklet').data('dialog').uiDialog
+  scrollHandler = function (event) {
+    this.dialog.data('dialog').uiDialog
       .clearQueue()
-      .animate({'marginTop': ($(window).scrollTop()) + 'px'}, 'fast', 'swing');
-  });
+      .animate({
+        marginTop: ($(window).scrollTop()) + 'px'
+      }, 'fast', 'swing');
+  };
+
+  $(window).bind('scroll', $.proxy(scrollHandler, this));
 
   // private member: $(elem).data('dialog') returns jQuery UI dialog object.
   this.dialog.data('dialog').uiDialog
