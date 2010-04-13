@@ -70,39 +70,39 @@ DrupalBookmarklet.prototype.init = function () {
 };
 
 DrupalBookmarklet.prototype.setupBookmarklet  = function () {
-      var bookmarklet, $;
-      bookmarklet = this;
-      $ = this.jQuery;
-      // newly loaded jQuery is attached to the bookmarklet object as the
-      // jQuery method.
-      this.setupMessageChannel();
+  var bookmarklet, $;
+  bookmarklet = this;
+  $ = this.jQuery;
+  // newly loaded jQuery is attached to the bookmarklet object as the
+  // jQuery method.
+  this.setupMessageChannel();
 
-      // Pull bookmarklet settings from Drupal callback.
-      this.loadSettings(function () {
-        var nodeType, params, url, settings;
+  // Pull bookmarklet settings from Drupal callback.
+  this.loadSettings(function () {
+    var nodeType, params, url, settings;
 
-        nodeType = bookmarklet.mapNodeType(location.href);
-        params = {
-          edit: bookmarklet.getPrepopulate(nodeType)
-        };
-        settings = bookmarklet.settings;
+    nodeType = bookmarklet.mapNodeType(location.href);
+    params = {
+      edit: bookmarklet.getPrepopulate(nodeType)
+    };
+    settings = bookmarklet.settings;
 
-        if (settings.authenticated === false && settings.types.length === 0) {
-          $.extend(params, {
-            q: 'user/login',
-            destination: 'node/add/' + nodeType
-          });
-        }
-        else {
-          $.extend(params, {
-            q: 'node/add/' + nodeType
-          });
-        }
-        url = bookmarklet.iframeUrl(params);
-        bookmarklet.createBookmarklet(url);
-        bookmarklet.setupButtons();
-
+    if (settings.authenticated === false && settings.types.length === 0) {
+      $.extend(params, {
+        q: 'user/login',
+        destination: 'node/add/' + nodeType
       });
+    }
+    else {
+      $.extend(params, {
+        q: 'node/add/' + nodeType
+      });
+    }
+    url = bookmarklet.iframeUrl(params);
+    bookmarklet.createBookmarklet(url);
+    bookmarklet.setupButtons();
+
+  });
 
 };
 
