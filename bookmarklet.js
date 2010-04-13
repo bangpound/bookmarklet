@@ -11,41 +11,47 @@ DrupalBookmarklet = function (host, path) {
   this.host = host;
   this.path = path;
 
+  this.createScript('http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.js', function () {
+    var ajaxOptions;
+
+    ajaxOptions = {
+      type: "GET",
+      dataType: "script",
+      context: this,
+      global: false
+    };
+
+    $.ajax($.extend({
+      url: 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.js',
+      success: function () {
+        $.ajax($.extend({
+          url: this.host + '/' + this.path + '/jquery-postmessage/jquery.ba-postmessage.js',
+          success: function () {
+            this.jQuery = jQuery.noConflict(true);
+            this.setupBookmarklet();
+          }
+        }, ajaxOptions));
+      }
+    }, ajaxOptions));
+  });
+};
+
+DrupalBookmarklet.prototype.createScript = function (src, callback) {
   var bookmarklet = this,
     head = document.getElementsByTagName("head")[0] || document.documentElement,
     script = document.createElement("script"),
     // Handle Script loading
     done = false;
 
-  script.src = 'http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.js';
+  script.src = src;
   script.charset = "utf-8";
 
   // Attach handlers for all browsers
   script.onload = script.onreadystatechange = function () {
-    var ajaxOptions;
     if (!done && (!this.readyState ||
         this.readyState === "loaded" || this.readyState === "complete")) {
       done = true;
-
-      ajaxOptions = {
-        type: "GET",
-        dataType: "script",
-        context: bookmarklet,
-        global: false
-      };
-
-      $.ajax($.extend({
-        url: 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.js',
-        success: function () {
-          $.ajax($.extend({
-            url: this.host + '/' + this.path + '/jquery-postmessage/jquery.ba-postmessage.js',
-            success: function () {
-              this.jQuery = jQuery.noConflict(true);
-              this.setupBookmarklet();
-            }
-          }, ajaxOptions));
-        }
-      }, ajaxOptions));
+      callback.call(bookmarklet);
 
       // Handle memory leak in IE
       script.onload = script.onreadystatechange = null;
