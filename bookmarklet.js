@@ -489,7 +489,7 @@ DrupalBookmarklet.prototype.createBookmarklet = function (url) {
           marginTop: ($(window).scrollTop()) + 'px'
         }, 'fast', 'swing');
 
-    }, '1000');
+    }, 1000);
   };
 
   $(window).bind('scroll', $.proxy(scrollHandler, this));
