@@ -232,7 +232,8 @@ DrupalBookmarklet.prototype.setupMessageChannel = function () {
  *                  value property.
  */
 DrupalBookmarklet.prototype.handleMessage = function (event) {
-  var $, data, bookmarklet;
+  var $, data, bookmarklet, css;
+
   $ = this.jQuery;
   data = {};
   bookmarklet = this;
@@ -243,7 +244,7 @@ DrupalBookmarklet.prototype.handleMessage = function (event) {
     switch (data.method) {
     case 'close':
       setTimeout(function () {
-        $(bookmarklet.dialog).dialog(data.method);
+        bookmarklet.dialog.dialog(data.method);
       }, 5000);
       break;
     case 'loadSettings':
@@ -260,9 +261,9 @@ DrupalBookmarklet.prototype.handleMessage = function (event) {
     switch (data.optionName) {
     case 'height':
     case 'width':
-      data.css = {};
-      data.css[data.optionName] = data.value;
-      this.dialog.animate(data.css, 'fast', 'swing');
+      css = {};
+      css[data.optionName] = data.value;
+      this.dialog.animate(css, 'fast', 'swing');
       break;
     default:
       this.dialog.dialog(data.method, data.optionName, data.value);
