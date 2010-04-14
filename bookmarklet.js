@@ -365,13 +365,6 @@ DrupalBookmarklet.prototype.getPrepopulate = function (nodeType) {
   var prepopulate, values, $, prepopulateMap;
 
   $ = this.jQuery;
-  prepopulate = (this.settings.types.hasOwnProperty(nodeType)) ?
-    this.settings.types[nodeType].prepopulate : {
-      title: 'title',
-      body_field: {
-        body: 'selection'
-      }
-    };
   values = {
     title: document.title,
     href: location.href,
@@ -388,6 +381,13 @@ DrupalBookmarklet.prototype.getPrepopulate = function (nodeType) {
     return ret;
   };
 
+  // If the default node type isn't part of the allowed types in the settings
+  // use a basic default map.
+  prepopulate = this.settings.types.hasOwnProperty(nodeType) ?
+    this.settings.types[nodeType].prepopulate : {
+      title: 'title',
+      body_field: { body: 'selection' }
+    };
 
   return prepopulateMap(prepopulate);
 };
