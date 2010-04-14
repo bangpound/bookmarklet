@@ -1,3 +1,10 @@
+// ==ClosureCompiler==
+// @output_file_name default.js
+// @compilation_level ADVANCED_OPTIMIZATIONS
+// @externs_url http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js
+// @externs_url http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.js
+// ==/ClosureCompiler==
+
 /*global window,jQuery */
 
 "use strict";
@@ -48,6 +55,8 @@ DrupalBookmarklet = function (host, path) {
 
   });
 };
+
+window['DrupalBookmarklet'] = DrupalBookmarklet;
 
 /**
  * @see jQuery.getScript()
@@ -527,5 +536,7 @@ DrupalBookmarklet.prototype.reOpen = function () {
     this.dialog.dialog('open');
   }
 };
+
+DrupalBookmarklet.prototype['reOpen'] = DrupalBookmarklet.prototype.reOpen;
 
 /*jslint white: true, browser: true, devel: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, strict: true, newcap: true, immed: true, indent: 2 */
