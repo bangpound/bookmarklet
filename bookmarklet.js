@@ -362,7 +362,7 @@ DrupalBookmarklet.prototype.parseUrl = function (href) {
  * @returns {Object} keys are FormAPI elements, will be sent through $.params().
  */
 DrupalBookmarklet.prototype.getPrepopulate = function (nodeType) {
-  var edit, prepopulate, values, $, prepopulateMap;
+  var prepopulate, values, $, prepopulateMap;
 
   $ = this.jQuery;
   prepopulate = (this.settings.types.hasOwnProperty(nodeType)) ?
@@ -377,7 +377,6 @@ DrupalBookmarklet.prototype.getPrepopulate = function (nodeType) {
     href: location.href,
     selection: this.getSelection()
   };
-  edit = {};
 
   prepopulateMap = function (map) {
     var ret = {};
@@ -389,9 +388,8 @@ DrupalBookmarklet.prototype.getPrepopulate = function (nodeType) {
     return ret;
   };
 
-  edit = prepopulateMap(prepopulate);
 
-  return edit;
+  return prepopulateMap(prepopulate);
 };
 
 /**
