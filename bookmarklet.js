@@ -358,7 +358,7 @@ DrupalBookmarklet.prototype.loadStylesheet = function (url) {
 };
 
 DrupalBookmarklet.prototype.createBookmarklet = function (url) {
-  var $, scrollHandler;
+  var $, scrollHandler, timeout;
 
   $ = this.jQuery;
 
@@ -392,11 +392,16 @@ DrupalBookmarklet.prototype.createBookmarklet = function (url) {
     });
 
   scrollHandler = function (event) {
-    this.dialog.data('dialog').uiDialog
-      .clearQueue()
-      .animate({
-        marginTop: ($(window).scrollTop()) + 'px'
-      }, 'fast', 'swing');
+    var bookmarklet;
+    bookmarklet = this;
+    clearTimeout(timeout);
+    timeout = setTimeout(function () {
+      bookmarklet.dialog.data('dialog').uiDialog
+        .clearQueue()
+        .animate({
+          marginTop: ($(window).scrollTop()) + 'px'
+        }, 'fast', 'swing');
+    }, '1000');
   };
 
   $(window).bind('scroll', $.proxy(scrollHandler, this));
