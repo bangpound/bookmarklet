@@ -5,7 +5,12 @@
 var DrupalBookmarklet;
 
 /**
+ * DrupalBookmarklet
  * @constructor
+ *
+ * Constructor loads all the required scripts in a specific sequence. The jQuery
+ * plugins must be loaded before the noConflict function is called or else they
+ * may be attached to some other jQuery instance.
  */
 DrupalBookmarklet = function (host, path) {
   this.host = host;
@@ -27,6 +32,7 @@ DrupalBookmarklet = function (host, path) {
     $.ajax($.extend({
       url: 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.js',
       success: function () {
+
         $.ajax($.extend({
 
           // Load jQuery postMessage plugin.
@@ -36,11 +42,17 @@ DrupalBookmarklet = function (host, path) {
             this.setupBookmarklet();
           }
         }, ajaxOptions));
+
       }
     }, ajaxOptions));
+
   });
 };
 
+/**
+ * @see jQuery.getScript()
+ * @see jQuery.ajax()
+ */
 DrupalBookmarklet.prototype.createScript = function (src, callback) {
   var bookmarklet = this,
     head = document.getElementsByTagName("head")[0] || document.documentElement,
@@ -71,6 +83,10 @@ DrupalBookmarklet.prototype.createScript = function (src, callback) {
   head.insertBefore(script, head.firstChild);
 };
 
+/**
+ * Open mesage channel to iframe document, direct user to node form or login
+ * form.
+ */
 DrupalBookmarklet.prototype.setupBookmarklet  = function () {
   var bookmarklet, $;
   bookmarklet = this;
@@ -89,6 +105,8 @@ DrupalBookmarklet.prototype.setupBookmarklet  = function () {
     };
     settings = bookmarklet.settings;
 
+    // Anonymous users without permission to create nodes should be directed to
+    // the login form.
     if (settings.authenticated === false && settings.types.length === 0) {
       $.extend(params, {
         q: 'user/login',
@@ -120,8 +138,11 @@ DrupalBookmarklet.prototype.loadSettings = function (callback) {
   url = this.host + '/?' + $.param({ q: 'bookmarklet/js' }) + '&callback=?';
 
   $.getJSON(url, function (json) {
+
+    // Set instance settings.
     bookmarklet.settings = json;
 
+    // Clone then empty URL map. It needs to be reconstituted as regexp objects.
     map = $.extend({}, bookmarklet.settings.urlMap);
     bookmarklet.settings.urlMap = [];
     $.each(map, function (exp, types) {
@@ -136,6 +157,7 @@ DrupalBookmarklet.prototype.loadSettings = function (callback) {
         });
       });
     });
+
     callback();
   });
 };
@@ -184,6 +206,8 @@ DrupalBookmarklet.prototype.setupButtons = function () {
 
 /**
  * Set up message channel.
+ *
+ * @see https://developer.mozilla.org/en/DOM/window.postMessage
  */
 DrupalBookmarklet.prototype.setupMessageChannel = function () {
   var $, parsedUrl;
@@ -269,21 +293,32 @@ DrupalBookmarklet.prototype.getSelection = function () {
   return t;
 };
 
+/**
+ * @param   {String} href a URI
+ * @returns {String} node type from map or default.
+ */
 DrupalBookmarklet.prototype.mapNodeType = function (href) {
   var $, nodeType;
+
   $ = this.jQuery;
   nodeType = this.settings.defaultType;
+
   $.each(this.settings.urlMap, function (index, pattern) {
     if (pattern.regexp.test(href)) {
       nodeType = pattern.type;
       return false;
     }
   });
+
   return nodeType;
 };
 
-// From Chapter 7 of JavaScript, the Good Parts.
-
+/**
+ * @param   {String} href a URI
+ * @returns {Object} keys are URI parts
+ *
+ * @see From Chapter 7 of JavaScript, the Good Parts.
+ */
 DrupalBookmarklet.prototype.parseUrl = function (href) {
   var $, urlRegex, result, names, parsedUrl;
 
@@ -296,9 +331,14 @@ DrupalBookmarklet.prototype.parseUrl = function (href) {
   $.each(names, function (item, name) {
     parsedUrl[name] = result[item];
   });
+
   return parsedUrl;
 };
 
+/**
+ * @param {String} nodeType machine name of a node type.
+ * @returns {Object} keys are FormAPI elements, will be sent through $.params().
+ */
 DrupalBookmarklet.prototype.getPrepopulate = function (nodeType) {
   var edit, prepopulate, values, $, prepopulateMap;
 
@@ -319,9 +359,11 @@ DrupalBookmarklet.prototype.getPrepopulate = function (nodeType) {
 
   prepopulateMap = function (map) {
     var ret = {};
+
     $.each(map, function (key, value) {
       ret[key] = (typeof value === 'string') ? values[value] : prepopulateMap(value);
     });
+
     return ret;
   };
 
@@ -330,6 +372,10 @@ DrupalBookmarklet.prototype.getPrepopulate = function (nodeType) {
   return edit;
 };
 
+/**
+ * @param {String|Object} path string becomes the 'q' GET parameter.
+ * @returns {String} absolute path
+ */
 DrupalBookmarklet.prototype.iframeUrl = function (path) {
   var $, params;
 
@@ -349,6 +395,11 @@ DrupalBookmarklet.prototype.iframeUrl = function (path) {
   return this.host + '/?' + $.param(params) + this.settings.constant;
 };
 
+/**
+ * Loads a stylesheet.
+ *
+ * @param {String} url
+ */
 DrupalBookmarklet.prototype.loadStylesheet = function (url) {
   var $;
 
@@ -363,6 +414,11 @@ DrupalBookmarklet.prototype.loadStylesheet = function (url) {
     .appendTo('head');
 };
 
+/**
+ * Opens a new dialog and creates the iframe contents.
+ *
+ * @param {String} url from iframeUrl().
+ */
 DrupalBookmarklet.prototype.createBookmarklet = function (url) {
   var $, scrollHandler, timeout;
 
@@ -397,16 +453,21 @@ DrupalBookmarklet.prototype.createBookmarklet = function (url) {
       zIndex: 2147483647
     });
 
+  // scrollHandler repositions dialog in the viewport after the user scrolls.
   scrollHandler = function (event) {
     var bookmarklet;
+
     bookmarklet = this;
+
     clearTimeout(timeout);
     timeout = setTimeout(function () {
+
       bookmarklet.dialog.data('dialog').uiDialog
         .clearQueue()
         .animate({
           marginTop: ($(window).scrollTop()) + 'px'
         }, 'fast', 'swing');
+
     }, '1000');
   };
 
@@ -423,6 +484,10 @@ DrupalBookmarklet.prototype.createBookmarklet = function (url) {
 
 };
 
+/**
+ * When the dialog has already been opened but the page isn't refreshed, this
+ * function is called to reopen the dialog.
+ */
 DrupalBookmarklet.prototype.reOpen = function () {
   var $, nodeType, path;
 
@@ -436,6 +501,7 @@ DrupalBookmarklet.prototype.reOpen = function () {
   // If the dialog has already been open, refresh the src URL of the iframe to
   // fill in the form with new values.
   $('iframe', this.dialog).attr('src', this.iframeUrl(path));
+
   if (!this.dialog.dialog('isOpen')) {
     this.dialog.dialog('open');
   }
