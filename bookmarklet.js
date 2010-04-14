@@ -113,7 +113,7 @@ DrupalBookmarklet.prototype.setupBookmarklet  = function () {
  * Load bookmarklet settings.
  */
 DrupalBookmarklet.prototype.loadSettings = function (callback) {
-  var bookmarklet, $, url;
+  var bookmarklet, $, url, map;
 
   bookmarklet = this;
   $ = this.jQuery;
@@ -121,6 +121,21 @@ DrupalBookmarklet.prototype.loadSettings = function (callback) {
 
   $.getJSON(url, function (json) {
     bookmarklet.settings = json;
+
+    map = $.extend({}, bookmarklet.settings.urlMap);
+    bookmarklet.settings.urlMap = [];
+    $.each(map, function (exp, types) {
+      var splits, regexp;
+
+      splits = exp.split(exp.charAt(0));
+      regexp = new RegExp(splits[1], splits[2]);
+      $.each(types, function (index, value) {
+        bookmarklet.settings.urlMap.push({
+          regexp: regexp,
+          type: value
+        });
+      });
+    });
     callback();
   });
 };
@@ -255,7 +270,16 @@ DrupalBookmarklet.prototype.getSelection = function () {
 };
 
 DrupalBookmarklet.prototype.mapNodeType = function (href) {
-  return this.settings.urlMap[this.parseUrl(href).host] || this.settings.defaultType;
+  var $, nodeType;
+  $ = this.jQuery;
+  nodeType = this.settings.defaultType;
+  $.each(this.settings.urlMap, function (index, pattern) {
+    if (pattern.regexp.test(href)) {
+      nodeType = pattern.type;
+      return false;
+    }
+  });
+  return nodeType;
 };
 
 // From Chapter 7 of JavaScript, the Good Parts.
