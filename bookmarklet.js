@@ -145,14 +145,13 @@ DrupalBookmarklet.prototype.loadSettings = function (callback) {
     // Clone then empty URL map. It needs to be reconstituted as regexp objects.
     map = $.extend({}, bookmarklet.settings.urlMap);
     bookmarklet.settings.urlMap = [];
-    $.each(map, function (exp, types) {
-      var splits, regexp;
 
+    $.each(map, function (exp, types) {
+      var splits;
       splits = exp.split(exp.charAt(0));
-      regexp = new RegExp(splits[1], splits[2]);
       $.each(types, function (index, value) {
         bookmarklet.settings.urlMap.push({
-          regexp: regexp,
+          regexp: new RegExp(splits[1], splits[2]),
           type: value
         });
       });
