@@ -217,7 +217,8 @@ DrupalBookmarklet.prototype.setupMessageChannel = function () {
   $.receiveMessage(
     $.proxy(this, 'handleMessage'),
     // https://developer.mozilla.org/en/DOM/window.postMessage
-    parsedUrl.scheme + ":" + parsedUrl.slash + parsedUrl.host + (parsedUrl.port ? ':' + parsedUrl.port : '')
+    parsedUrl.scheme + ":" + parsedUrl.slash + parsedUrl.host +
+      (parsedUrl.port ? ':' + parsedUrl.port : '')
   );
 };
 
@@ -277,7 +278,10 @@ DrupalBookmarklet.prototype.getSelection = function () {
 
   try {
     // get the currently selected text
-    t = ((window.getSelection && window.getSelection()) || (document.getSelection && document.getSelection()) || (document.selection && document.selection.createRange && document.selection.createRange().text));
+    t = ((window.getSelection && window.getSelection()) ||
+      (document.getSelection && document.getSelection()) ||
+      (document.selection && document.selection.createRange &&
+      document.selection.createRange().text));
   }
   catch (e) {
     // access denied on https sites
