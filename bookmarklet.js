@@ -303,7 +303,13 @@ DrupalBookmarklet.prototype.getPrepopulate = function (nodeType) {
   var edit, prepopulate, values, $, prepopulateMap;
 
   $ = this.jQuery;
-  prepopulate = this.settings.types[nodeType].prepopulate;
+  prepopulate = (this.settings.types.hasOwnProperty(nodeType)) ?
+    this.settings.types[nodeType].prepopulate : {
+      title: 'title',
+      body_field: {
+        body: 'selection'
+      }
+    };
   values = {
     title: document.title,
     href: location.href,
