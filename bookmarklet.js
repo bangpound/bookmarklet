@@ -365,6 +365,7 @@ DrupalBookmarklet.prototype.getPrepopulate = function (nodeType) {
   var prepopulate, values, $, prepopulateMap;
 
   $ = this.jQuery;
+
   values = {
     title: document.title,
     href: location.href,
