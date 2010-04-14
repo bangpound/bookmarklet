@@ -216,7 +216,6 @@ DrupalBookmarklet.prototype.setupMessageChannel = function () {
 
   $.receiveMessage(
     $.proxy(this, 'handleMessage'),
-    // https://developer.mozilla.org/en/DOM/window.postMessage
     parsedUrl.scheme + ":" + parsedUrl.slash + parsedUrl.host +
       (parsedUrl.port ? ':' + parsedUrl.port : '')
   );
@@ -238,41 +237,60 @@ DrupalBookmarklet.prototype.handleMessage = function (event) {
   $ = this.jQuery;
   data = {};
   bookmarklet = this;
+
   $.each(decodeURIComponent(event.data).replace(/\+/g, " ").split("&"), function () {
     data[this.split("=")[0]] = this.split("=")[1];
   });
+
+  // Messages are designed to be passed straight through to the jQuery UI
+  // widget. If option name is undefined, the message is triggering a widget
+  // method.
   if (typeof(data.optionName) === "undefined") {
+
     switch (data.method) {
     case 'close':
       setTimeout(function () {
         bookmarklet.dialog.dialog(data.method);
       }, 5000);
       break;
+
     case 'loadSettings':
       this.loadSettings(function () {
         bookmarklet.setupButtons();
       });
       break;
+
     default:
       this.dialog.dialog(data.method);
       break;
     }
+
   }
   else {
     switch (data.optionName) {
+
+    // Height and width are put directly in the CSS of the dialog because
+    // iframes are sensitive.
     case 'height':
     case 'width':
       css = {};
       css[data.optionName] = data.value;
       this.dialog.animate(css, 'fast', 'swing');
       break;
+
     default:
       this.dialog.dialog(data.method, data.optionName, data.value);
       break;
     }
   }
+
 };
 
+/**
+ * Get the current text selection.
+ *
+ * @see http://betterexplained.com/articles/how-to-make-a-bookmarklet-for-your-web-application/
+ */
 DrupalBookmarklet.prototype.getSelection = function () {
   var t;
 
