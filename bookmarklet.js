@@ -124,7 +124,7 @@ DrupalBookmarklet.prototype.setupBookmarklet  = function () {
     }
     else {
       $.extend(params, {
-        q: 'node/add/' + nodeType
+        'q': 'node/add/' + nodeType
       });
     }
     url = bookmarklet.iframeUrl(params);
@@ -144,7 +144,7 @@ DrupalBookmarklet.prototype.loadSettings = function (callback) {
 
   bookmarklet = this;
   $ = this.jQuery;
-  url = this.host + '/?' + $.param({ q: 'bookmarklet/js' }) + '&callback=?';
+  url = this.host + '/?' + $.param({ 'q': 'bookmarklet/js' }) + '&callback=?';
 
   $.getJSON(url, function (json) {
 
@@ -186,8 +186,8 @@ DrupalBookmarklet.prototype.setupButtons = function () {
     buttons[setting.name] = function (event) {
       var params;
       params = {
-        q: 'node/add/' + machineName,
-        edit: bookmarklet.getPrepopulate(machineName)
+        'q': 'node/add/' + machineName,
+        'edit': bookmarklet.getPrepopulate(machineName)
       };
       $('iframe', this).attr('src', bookmarklet.iframeUrl(params));
     };
@@ -411,12 +411,12 @@ DrupalBookmarklet.prototype.iframeUrl = function (path) {
 
   $ = this.jQuery;
   params = {
-    bookmarklet: true,
-    origin: location.href
+    'bookmarklet': true,
+    'origin': location.href
   };
 
   if (typeof path === "string") {
-    $.extend(params, { q: path });
+    $.extend(params, { 'q': path });
   }
   else if (typeof path === "object") {
     $.extend(params, path);
