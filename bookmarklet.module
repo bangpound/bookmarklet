@@ -507,6 +507,7 @@ function bookmarklet_prepopulate_pattern($type) {
       break;
     }
   }
+  drupal_alter('bookmarklet_prepopulate_pattern', $pattern, $type);
   return $pattern;
 }
 
@@ -541,6 +542,7 @@ function bookmarklet_url_type_map() {
       }
     }
   }
+  drupal_alter('bookmarklet_urlmap', $map);
   return $map;
 }
 
