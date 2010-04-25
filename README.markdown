@@ -5,7 +5,7 @@ Drupal Bookmarklet
 
 This module provides a bookmarklet to allow users to create new nodes while they browse other sites. The bookmarklet opens a jQuery UI Dialog containing an iframe of the Drupal node form.
 
-[Video Demonstration](http://www.vimeo.com/10082728)  
+[Video Demonstration](http://vimeo.com/11202911)  
 ![Screenshot](http://img.skitch.com/20100425-r5jkna852yjrxa9kftu7qxmhms.png "Drupal bookmarklet in action")
 
 Dependencies
