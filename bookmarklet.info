@@ -1,5 +1,5 @@
 ; $Id$
 name = Bookmarklet
-description = TODO: Description of module
+description = Bookmarklet enables creation of nodes in a UI Dialog on any site.
 core = 6.x
 dependencies[] = prepopulate
