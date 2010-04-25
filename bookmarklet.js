@@ -457,8 +457,6 @@ DrupalBookmarklet.prototype.createBookmarklet = function (url) {
       src: url,
       frameborder: 0,
       scrolling: 'no',
-      name: 'drupal_bookmarklet_iframe',
-      id: 'drupal_bookmarklet_iframe',
       width: '100%',
       height: '100%',
       css: {
