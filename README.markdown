@@ -15,9 +15,23 @@ Dependencies
 * [jQuery postMessage](http://github.com/cowboy/jquery-postmessage/)  
   postMessage is what enables XSS between the parent and the child iframe on different domains. If the browser supports [window.postMessage](https://developer.mozilla.org/en/DOM/window.postMessage), this is used. Otherwise, the location of the parent page is updated with the message as the fragment. (Embedded as git submodule.)
 
+Usage
+-----
+This module implements `hook_block` to expose the link for users to drag to their browser's toolbars. The block configuration allows the site administrator to set the allowed and default content types available in the bookmarklet.
+
+When [Embedded Media Field](http://drupal.org/project/emfield) or [Link](http://drupal.org/project/link) field are enabled, the bookmarklet will add the URL of the page where the bookmarklet was invoked to these fields. Furthermore, the bookmarklet will override the module's default content type when the user has invoked the bookmarklet script on a page whose URL matches a pattern returned in a provider's implementation of [`EMMODULE_PROVIDER_extract`](http://api.lullabot.com/EMMODULE_PROVIDER_extract).
+
+Three alter hooks are invoked by this module with which developers can change the node form prepopulate pattern, the visibility of node form elements in the bookmarklet, and the URL - node type mappings.
+
+* `hook_bookmarklet_fields_alter(&$preserve)`
+* `hook_bookmarklet_prepopulate_pattern_alter(&$pattern, $type)`
+* `hook_bookmarklet_urlmap_alter(&$map)`
+
 Issues
 ------
 This module is not complete nor very configurable. It's only been tested in Firefox 3 and Safari.
+
+The block configuration is the least obvious place to change settings for the bookmarklet.
 
 Multiple invocations of the bookmarklet on the same page cause the dialog to reappear, but this is not always desirable.
 
@@ -25,7 +39,7 @@ There is no status indicators. Is the iframe loading? Is the node saving?
 
 jQuery, jQuery UI and jQuery UI stylesheet are loaded from [Google](http://code.google.com/apis/ajaxlibs/documentation/index.html).
 
-Because this module implements hook\_form\_alter, this module's weight in the system table is important. For example, it must run after Vertical Tabs if you want to disable Vertical Tabs for bookmarklet forms.
+Because this module implements `hook_form_alter`, this module's weight in the system table is important. For example, it must run after Vertical Tabs if you want to disable Vertical Tabs for bookmarklet forms.
 
 Road map
 --------
