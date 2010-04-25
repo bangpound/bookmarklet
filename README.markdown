@@ -23,16 +23,12 @@ Multiple invocations of the bookmarklet on the same page cause the dialog to rea
 
 There is no status indicators. Is the iframe loading? Is the node saving?
 
-If the user is visiting a secure site, the referrer doesn't get passed to the Drupal site and the connection between the child iframe and the parent page is broken. This means the iframe cannot be closed without user intervention.
-
 jQuery, jQuery UI and jQuery UI stylesheet are loaded from [Google](http://code.google.com/apis/ajaxlibs/documentation/index.html).
 
 Because this module implements hook\_form\_alter, this module's weight in the system table is important. For example, it must run after Vertical Tabs if you want to disable Vertical Tabs for bookmarklet forms.
 
 Road map
 --------
-It would be even nice if Drupal would choose the best node type depending on the URL of the page the user is viewing.
-
 The Drupal theme needs to be educated about how to render and style forms for the bookmarklet.
 
 Warn the user when he has third party cookies disabled.
