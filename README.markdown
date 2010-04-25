@@ -29,23 +29,16 @@ Dependencies
 
 Issues
 ------
-This module is not complete nor very configurable. It's only been tested in Firefox 3 and Safari.
-
-The block configuration is the least obvious place to change settings for the bookmarklet.
-
-Multiple invocations of the bookmarklet on the same page cause the dialog to reappear, but this is not always desirable.
-
-There is no status indicators. Is the iframe loading? Is the node saving?
-
-jQuery, jQuery UI and jQuery UI stylesheet are loaded from [Google](http://code.google.com/apis/ajaxlibs/documentation/index.html).
-
-Because this module implements `hook_form_alter`, this module's weight in the system table is important. For example, it must run after Vertical Tabs if you want to disable Vertical Tabs for bookmarklet forms.
-
-Road map
---------
-The Drupal theme needs to be educated about how to render and style forms for the bookmarklet.
-
-Warn the user when he has third party cookies disabled.
+1. This module needs a security review because of its reliance on cross site scripting. If you have skills in JavaScript security and are interested in this module, the maintainer would appreciate your feedback. **Do not use this module on a production site until the security implications are understood and documented.**
+2. The bookmarklet UI and UX leverages default jQuery UI components and do not reflect a thoughtful implementation of any intentional design to make this project easy and pleasant to use. If you're interested in this module and have UI/UX design sense, please post issues with your concrete suggestions.
+3. This module is not complete nor very configurable. It's only been tested in Firefox 3 and Safari.
+4. The block configuration is the least obvious place to change settings for the bookmarklet.
+5. Multiple invocations of the bookmarklet on the same page cause the dialog to reappear, but this is not always desirable.
+6. There is no status indicators. Is the iframe loading? Is the node saving?
+7. jQuery, jQuery UI and jQuery UI stylesheet are loaded from [Google](http://code.google.com/apis/ajaxlibs/documentation/index.html) and collide with existing jQuery UI styles in the current document.
+8. Because this module implements `hook_form_alter`, this module's weight in the system table is important. For example, it must run after Vertical Tabs if you want to disable Vertical Tabs for bookmarklet forms.
+9. The Drupal theme needs to be educated about how to render and style forms for the bookmarklet.
+10. Warn the user when he has third party cookies disabled.
 
 References
 ----------
