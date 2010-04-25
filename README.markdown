@@ -8,13 +8,6 @@ This module provides a bookmarklet to allow users to create new nodes while they
 [Video Demonstration](http://vimeo.com/11202911)  
 ![Screenshot](http://img.skitch.com/20100425-r5jkna852yjrxa9kftu7qxmhms.png "Drupal bookmarklet in action")
 
-Dependencies
-------------
-* [Prepopulate](http://drupal.org/project/prepopulate)  
-  The module was developed with the 6.x-2.x branch, but the more stable branch probably works too.
-* [jQuery postMessage](http://github.com/cowboy/jquery-postmessage/)  
-  postMessage is what enables XSS between the parent and the child iframe on different domains. If the browser supports [window.postMessage](https://developer.mozilla.org/en/DOM/window.postMessage), this is used. Otherwise, the location of the parent page is updated with the message as the fragment. (Embedded as git submodule.)
-
 Usage
 -----
 This module implements `hook_block` to expose the link for users to drag to their browser's toolbars. The block configuration allows the site administrator to set the allowed and default content types available in the bookmarklet.
@@ -26,6 +19,13 @@ Three alter hooks are invoked by this module with which developers can change th
 * `hook_bookmarklet_fields_alter(&$preserve)`
 * `hook_bookmarklet_prepopulate_pattern_alter(&$pattern, $type)`
 * `hook_bookmarklet_urlmap_alter(&$map)`
+
+Dependencies
+------------
+* [Prepopulate](http://drupal.org/project/prepopulate)  
+  The module was developed with the 6.x-2.x branch, but the more stable branch probably works too.
+* [jQuery postMessage](http://github.com/cowboy/jquery-postmessage/)  
+  postMessage is what enables XSS between the parent and the child iframe on different domains. If the browser supports [window.postMessage](https://developer.mozilla.org/en/DOM/window.postMessage), this is used. Otherwise, the location of the parent page is updated with the message as the fragment. (Embedded as git submodule.)
 
 Issues
 ------
