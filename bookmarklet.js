@@ -1,3 +1,5 @@
+// $Id$
+
 /*global window,jQuery */
 
 "use strict";

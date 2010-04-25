@@ -1,3 +1,5 @@
+// $Id$
+
 /*global $, Drupal, document, setTimeout */
 
 "use strict";
